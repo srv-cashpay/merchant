@@ -16,7 +16,7 @@ func (b *productRepository) GetById(req dto.GetByIdRequest) (*dto.ProductRespons
 
 	response := &dto.ProductResponse{
 		ProductName: tr.ProductName,
-		CreatedAt:   tr.CreatedAt,
+		CreatedAt:   dto.Timestamp(tr.CreatedAt),
 	}
 
 	return response, nil
