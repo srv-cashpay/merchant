@@ -24,7 +24,7 @@ func (r *merkRepository) Create(req dto.MerkRequest) (dto.MerkResponse, error) {
 	}
 
 	// Generate Product ID with prefix and auto increment value
-	prefix := "p="
+	prefix := "m="
 	secureID, err := generateProductID(prefix, autoIncrement)
 	if err != nil {
 		return dto.MerkResponse{}, err

@@ -18,6 +18,7 @@ func (b *domainHandler) Get(c echo.Context) error {
 	if !ok {
 		return res.ErrorBuilder(&res.ErrorConstant.InternalServerError, nil).Send(c)
 	}
+
 	paginationDTO.MerchantID = merchantId
 	paginationDTO.UserID = userid
 

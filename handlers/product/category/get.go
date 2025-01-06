@@ -10,6 +10,8 @@ import (
 
 func (b *domainHandler) Get(c echo.Context) error {
 	var req dto.CategoryRequest
+	var resp []dto.CategoryResponse
+
 	merchantId, ok := c.Get("MerchantId").(string)
 	if !ok {
 		return res.ErrorBuilder(&res.ErrorConstant.InternalServerError, nil).Send(c)
@@ -23,9 +25,9 @@ func (b *domainHandler) Get(c echo.Context) error {
 	req.MerchantID = merchantId
 	req.CreatedBy = createdBy
 
-	products, err := b.serviceGetCategory.Get()
+	resp, err := b.serviceGetCategory.Get(req)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
-	return c.JSON(http.StatusOK, products)
+	return c.JSON(http.StatusOK, resp)
 }

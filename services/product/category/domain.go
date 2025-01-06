@@ -3,12 +3,12 @@ package dashboard
 import (
 	m "github.com/srv-cashpay/middlewares/middlewares"
 
-	"github.com/srv-cashpay/merchant/entity"
+	"github.com/srv-cashpay/merchant/dto"
 	r "github.com/srv-cashpay/merchant/repositories/product/category"
 )
 
 type GetCategoryService interface {
-	Get() ([]entity.Category, error)
+	Get(req dto.CategoryRequest) ([]dto.CategoryResponse, error)
 }
 
 type getCategorydashboardService struct {

@@ -3,12 +3,12 @@ package dashboard
 import (
 	m "github.com/srv-cashpay/middlewares/middlewares"
 
-	"github.com/srv-cashpay/merchant/entity"
+	"github.com/srv-cashpay/merchant/dto"
 	r "github.com/srv-cashpay/merchant/repositories/product/merk"
 )
 
 type GetMerkService interface {
-	Get() ([]entity.Merk, error)
+	Get(req dto.MerkRequest) ([]dto.MerkResponse, error)
 }
 
 type getMerkdashboardService struct {

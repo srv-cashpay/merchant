@@ -1,12 +1,12 @@
 package category
 
 import (
-	"github.com/srv-cashpay/merchant/entity"
+	"github.com/srv-cashpay/merchant/dto"
 	"gorm.io/gorm"
 )
 
 type DomainRepository interface {
-	Get() ([]entity.Category, error)
+	Get(req dto.CategoryRequest) ([]dto.CategoryResponse, error)
 }
 
 type getcategoryRepository struct {

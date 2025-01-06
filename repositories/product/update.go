@@ -1,8 +1,6 @@
 package product
 
 import (
-	"log"
-
 	"github.com/srv-cashpay/merchant/dto"
 	"github.com/srv-cashpay/product/entity"
 )
@@ -23,7 +21,7 @@ func (b *productRepository) Update(req dto.ProductUpdateRequest) (dto.ProductUpd
 
 	// Cek apakah produk ada terlebih dahulu
 	var existingProduct entity.Product
-	err := b.DB.Where("user_id = ?", req.UserID).First(&existingProduct).Error
+	err := b.DB.Where("id = ?", req.ID).First(&existingProduct).Error
 	if err != nil {
 		return dto.ProductUpdateResponse{}, err
 	}
@@ -46,9 +44,6 @@ func (b *productRepository) Update(req dto.ProductUpdateRequest) (dto.ProductUpd
 		MerchantID:   updateProduct.MerchantID,
 		Description:  updateProduct.Description,
 	}
-
-	// Log status yang diupdate
-	log.Printf("Updated status: %v", updateProduct.Status)
 
 	return response, nil
 }

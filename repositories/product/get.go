@@ -20,8 +20,11 @@ func (r *productRepository) Get(req *dto.Pagination) (RepositoryResult, int) {
 	offset := (req.Page - 1) * req.Limit
 
 	// Ambil data sesuai limit, offset, dan urutan
-	find := r.DB.Where("merchant_id = ?", req.MerchantID).Limit(req.Limit).Offset(offset).Order(req.Sort)
-
+	find := r.DB.Preload("Image").
+		Where("merchant_id = ?", req.MerchantID).
+		Limit(req.Limit).
+		Offset(offset).
+		Order(req.Sort)
 	// Generate where query untuk search
 	if req.Searchs != nil {
 		for _, value := range req.Searchs {

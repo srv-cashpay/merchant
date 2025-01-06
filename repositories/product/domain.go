@@ -13,6 +13,8 @@ type DomainRepository interface {
 	Delete(req dto.DeleteRequest) (dto.DeleteResponse, error)
 	BulkDelete(req dto.BulkDeleteRequest) (int, error)
 	Update(req dto.ProductUpdateRequest) (dto.ProductUpdateResponse, error)
+	SaveFile(req dto.ProductUploadRequest) (dto.ProductUploadResponse, error)
+	GetPicture(req dto.GetProductUploadRequest) (*dto.GetProductUploadResponse, error)
 }
 
 type productRepository struct {

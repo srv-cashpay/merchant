@@ -20,11 +20,17 @@ func (b *domainHandler) Update(c echo.Context) error {
 		return res.ErrorBuilder(&res.ErrorConstant.InternalServerError, nil).Send(c)
 	}
 
+	merchantId, ok := c.Get("MerchantId").(string)
+	if !ok {
+		return res.ErrorBuilder(&res.ErrorConstant.InternalServerError, nil).Send(c)
+	}
+
 	idUint, err := res.IsNumber(c, "id")
 	if err != nil {
 		return res.ErrorBuilder(&res.ErrorConstant.BadRequest, err).Send(c)
 	}
 
+	req.MerchantID = merchantId
 	req.ID = idUint
 	req.UpdatedBy = updatedBy
 	req.UserID = userid

@@ -23,6 +23,10 @@ import (
 	r_dashboard "github.com/srv-cashpay/merchant/repositories/dashboard"
 	s_dashboard "github.com/srv-cashpay/merchant/services/dashboard"
 
+	h_sidebar "github.com/srv-cashpay/merchant/handlers/dashboard/sidebar"
+	r_sidebar "github.com/srv-cashpay/merchant/repositories/dashboard/sidebar"
+	s_sidebar "github.com/srv-cashpay/merchant/services/dashboard/sidebar"
+
 	h_packages "github.com/srv-cashpay/merchant/handlers/packages"
 	r_packages "github.com/srv-cashpay/merchant/repositories/packages"
 	s_packages "github.com/srv-cashpay/merchant/services/packages"
@@ -30,6 +34,18 @@ import (
 	h_authenticator "github.com/srv-cashpay/merchant/handlers/authenticator_request"
 	r_authenticator "github.com/srv-cashpay/merchant/repositories/authenticator_request"
 	s_authenticator "github.com/srv-cashpay/merchant/services/authenticator_request"
+
+	h_tax "github.com/srv-cashpay/merchant/handlers/tax"
+	r_tax "github.com/srv-cashpay/merchant/repositories/tax"
+	s_tax "github.com/srv-cashpay/merchant/services/tax"
+
+	h_discount "github.com/srv-cashpay/merchant/handlers/discount"
+	r_discount "github.com/srv-cashpay/merchant/repositories/discount"
+	s_discount "github.com/srv-cashpay/merchant/services/discount"
+
+	h_user "github.com/srv-cashpay/merchant/handlers/user"
+	r_user "github.com/srv-cashpay/merchant/repositories/user"
+	s_user "github.com/srv-cashpay/merchant/services/user"
 
 	h_product "github.com/srv-cashpay/merchant/handlers/product"
 	r_product "github.com/srv-cashpay/merchant/repositories/product"
@@ -43,6 +59,10 @@ import (
 	r_getcategory "github.com/srv-cashpay/merchant/repositories/product/category"
 	s_getcategory "github.com/srv-cashpay/merchant/services/product/category"
 
+	h_merchant "github.com/srv-cashpay/merchant/handlers/merchant"
+	r_merchant "github.com/srv-cashpay/merchant/repositories/merchant"
+	s_merchant "github.com/srv-cashpay/merchant/services/merchant"
+
 	"github.com/srv-cashpay/middlewares/middlewares"
 )
 
@@ -55,6 +75,10 @@ var (
 	authenticatorS = s_authenticator.NewAuthenticatorService(authenticatorR, JWT)
 	authenticatorH = h_authenticator.NewAuthenticatorHandler(authenticatorS)
 
+	merchantR = r_merchant.NewMerchantRepository(DB)
+	merchantS = s_merchant.NewMerchantService(merchantR, JWT)
+	merchantH = h_merchant.NewMerchantHandler(merchantS)
+
 	packagesR = r_packages.NewPackagesRepository(DB)
 	packagesS = s_packages.NewPackagesService(packagesR, JWT)
 	packagesH = h_packages.NewPackagesHandler(packagesS)
@@ -66,6 +90,10 @@ var (
 	merkR = r_merk.NewMerkRepository(DB)
 	merkS = s_merk.NewMerkService(merkR, JWT)
 	merkH = h_merk.NewMerkHandler(merkS)
+
+	sidebarR = r_sidebar.NewSidebarRepository(DB)
+	sidebarS = s_sidebar.NewSidebarService(sidebarR, JWT)
+	sidebarH = h_sidebar.NewSidebarHandler(sidebarS)
 
 	categoryR = r_category.NewCategoryRepository(DB)
 	categoryS = s_category.NewCategoryService(categoryR, JWT)
@@ -87,6 +115,18 @@ var (
 	getmerkS = s_getmerk.NewGetMerkService(getmerkR, JWT)
 	getmerkH = h_getmerk.NewMerkHandler(getmerkS)
 
+	discountR = r_discount.NewDiscountRepository(DB)
+	discountS = s_discount.NewDiscountService(discountR, JWT)
+	discountH = h_discount.NewDiscountHandler(discountS)
+
+	userR = r_user.NewUserRepository(DB)
+	userS = s_user.NewUserService(userR, JWT)
+	userH = h_user.NewUserHandler(userS)
+
+	taxR = r_tax.NewTaxRepository(DB)
+	taxS = s_tax.NewTaxService(taxR, JWT)
+	taxH = h_tax.NewTaxHandler(taxS)
+
 	getcategoryR = r_getcategory.NewGetCategoryRepository(DB)
 	getcategoryS = s_getcategory.NewGetCategoryService(getcategoryR, JWT)
 	getcategoryH = h_getcategory.NewCategoryHandler(getcategoryS)
@@ -104,21 +144,61 @@ func New() *echo.Echo {
 	{
 		packages.POST("/packages/create", packagesH.Create)
 		packages.POST("/midtrans/callback", packagesH.MidtransCallback)
-
 	}
+	merchant := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
+	{
+		merchant.PUT("/update", merchantH.Update)
+		merchant.GET("/get", merchantH.Get)
+	}
+
 	merk := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
 	{
 		merk.POST("/merk/create", merkH.Create)
 		merk.GET("/merk/pagination", merkH.Get)
-		merk.PUT("/merk/:id", merkH.Update)
+		merk.PUT("/merk/update/:id", merkH.Update)
 		merk.DELETE("/merk/:id", merkH.Delete)
 		merk.DELETE("/merk/bulk-delete", merkH.BulkDelete)
 	}
+	sidebar := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
+	{
+		sidebar.POST("/sidebar/create", sidebarH.Create)
+		sidebar.GET("/sidebar", sidebarH.Get)
+		sidebar.PUT("/sidebar/update/:id", sidebarH.Update)
+		sidebar.DELETE("/sidebar/:id", sidebarH.Delete)
+		sidebar.DELETE("/sidebar/bulk-delete", sidebarH.BulkDelete)
+	}
+	tax := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
+	{
+		tax.POST("/tax/create", taxH.Create)
+		tax.GET("/tax/pagination", taxH.Get)
+		tax.PUT("/tax/update/:id", taxH.Update)
+		tax.DELETE("/tax/:id", taxH.Delete)
+		tax.DELETE("/tax/bulk-delete", taxH.BulkDelete)
+	}
+
+	discount := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
+	{
+		discount.POST("/discount/create", discountH.Create)
+		discount.GET("/discount/pagination", discountH.Get)
+		discount.PUT("/discount/update/:id", discountH.Update)
+		discount.DELETE("/discount/:id", discountH.Delete)
+		discount.DELETE("/discount/bulk-delete", discountH.BulkDelete)
+	}
+
+	user := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
+	{
+		user.POST("/user/create", userH.Create)
+		user.GET("/user/pagination", userH.Get)
+		user.PUT("/user/update/:id", userH.Update)
+		user.DELETE("/user/:id", userH.Delete)
+		user.DELETE("/user/bulk-delete", userH.BulkDelete)
+	}
+
 	category := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
 	{
 		category.POST("/category/create", categoryH.Create)
 		category.GET("/category/pagination", categoryH.Get)
-		category.PUT("/category/:id", categoryH.Update)
+		category.PUT("/category/update/:id", categoryH.Update)
 		category.DELETE("/category/:id", categoryH.Delete)
 		category.DELETE("/category/bulk-delete", categoryH.BulkDelete)
 	}
@@ -148,7 +228,9 @@ func New() *echo.Echo {
 		product.GET("/product/pagination", productH.Get)
 		product.GET("/product/merk", getmerkH.Get)
 		product.GET("/product/category", getcategoryH.Get)
+		product.PUT("/product/upload/:id", productH.UploadImage)
 	}
+	e.GET("/uploads/:file_name", productH.GetPicture)
 
 	return e
 }

@@ -1,13 +1,12 @@
 package dashboard
 
-import "github.com/srv-cashpay/merchant/entity"
+import "github.com/srv-cashpay/merchant/dto"
 
-func (s *getCategorydashboardService) Get() ([]entity.Category, error) {
-	// Fetch comments from the repository layer based on post_id
-	comments, err := s.Repo.Get()
+func (s *getCategorydashboardService) Get(req dto.CategoryRequest) ([]dto.CategoryResponse, error) {
+	category, err := s.Repo.Get(req)
 	if err != nil {
 		return nil, err
 	}
 
-	return comments, nil
+	return category, nil
 }

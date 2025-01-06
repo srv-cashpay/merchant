@@ -1,6 +1,9 @@
 package dto
 
-import "time"
+import (
+	"mime/multipart"
+	"time"
+)
 
 type ProductRequest struct {
 	ID           string `json:"id"`
@@ -69,6 +72,30 @@ type ProductUpdateRequest struct {
 	UserID       string `json:"user_id"`
 	MerchantID   string `json:"merchant_id"`
 	Description  string `json:"description"`
+}
+
+type ProductUploadRequest struct {
+	ID          string `json:"id"`
+	File        *multipart.FileHeader
+	CreatedBy   string `json:"created_by"`
+	UpdatedBy   string `json:"updated_by"`
+	ProductID   string `json:"product_id"`
+	UserID      string `json:"user_id"`
+	MerchantID  string `json:"merchant_id"`
+	Destination string `json:"destination"`
+}
+
+type ProductUploadResponse struct {
+	FilePath string `json:"file_path"`
+}
+
+type GetProductUploadRequest struct {
+	FileName string `param:"file_name" validate:"required"`
+}
+
+type GetProductUploadResponse struct {
+	FileName string `json:"file_name"`
+	FilePath string `json:"file_path"`
 }
 
 type ProductUpdateResponse struct {

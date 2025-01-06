@@ -1,0 +1,32 @@
+package sidebar
+
+import (
+	"fmt"
+	"strconv"
+
+	"github.com/labstack/echo/v4"
+	dto "github.com/srv-cashpay/merchant/dto"
+	res "github.com/srv-cashpay/util/s/response"
+)
+
+func (b *domainHandler) GetById(c echo.Context) error {
+	var req dto.GetSidebarByIdRequest
+
+	// idStr := c.Param("id")
+
+	idParam := c.Param("id")
+	idUint, err := strconv.ParseUint(idParam, 10, 32)
+	if err != nil {
+		return res.ErrorBuilder(&res.ErrorConstant.BadRequest, fmt.Errorf("invalid ID format: %v", err)).Send(c)
+	}
+	req.ID = uint(idUint)
+
+	transaction, err := b.serviceSidebar.GetById(req)
+	if err != nil {
+		return res.ErrorBuilder(&res.ErrorConstant.NotFound, err).Send(c)
+
+	}
+
+	return res.SuccessResponse(transaction).Send(c)
+
+}

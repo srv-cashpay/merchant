@@ -12,7 +12,7 @@ func (b *categoryService) Update(req dto.CategoryUpdateRequest) (dto.CategoryUpd
 		MerchantID:   req.MerchantID,
 	}
 
-	product, err := b.Repo.Update(request)
+	product, err := b.Repo.Update(req)
 	if err != nil {
 		return product, err
 	}

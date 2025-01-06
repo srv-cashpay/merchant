@@ -6,6 +6,7 @@ import (
 )
 
 func (s *categoryService) Create(req dto.CategoryRequest) (dto.CategoryResponse, error) {
+
 	create := dto.CategoryRequest{
 		ID:           util.GenerateRandomString(),
 		UserID:       req.UserID,

@@ -1,13 +1,12 @@
 package dashboard
 
-import "github.com/srv-cashpay/merchant/entity"
+import "github.com/srv-cashpay/merchant/dto"
 
-func (s *getMerkdashboardService) Get() ([]entity.Merk, error) {
-	// Fetch comments from the repository layer based on post_id
-	comments, err := s.Repo.Get()
+func (s *getMerkdashboardService) Get(req dto.MerkRequest) ([]dto.MerkResponse, error) {
+	merk, err := s.Repo.Get(req)
 	if err != nil {
 		return nil, err
 	}
 
-	return comments, nil
+	return merk, nil
 }

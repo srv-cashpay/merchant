@@ -60,6 +60,11 @@ func InitDB() *gorm.DB {
 		&entity.Unit{},
 		&entity.Type{},
 		&entity.Category{},
+		&entity.Tax{},
+		&entity.Discount{},
+		&entity.Sidebar{},
+		&entity.Table{},
+		&entity.MerchantDetail{},
 	)
 
 	return db

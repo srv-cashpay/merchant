@@ -1,12 +1,12 @@
 package merk
 
 import (
-	"github.com/srv-cashpay/merchant/entity"
+	"github.com/srv-cashpay/merchant/dto"
 	"gorm.io/gorm"
 )
 
 type DomainRepository interface {
-	Get() ([]entity.Merk, error)
+	Get(req dto.MerkRequest) ([]dto.MerkResponse, error)
 }
 
 type getmerkRepository struct {

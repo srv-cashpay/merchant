@@ -17,6 +17,7 @@ type CategoryResponse struct {
 	Description  string `json:"description"`
 	CategoryName string `json:"category_name"`
 	CreatedBy    string `json:"created_by"`
+	CreatedAt    string `json:"createdAt_at"`
 	Status       int    `json:"status"`
 }
 
@@ -38,4 +39,5 @@ type CategoryUpdateResponse struct {
 	UpdatedBy    string `json:"updated_by"`
 	Description  string `json:"description"`
 	Status       int    `json:"status"`
+	UpdatedAt    string `json:"updated_at"`
 }
