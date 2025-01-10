@@ -86,3 +86,19 @@ func generateSecurePart() (string, error) {
 
 	return string(securePart), nil
 }
+
+func (r *merkRepository) CheckMerchantDetail(merchantID string, merchantDetail *entity.MerchantDetail) error {
+	err := r.DB.Where("id = ?", merchantID).First(merchantDetail).Error
+	if err != nil {
+		return err
+	}
+
+	// Periksa apakah semua kolom penting sudah terisi
+	if merchantDetail.MerchantName == "" || merchantDetail.Address == "" ||
+		merchantDetail.Country == "" || merchantDetail.City == "" ||
+		merchantDetail.Zip == "" || merchantDetail.Phone == "" {
+		return fmt.Errorf("all fields in MerchantDetail must be filled for merchant_id: %s", merchantID)
+	}
+
+	return nil
+}

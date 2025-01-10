@@ -23,9 +23,9 @@ import (
 	r_dashboard "github.com/srv-cashpay/merchant/repositories/dashboard"
 	s_dashboard "github.com/srv-cashpay/merchant/services/dashboard"
 
-	h_sidebar "github.com/srv-cashpay/merchant/handlers/dashboard/sidebar"
-	r_sidebar "github.com/srv-cashpay/merchant/repositories/dashboard/sidebar"
-	s_sidebar "github.com/srv-cashpay/merchant/services/dashboard/sidebar"
+	h_permission "github.com/srv-cashpay/merchant/handlers/dashboard/permission"
+	r_permission "github.com/srv-cashpay/merchant/repositories/dashboard/permission"
+	s_permission "github.com/srv-cashpay/merchant/services/dashboard/permission"
 
 	h_packages "github.com/srv-cashpay/merchant/handlers/packages"
 	r_packages "github.com/srv-cashpay/merchant/repositories/packages"
@@ -63,6 +63,10 @@ import (
 	r_merchant "github.com/srv-cashpay/merchant/repositories/merchant"
 	s_merchant "github.com/srv-cashpay/merchant/services/merchant"
 
+	h_table "github.com/srv-cashpay/merchant/handlers/table"
+	r_table "github.com/srv-cashpay/merchant/repositories/table"
+	s_table "github.com/srv-cashpay/merchant/services/table"
+
 	"github.com/srv-cashpay/middlewares/middlewares"
 )
 
@@ -91,9 +95,9 @@ var (
 	merkS = s_merk.NewMerkService(merkR, JWT)
 	merkH = h_merk.NewMerkHandler(merkS)
 
-	sidebarR = r_sidebar.NewSidebarRepository(DB)
-	sidebarS = s_sidebar.NewSidebarService(sidebarR, JWT)
-	sidebarH = h_sidebar.NewSidebarHandler(sidebarS)
+	permissionR = r_permission.NewPermissionRepository(DB)
+	permissionS = s_permission.NewPermissionService(permissionR, JWT)
+	permissionH = h_permission.NewPermissionHandler(permissionS)
 
 	categoryR = r_category.NewCategoryRepository(DB)
 	categoryS = s_category.NewCategoryService(categoryR, JWT)
@@ -118,6 +122,10 @@ var (
 	discountR = r_discount.NewDiscountRepository(DB)
 	discountS = s_discount.NewDiscountService(discountR, JWT)
 	discountH = h_discount.NewDiscountHandler(discountS)
+
+	tableR = r_table.NewTableRepository(DB)
+	tableS = s_table.NewTableService(tableR, JWT)
+	tableH = h_table.NewTableHandler(tableS)
 
 	userR = r_user.NewUserRepository(DB)
 	userS = s_user.NewUserService(userR, JWT)
@@ -159,13 +167,13 @@ func New() *echo.Echo {
 		merk.DELETE("/merk/:id", merkH.Delete)
 		merk.DELETE("/merk/bulk-delete", merkH.BulkDelete)
 	}
-	sidebar := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
+	permission := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
 	{
-		sidebar.POST("/sidebar/create", sidebarH.Create)
-		sidebar.GET("/sidebar", sidebarH.Get)
-		sidebar.PUT("/sidebar/update/:id", sidebarH.Update)
-		sidebar.DELETE("/sidebar/:id", sidebarH.Delete)
-		sidebar.DELETE("/sidebar/bulk-delete", sidebarH.BulkDelete)
+		permission.POST("/permission/create", permissionH.Create)
+		permission.GET("/permission", permissionH.Get)
+		permission.PUT("/permission/update/:id", permissionH.Update)
+		permission.DELETE("/permission/:id", permissionH.Delete)
+		permission.DELETE("/permission/bulk-delete", permissionH.BulkDelete)
 	}
 	tax := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
 	{
@@ -174,6 +182,15 @@ func New() *echo.Echo {
 		tax.PUT("/tax/update/:id", taxH.Update)
 		tax.DELETE("/tax/:id", taxH.Delete)
 		tax.DELETE("/tax/bulk-delete", taxH.BulkDelete)
+	}
+
+	table := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
+	{
+		table.POST("/table/create", tableH.Create)
+		table.GET("/table/pagination", tableH.Get)
+		table.PUT("/table/update/:id", tableH.Update)
+		table.DELETE("/table/:id", tableH.Delete)
+		table.DELETE("/table/bulk-delete", tableH.BulkDelete)
 	}
 
 	discount := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))

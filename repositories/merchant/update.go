@@ -11,14 +11,15 @@ func (b *merchantRepository) Update(req dto.UpdateMerchantRequest) (dto.UpdateMe
 	}
 
 	request := entity.MerchantDetail{
+		ID:           tr.ID,
 		MerchantName: req.MerchantName,
 		Description:  req.Description,
 		Address:      req.Address,
+		Country:      req.Country,
 		City:         req.City,
 		Zip:          req.Zip,
 		Phone:        req.Phone,
 		UpdatedBy:    req.UpdatedBy,
-		ID:           tr.ID,
 	}
 
 	mer, err := b.GetById(tr)
@@ -30,6 +31,7 @@ func (b *merchantRepository) Update(req dto.UpdateMerchantRequest) (dto.UpdateMe
 		MerchantName: request.MerchantName,
 		Description:  request.Description,
 		Address:      request.Address,
+		Country:      request.Country,
 		City:         request.City,
 		Zip:          request.Zip,
 		Phone:        request.Phone,
@@ -43,6 +45,7 @@ func (b *merchantRepository) Update(req dto.UpdateMerchantRequest) (dto.UpdateMe
 		MerchantName: request.MerchantName,
 		Description:  request.Description,
 		Address:      request.Address,
+		Country:      request.Country,
 		City:         request.City,
 		Zip:          request.Zip,
 		Phone:        request.Phone,

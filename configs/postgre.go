@@ -62,7 +62,7 @@ func InitDB() *gorm.DB {
 		&entity.Category{},
 		&entity.Tax{},
 		&entity.Discount{},
-		&entity.Sidebar{},
+		&entity.Permission{},
 		&entity.Table{},
 		&entity.MerchantDetail{},
 	)

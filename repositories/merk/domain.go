@@ -2,6 +2,7 @@ package merk
 
 import (
 	dto "github.com/srv-cashpay/merchant/dto"
+	"github.com/srv-cashpay/merchant/entity"
 
 	"gorm.io/gorm"
 )
@@ -13,6 +14,7 @@ type DomainRepository interface {
 	Get(req *dto.Pagination) (RepositoryResult, int)
 	GetById(req dto.GetByIdRequest) (*dto.MerkResponse, error)
 	Update(req dto.MerkUpdateRequest) (dto.MerkUpdateResponse, error)
+	CheckMerchantDetail(merchantID string, merchantDetail *entity.MerchantDetail) error
 }
 
 type merkRepository struct {
