@@ -6,7 +6,7 @@ require (
 	github.com/joho/godotenv v1.5.1
 	github.com/labstack/echo/v4 v4.12.0
 	github.com/midtrans/midtrans-go v1.3.8
-	github.com/srv-cashpay/auth v0.0.0-20250106054423-5efe35ba2499
+	github.com/srv-cashpay/auth v0.0.0-20250110142616-010840f63cd3
 	github.com/srv-cashpay/middlewares v0.0.0-20241205063440-0179e9f99fa9
 	github.com/srv-cashpay/pos v0.0.0-20241202032618-ba70a5017da1
 	github.com/srv-cashpay/product v0.0.0-20241229044857-acd5abb0a25c

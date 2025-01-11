@@ -1,8 +1,6 @@
 package merchant
 
 import (
-	"sync"
-
 	dto "github.com/srv-cashpay/merchant/dto"
 
 	"gorm.io/gorm"
@@ -16,7 +14,6 @@ type DomainRepository interface {
 
 type merchantRepository struct {
 	DB *gorm.DB
-	mu sync.Mutex
 }
 
 func NewMerchantRepository(DB *gorm.DB) DomainRepository {
