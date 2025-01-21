@@ -2,6 +2,7 @@ package discount
 
 import (
 	dto "github.com/srv-cashpay/merchant/dto"
+	"github.com/srv-cashpay/merchant/entity"
 
 	"gorm.io/gorm"
 )
@@ -13,6 +14,7 @@ type DomainRepository interface {
 	Delete(req dto.DeleteRequest) (dto.DeleteResponse, error)
 	BulkDelete(req dto.BulkDeleteRequest) (int, error)
 	Update(req dto.DiscountUpdateRequest) (dto.DiscountUpdateResponse, error)
+	CheckMerchantDetail(merchantID string, merchantDetail *entity.MerchantDetail) error
 }
 
 type discountRepository struct {

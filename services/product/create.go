@@ -2,14 +2,26 @@ package product
 
 import (
 	"crypto/rand"
+	"errors"
 	"fmt"
 	"time"
 
 	dto "github.com/srv-cashpay/merchant/dto"
+	"github.com/srv-cashpay/merchant/entity"
 	"golang.org/x/crypto/blake2b"
+	"gorm.io/gorm"
 )
 
 func (s *productService) Create(req dto.ProductRequest) (dto.ProductResponse, error) {
+	// Validasi MerchantDetail
+	var merchantDetail entity.MerchantDetail
+	err := s.Repo.CheckMerchantDetail(req.MerchantID, &merchantDetail)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return dto.ProductResponse{}, fmt.Errorf("merchant detail not found for merchant_id: %s", req.MerchantID)
+		}
+		return dto.ProductResponse{}, err
+	}
 	if req.Status != 1 && req.Status != 2 {
 		return dto.ProductResponse{}, fmt.Errorf("invalid status: must be 1 (active) or 2 (inactive)")
 	}

@@ -6,7 +6,9 @@ import (
 	"strconv"
 
 	dto "github.com/srv-cashpay/merchant/dto"
-	"github.com/srv-cashpay/product/entity"
+	"github.com/srv-cashpay/merchant/entity"
+	product "github.com/srv-cashpay/product/entity"
+	res "github.com/srv-cashpay/util/s/response"
 )
 
 func (r *productRepository) Create(req dto.ProductRequest) (dto.ProductResponse, error) {
@@ -32,7 +34,7 @@ func (r *productRepository) Create(req dto.ProductRequest) (dto.ProductResponse,
 	}
 
 	// Create the new product entry
-	create := entity.Product{
+	create := product.Product{
 		ID:           secureID,
 		ProductName:  req.ProductName,
 		Stock:        req.Stock,
@@ -119,4 +121,20 @@ func generateSecurePart() (string, error) {
 	}
 
 	return string(securePart), nil
+}
+
+func (r *productRepository) CheckMerchantDetail(merchantID string, merchantDetail *entity.MerchantDetail) error {
+	err := r.DB.Where("id = ?", merchantID).First(merchantDetail).Error
+	if err != nil {
+		return err
+	}
+
+	// Periksa apakah semua kolom penting sudah terisi
+	if merchantDetail.MerchantName == "" || merchantDetail.Address == "" ||
+		merchantDetail.Country == "" || merchantDetail.City == "" ||
+		merchantDetail.Zip == "" || merchantDetail.Phone == "" {
+		return res.ErrorBuilder(&res.ErrorConstant.MerchantNoProvide, nil)
+	}
+
+	return nil
 }

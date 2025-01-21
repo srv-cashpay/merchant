@@ -1,6 +1,7 @@
 package permission
 
 import (
+	"github.com/labstack/echo/v4"
 	dto "github.com/srv-cashpay/merchant/dto"
 	m "github.com/srv-cashpay/middlewares/middlewares"
 
@@ -9,7 +10,8 @@ import (
 
 type PermissionService interface {
 	Create(req dto.PermissionRequest) (dto.PermissionResponse, error)
-	Get(req dto.PermissionRequest) (dto.GetPermissionResponse, error)
+	Get(req dto.RoleUser) (dto.GetPermissionResponse, error)
+	Pagination(context echo.Context, req *dto.Pagination) dto.Response
 	GetById(req dto.GetPermissionByIdRequest) (*dto.PermissionResponse, error)
 	Delete(req dto.DeletePermissionRequest) (dto.DeletePermissionResponse, error)
 	BulkDelete(req dto.BulkDeleteRequest) (dto.BulkDeleteResponse, error)

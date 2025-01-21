@@ -1,4 +1,4 @@
-package merk
+package discount
 
 import (
 	"github.com/labstack/echo/v4"
@@ -7,8 +7,8 @@ import (
 )
 
 func (b *domainHandler) Update(c echo.Context) error {
-	var req dto.MerkUpdateRequest
-	var resp dto.MerkUpdateResponse
+	var req dto.DiscountUpdateRequest
+	var resp dto.DiscountUpdateResponse
 
 	userid, ok := c.Get("UserId").(string)
 	if !ok {
@@ -25,12 +25,6 @@ func (b *domainHandler) Update(c echo.Context) error {
 		return res.ErrorBuilder(&res.ErrorConstant.BadRequest, err).Send(c)
 	}
 
-	merchantId, ok := c.Get("MerchantId").(string)
-	if !ok {
-		return res.ErrorBuilder(&res.ErrorConstant.InternalServerError, nil).Send(c)
-	}
-
-	req.MerchantID = merchantId
 	req.ID = idUint
 	req.UpdatedBy = updatedBy
 	req.UserID = userid
@@ -40,7 +34,7 @@ func (b *domainHandler) Update(c echo.Context) error {
 		return res.ErrorBuilder(&res.ErrorConstant.BadRequest, err).Send(c)
 	}
 
-	resp, err = b.serviceMerk.Update(req)
+	resp, err = b.serviceDiscount.Update(req)
 	if err != nil {
 		return res.ErrorResponse(err).Send(c)
 	}

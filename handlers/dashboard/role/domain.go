@@ -1,7 +1,7 @@
-package permission
+package discount
 
 import (
-	s "github.com/srv-cashpay/merchant/services/dashboard/permission"
+	s "github.com/srv-cashpay/merchant/services/discount"
 
 	"github.com/labstack/echo/v4"
 )
@@ -13,15 +13,14 @@ type DomainHandler interface {
 	BulkDelete(c echo.Context) error
 	GetById(c echo.Context) error
 	Update(c echo.Context) error
-	Pagination(c echo.Context) error
 }
 
 type domainHandler struct {
-	servicePermission s.PermissionService
+	serviceDiscount s.DiscountService
 }
 
-func NewPermissionHandler(service s.PermissionService) DomainHandler {
+func NewDiscountHandler(service s.DiscountService) DomainHandler {
 	return &domainHandler{
-		servicePermission: service,
+		serviceDiscount: service,
 	}
 }

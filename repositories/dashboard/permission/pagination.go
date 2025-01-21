@@ -1,17 +1,17 @@
-package user
+package permission
 
 import (
 	"fmt"
 	"math"
 	"strings"
 
-	"github.com/srv-cashpay/auth/entity"
 	dto "github.com/srv-cashpay/merchant/dto"
+	"github.com/srv-cashpay/merchant/entity"
 	"github.com/srv-cashpay/merchant/helpers"
 )
 
-func (r *userRepository) Get(req *dto.Pagination) (RepositoryResult, int) {
-	var users []entity.AccessDoor
+func (r *PermissionRepository) Pagination(req *dto.Pagination) (RepositoryResult, int) {
+	var permissions []entity.Permission
 
 	var totalRows int64
 	totalPages, fromRow, toRow := 0, 0, 0
@@ -20,7 +20,7 @@ func (r *userRepository) Get(req *dto.Pagination) (RepositoryResult, int) {
 	offset := (req.Page - 1) * req.Limit
 
 	// Ambil data sesuai limit, offset, dan urutan
-	find := r.DB.Limit(req.Limit).Offset(offset).Order(req.Sort)
+	find := r.DB.Where("merchant_id = ?", req.MerchantID).Limit(req.Limit).Offset(offset).Order(req.Sort)
 
 	// Generate where query untuk search
 	if req.Searchs != nil {
@@ -40,22 +40,22 @@ func (r *userRepository) Get(req *dto.Pagination) (RepositoryResult, int) {
 		}
 	}
 
-	find = find.Find(&users)
+	find = find.Find(&permissions)
 
 	// Periksa jika ada error saat pengambilan data
 	if errFind := find.Error; errFind != nil {
 		return RepositoryResult{Error: errFind}, totalPages
 	}
 
-	req.Rows = users
+	req.Rows = permissions
 
 	// Hitung total data
-	if errCount := r.DB.Model(&entity.AccessDoor{}).Count(&totalRows).Error; errCount != nil {
+	if errCount := r.DB.Model(&entity.Permission{}).Where("merchant_id = ?", req.MerchantID).Count(&totalRows).Error; errCount != nil {
 		return RepositoryResult{Error: errCount}, totalPages
 	}
 
-	for i := range users {
-		users[i].UserDetail.FullName = helpers.TruncateString(users[i].UserDetail.FullName, 47)
+	for i := range permissions {
+		permissions[i].Label = helpers.TruncateString(permissions[i].Label, 47)
 	}
 
 	req.TotalRows = int(totalRows)

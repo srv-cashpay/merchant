@@ -1,11 +1,24 @@
 package category
 
 import (
+	"errors"
+	"fmt"
+
 	dto "github.com/srv-cashpay/merchant/dto"
+	"github.com/srv-cashpay/merchant/entity"
 	util "github.com/srv-cashpay/util/s"
+	"gorm.io/gorm"
 )
 
 func (s *categoryService) Create(req dto.CategoryRequest) (dto.CategoryResponse, error) {
+	var merchantDetail entity.MerchantDetail
+	err := s.Repo.CheckMerchantDetail(req.MerchantID, &merchantDetail)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return dto.CategoryResponse{}, fmt.Errorf("merchant detail not found for merchant_id: %s", req.MerchantID)
+		}
+		return dto.CategoryResponse{}, err
+	}
 
 	create := dto.CategoryRequest{
 		ID:           util.GenerateRandomString(),

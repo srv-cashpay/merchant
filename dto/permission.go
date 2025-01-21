@@ -18,16 +18,9 @@ type PermissionRequest struct {
 }
 
 type PermissionResponse struct {
-	ID         uint      `json:"id"`
-	UserID     string    `json:"user_id"`
-	MerchantID string    `json:"merchant_id"`
-	Label      string    `json:"label"`
-	Icon       string    `json:"icon"`
-	To         string    `json:"to"`
-	CreatedBy  string    `json:"created_by"`
-	UpdatedBy  string    `json:"updated_by"`
-	DeletedBy  string    `json:"deleted_by"`
-	CreatedAt  time.Time `json:"created_at"`
+	Label string `json:"label"`
+	Icon  string `json:"icon"`
+	To    string `json:"to"`
 }
 
 type GetPermissionByIdRequest struct {
@@ -54,7 +47,7 @@ type DeletePermissionResponse struct {
 }
 
 type GetPermissionResponse struct {
-	Items []PermissionItem `json:"items"`
+	Items []PermissionResponse `json:"items"`
 }
 
 type PermissionItem struct {

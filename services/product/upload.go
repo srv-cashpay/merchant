@@ -9,9 +9,22 @@ import (
 	"time"
 
 	dto "github.com/srv-cashpay/merchant/dto"
+	"github.com/srv-cashpay/merchant/entity"
+	"gorm.io/gorm"
 )
 
 func (s *productService) Upload(req dto.ProductUploadRequest) (dto.ProductUploadResponse, error) {
+
+	// Validasi MerchantDetail
+	var merchantDetail entity.MerchantDetail
+	err := s.Repo.CheckMerchantDetail(req.MerchantID, &merchantDetail)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return dto.ProductUploadResponse{}, fmt.Errorf("merchant detail not found for merchant_id: %s", req.MerchantID)
+		}
+		return dto.ProductUploadResponse{}, err
+	}
+
 	// Validate file type
 	allowedExtensions := []string{".jpg", ".jpeg", ".png"}
 	ext := strings.ToLower(filepath.Ext(req.File.Filename))

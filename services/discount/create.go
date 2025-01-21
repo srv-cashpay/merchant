@@ -2,14 +2,25 @@ package discount
 
 import (
 	"crypto/rand"
+	"errors"
 	"fmt"
 	"time"
 
 	dto "github.com/srv-cashpay/merchant/dto"
+	"github.com/srv-cashpay/merchant/entity"
 	"golang.org/x/crypto/blake2b"
+	"gorm.io/gorm"
 )
 
 func (s *discountService) Create(req dto.DiscountRequest) (dto.DiscountResponse, error) {
+	var merchantDetail entity.MerchantDetail
+	err := s.Repo.CheckMerchantDetail(req.MerchantID, &merchantDetail)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return dto.DiscountResponse{}, fmt.Errorf("merchant detail not found for merchant_id: %s", req.MerchantID)
+		}
+		return dto.DiscountResponse{}, err
+	}
 	if req.Status != 1 && req.Status != 2 {
 		return dto.DiscountResponse{}, fmt.Errorf("invalid status: must be 1 (active) or 2 (inactive)")
 	}

@@ -27,6 +27,9 @@ import (
 	r_permission "github.com/srv-cashpay/merchant/repositories/dashboard/permission"
 	s_permission "github.com/srv-cashpay/merchant/services/dashboard/permission"
 
+	// r_role "github.com/srv-cashpay/merchant/repositories/dashboard/role"
+	// s_role "github.com/srv-cashpay/merchant/services/dashboard/role"
+
 	h_packages "github.com/srv-cashpay/merchant/handlers/packages"
 	r_packages "github.com/srv-cashpay/merchant/repositories/packages"
 	s_packages "github.com/srv-cashpay/merchant/services/packages"
@@ -98,6 +101,10 @@ var (
 	permissionR = r_permission.NewPermissionRepository(DB)
 	permissionS = s_permission.NewPermissionService(permissionR, JWT)
 	permissionH = h_permission.NewPermissionHandler(permissionS)
+
+	// roleR = r_role.NewPermissionRepository(DB)
+	// roleS = s_role.NewPermissionService(roleR, JWT)
+	// roleH = h_role.NewPermissionHandler(roleS)
 
 	categoryR = r_category.NewCategoryRepository(DB)
 	categoryS = s_category.NewCategoryService(categoryR, JWT)
@@ -171,9 +178,18 @@ func New() *echo.Echo {
 	{
 		permission.POST("/permission/create", permissionH.Create)
 		permission.GET("/permission", permissionH.Get)
+		permission.GET("/permission/pagination", permissionH.Pagination)
 		permission.PUT("/permission/update/:id", permissionH.Update)
 		permission.DELETE("/permission/:id", permissionH.Delete)
 		permission.DELETE("/permission/bulk-delete", permissionH.BulkDelete)
+	}
+	// role := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
+	{
+		// role.POST("/role/create", roleH.Create)
+		// role.GET("/role/pagination", roleH.Get)
+		// role.PUT("/role/update/:id", roleH.Update)
+		// role.DELETE("/role/:id", roleH.Delete)
+		// role.DELETE("/role/bulk-delete", roleH.BulkDelete)
 	}
 	tax := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
 	{

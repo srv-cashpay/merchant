@@ -1,8 +1,25 @@
 package product
 
-import "github.com/srv-cashpay/merchant/dto"
+import (
+	"errors"
+	"fmt"
+
+	"github.com/srv-cashpay/merchant/dto"
+	"github.com/srv-cashpay/merchant/entity"
+	"gorm.io/gorm"
+)
 
 func (b *productService) Update(req dto.ProductUpdateRequest) (dto.ProductUpdateResponse, error) {
+	// Validasi MerchantDetail
+	var merchantDetail entity.MerchantDetail
+	err := b.Repo.CheckMerchantDetail(req.MerchantID, &merchantDetail)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return dto.ProductUpdateResponse{}, fmt.Errorf("merchant detail not found for merchant_id: %s", req.MerchantID)
+		}
+		return dto.ProductUpdateResponse{}, err
+	}
+
 	request := dto.ProductUpdateRequest{
 		ProductName:  req.ProductName,
 		Stock:        req.Stock,

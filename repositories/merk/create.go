@@ -6,6 +6,7 @@ import (
 
 	dto "github.com/srv-cashpay/merchant/dto"
 	"github.com/srv-cashpay/merchant/entity"
+	res "github.com/srv-cashpay/util/s/response"
 )
 
 func (r *merkRepository) Create(req dto.MerkRequest) (dto.MerkResponse, error) {
@@ -97,7 +98,7 @@ func (r *merkRepository) CheckMerchantDetail(merchantID string, merchantDetail *
 	if merchantDetail.MerchantName == "" || merchantDetail.Address == "" ||
 		merchantDetail.Country == "" || merchantDetail.City == "" ||
 		merchantDetail.Zip == "" || merchantDetail.Phone == "" {
-		return fmt.Errorf("all fields in MerchantDetail must be filled for merchant_id: %s", merchantID)
+		return res.ErrorBuilder(&res.ErrorConstant.MerchantNoProvide, nil)
 	}
 
 	return nil

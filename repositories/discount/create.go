@@ -7,6 +7,7 @@ import (
 
 	dto "github.com/srv-cashpay/merchant/dto"
 	"github.com/srv-cashpay/merchant/entity"
+	res "github.com/srv-cashpay/util/s/response"
 )
 
 func (r *discountRepository) Create(req dto.DiscountRequest) (dto.DiscountResponse, error) {
@@ -109,4 +110,20 @@ func generateSecurePart() (string, error) {
 	}
 
 	return string(securePart), nil
+}
+
+func (r *discountRepository) CheckMerchantDetail(merchantID string, merchantDetail *entity.MerchantDetail) error {
+	err := r.DB.Where("id = ?", merchantID).First(merchantDetail).Error
+	if err != nil {
+		return err
+	}
+
+	// Periksa apakah semua kolom penting sudah terisi
+	if merchantDetail.MerchantName == "" || merchantDetail.Address == "" ||
+		merchantDetail.Country == "" || merchantDetail.City == "" ||
+		merchantDetail.Zip == "" || merchantDetail.Phone == "" {
+		return res.ErrorBuilder(&res.ErrorConstant.MerchantNoProvide, nil)
+	}
+
+	return nil
 }

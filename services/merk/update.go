@@ -1,8 +1,23 @@
 package merk
 
-import "github.com/srv-cashpay/merchant/dto"
+import (
+	"errors"
+	"fmt"
+
+	"github.com/srv-cashpay/merchant/dto"
+	"github.com/srv-cashpay/merchant/entity"
+	"gorm.io/gorm"
+)
 
 func (b *merkService) Update(req dto.MerkUpdateRequest) (dto.MerkUpdateResponse, error) {
+	var merchantDetail entity.MerchantDetail
+	err := b.Repo.CheckMerchantDetail(req.MerchantID, &merchantDetail)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return dto.MerkUpdateResponse{}, fmt.Errorf("merchant detail not found for merchant_id: %s", req.MerchantID)
+		}
+		return dto.MerkUpdateResponse{}, err
+	}
 	request := dto.MerkUpdateRequest{
 		MerkName:    req.MerkName,
 		UserID:      req.UserID,

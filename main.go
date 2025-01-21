@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"github.com/srv-cashpay/auth/configs/seeder"
+	"github.com/srv-cashpay/merchant/configs/seeder"
 	"github.com/srv-cashpay/merchant/routes"
 
 	"github.com/labstack/echo/v4"

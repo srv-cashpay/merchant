@@ -9,19 +9,13 @@ import (
 )
 
 func (b *domainHandler) Get(c echo.Context) error {
-	var req dto.PermissionRequest
+	var req dto.RoleUser
 
 	userid, ok := c.Get("UserId").(string)
 	if !ok {
 		return res.ErrorBuilder(&res.ErrorConstant.InternalServerError, nil).Send(c)
 	}
 
-	merchantId, ok := c.Get("MerchantId").(string)
-	if !ok {
-		return res.ErrorBuilder(&res.ErrorConstant.InternalServerError, nil).Send(c)
-	}
-
-	req.MerchantID = merchantId
 	req.UserID = userid
 
 	products, err := b.servicePermission.Get(req)

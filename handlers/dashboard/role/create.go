@@ -1,4 +1,4 @@
-package merk
+package discount
 
 import (
 	"github.com/labstack/echo/v4"
@@ -6,23 +6,18 @@ import (
 	res "github.com/srv-cashpay/util/s/response"
 )
 
-func (b *domainHandler) Update(c echo.Context) error {
-	var req dto.MerkUpdateRequest
-	var resp dto.MerkUpdateResponse
+func (h *domainHandler) Create(c echo.Context) error {
+	var req dto.DiscountRequest
+	var resp dto.DiscountResponse
 
 	userid, ok := c.Get("UserId").(string)
 	if !ok {
 		return res.ErrorBuilder(&res.ErrorConstant.InternalServerError, nil).Send(c)
 	}
 
-	updatedBy, ok := c.Get("UpdatedBy").(string)
+	createdBy, ok := c.Get("CreatedBy").(string)
 	if !ok {
 		return res.ErrorBuilder(&res.ErrorConstant.InternalServerError, nil).Send(c)
-	}
-
-	idUint, err := res.IsNumber(c, "id")
-	if err != nil {
-		return res.ErrorBuilder(&res.ErrorConstant.BadRequest, err).Send(c)
 	}
 
 	merchantId, ok := c.Get("MerchantId").(string)
@@ -30,17 +25,16 @@ func (b *domainHandler) Update(c echo.Context) error {
 		return res.ErrorBuilder(&res.ErrorConstant.InternalServerError, nil).Send(c)
 	}
 
-	req.MerchantID = merchantId
-	req.ID = idUint
-	req.UpdatedBy = updatedBy
 	req.UserID = userid
+	req.MerchantID = merchantId
+	req.CreatedBy = createdBy
 
-	err = c.Bind(&req)
+	err := c.Bind(&req)
 	if err != nil {
 		return res.ErrorBuilder(&res.ErrorConstant.BadRequest, err).Send(c)
 	}
 
-	resp, err = b.serviceMerk.Update(req)
+	resp, err = h.serviceDiscount.Create(req)
 	if err != nil {
 		return res.ErrorResponse(err).Send(c)
 	}

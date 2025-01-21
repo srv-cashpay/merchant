@@ -26,13 +26,9 @@ func (s *permissionService) Create(req dto.PermissionRequest) (dto.PermissionRes
 	}
 
 	response := dto.PermissionResponse{
-		ID:         created.ID,
-		UserID:     created.UserID,
-		Label:      req.Label,
-		Icon:       req.Icon,
-		To:         req.To,
-		MerchantID: created.MerchantID,
-		CreatedBy:  created.CreatedBy,
+		Label: created.Label,
+		Icon:  created.Icon,
+		To:    created.To,
 	}
 
 	return response, nil
