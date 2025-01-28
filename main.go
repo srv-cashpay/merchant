@@ -16,7 +16,6 @@ func main() {
 	if dbEvent == "seeder" {
 		seeder.RunSeeder()
 	}
-
 	e := routes.New()
 	e.Use(middleware.CORS())
 
