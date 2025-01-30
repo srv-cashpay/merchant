@@ -17,25 +17,11 @@ services:
     depends_on:
       - db
     networks:
-      - local
-
-  db:
-    container_name: db_merchant
-    image: postgres:14-alpine 
-    environment: 
-      - POSTGRES_USER=${DB_USER}
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
-      - POSTGRES_DB=${DB_NAME}
-    volumes: 
-      - db_data:/var/lib/postgresql
-    ports:
-      - "5481:5432"
-    networks:
-      - local
+      - shared_network
 
   elasticsearch:
     image: 'docker.elastic.co/elasticsearch/elasticsearch:7.13.3'
-    container_name: elasticsearchmerchant
+    container_name: elasticsearch_merchant
     environment:
       - discovery.type=single-node
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
@@ -43,11 +29,13 @@ services:
       - "9400:9200"
     volumes:
       - esdata:/usr/share/elasticsearch/data
+    networks:
+      - shared_network
 
 volumes:
-    db_data:
-    esdata:
-      driver: local
+  esdata:
+    driver: local
+
 networks:
-  local:
-    driver: bridge
+  shared_network:
+    external: true
