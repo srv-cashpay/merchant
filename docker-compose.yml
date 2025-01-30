@@ -29,7 +29,7 @@ services:
     volumes: 
       - db_data:/var/lib/postgresql
     ports:
-      - "5481:5432"
+      - "5481:5431"
     networks:
       - local
 
