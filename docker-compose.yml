@@ -12,10 +12,10 @@ services:
     volumes:
       - .:/app
     ports:
-      - 2358:2345
+      - "2358:2345"
     depends_on:
-      - db_shared
-      - elasticsearch_shared
+      - db
+      - elasticsearch_auth
     networks:
       - shared_network
 
