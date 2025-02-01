@@ -28,7 +28,7 @@ services:
     volumes:
       - db_merchant_data:/var/lib/postgresql
     ports:
-      - "5433:5432"
+      - "5431:5432"
     networks:
       - shared_network
 
