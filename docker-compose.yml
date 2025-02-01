@@ -1,18 +1,19 @@
 version: '3.1'
 
 services:
+
   api_merchant:
     restart: always
     container_name: api_merchant
     build:
-      context: ./api_merchant
+      context: .
     command: /bin/sh -c "go run main.go"
     stdin_open: true
     tty: true
     volumes:
-      - ./api_merchant:/app
+      - .:/app
     ports:
-      - "2358:2345"
+      - 2358:2345
     depends_on:
       - db
     networks:
@@ -20,15 +21,15 @@ services:
 
   db:
     container_name: db_merchant
-    image: postgres:14-alpine
-    environment:
+    image: postgres:14-alpine 
+    environment: 
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=${DB_NAME}
-    volumes:
+    volumes: 
       - db_data:/var/lib/postgresql
     ports:
-      - "5432:5432"
+      - "5431:5432"
     networks:
       - local
 
@@ -44,10 +45,9 @@ services:
       - esdata:/usr/share/elasticsearch/data
 
 volumes:
-  db_data:
-  esdata:
-    driver: local
-
+    db_data:
+    esdata:
+      driver: local
 networks:
   local:
     driver: bridge
