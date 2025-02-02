@@ -13,8 +13,6 @@ services:
       - .:/app
     ports:
       - 2358:2345
-    depends_on:
-      - db_main
     networks:
       - shared_network
     env_file:
