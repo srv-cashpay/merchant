@@ -13,11 +13,10 @@ services:
       - .:/app
     ports:
       - 2358:2345
-    depends_on:
-      - db_shared
-      - elasticsearch_shared
     networks:
       - shared_network
+    env_file:
+      - .env
 
 networks:
   shared_network:
