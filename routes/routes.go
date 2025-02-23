@@ -170,6 +170,7 @@ func New() *echo.Echo {
 	{
 		merk.POST("/merk/create", merkH.Create)
 		merk.GET("/merk/pagination", merkH.Get)
+		merk.GET("/merk/:id", merkH.GetById)
 		merk.PUT("/merk/update/:id", merkH.Update)
 		merk.DELETE("/merk/:id", merkH.Delete)
 		merk.DELETE("/merk/bulk-delete", merkH.BulkDelete)

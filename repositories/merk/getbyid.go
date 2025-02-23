@@ -15,7 +15,9 @@ func (b *merkRepository) GetById(req dto.GetByIdRequest) (*dto.MerkResponse, err
 	}
 
 	response := &dto.MerkResponse{
-		MerkName: tr.MerkName,
+		MerkName:    tr.MerkName,
+		Description: tr.Description,
+		Status:      tr.Status,
 	}
 
 	return response, nil
