@@ -16,6 +16,8 @@ func (b *categoryRepository) GetById(req dto.GetByIdRequest) (*dto.CategoryRespo
 
 	response := &dto.CategoryResponse{
 		CategoryName: tr.CategoryName,
+		Description:  tr.Description,
+		Status:       tr.Status,
 	}
 
 	return response, nil
