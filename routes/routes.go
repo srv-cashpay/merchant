@@ -232,6 +232,7 @@ func New() *echo.Echo {
 	{
 		category.POST("/category/create", categoryH.Create)
 		category.GET("/category/pagination", categoryH.Get)
+		category.GET("/category/:id", categoryH.GetById)
 		category.PUT("/category/update/:id", categoryH.Update)
 		category.DELETE("/category/:id", categoryH.Delete)
 		category.DELETE("/category/bulk-delete", categoryH.BulkDelete)
