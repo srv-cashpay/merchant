@@ -38,7 +38,7 @@ func (r *dashboardRepository) Get(req dto.GetDashboardRequest) (dto.GetDashboard
 		FROM pos,
 		LATERAL json_array_elements(pos.product) AS json_data
 		WHERE pos.merchant_id = ? AND pos.deleted_at IS NULL 
-		AND pos.status_payment IN ('Lunas')
+		AND pos.status_payment IN ('Paid')
 	`, req.MerchantID).Scan(&req.TotalPrice).Error; err != nil {
 		return response, err
 	}
@@ -49,7 +49,7 @@ func (r *dashboardRepository) Get(req dto.GetDashboardRequest) (dto.GetDashboard
 		FROM pos,
 		LATERAL json_array_elements(pos.product) AS json_data
 		WHERE pos.merchant_id = ? AND pos.deleted_at IS NULL 
-		AND pos.status_payment IN ('Menunggu Pembayaran')
+		AND pos.status_payment IN ('Unpaid')
 	`, req.MerchantID).Scan(&req.TotalWaiting).Error; err != nil {
 		return response, err
 	}
@@ -57,14 +57,14 @@ func (r *dashboardRepository) Get(req dto.GetDashboardRequest) (dto.GetDashboard
 
 	var waitingPayment int64
 	if err := r.DB.Model(&entityPos.Pos{}).
-		Where("merchant_id = ? AND status_payment = ?", req.MerchantID, "Menunggu Pembayaran").
+		Where("merchant_id = ? AND status_payment = ?", req.MerchantID, "Unpaid").
 		Count(&waitingPayment).Error; err != nil {
 		return dto.GetDashboardResponse{}, err
 	}
 	response.WaitingPayment = waitingPayment
 
 	if err := r.DB.Model(&entityPos.Pos{}).
-		Where("merchant_id = ? AND status_payment = ?", req.MerchantID, "Batal Pembayaran").
+		Where("merchant_id = ? AND status_payment = ?", req.MerchantID, "Cancel").
 		Count(&req.PaymentCancel).Error; err != nil {
 		return dto.GetDashboardResponse{}, err
 	}
