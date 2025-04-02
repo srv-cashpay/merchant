@@ -62,6 +62,10 @@ import (
 	r_getcategory "github.com/srv-cashpay/merchant/repositories/product/category"
 	s_getcategory "github.com/srv-cashpay/merchant/services/product/category"
 
+	h_printer "github.com/srv-cashpay/merchant/handlers/printer"
+	r_printer "github.com/srv-cashpay/merchant/repositories/printer"
+	s_printer "github.com/srv-cashpay/merchant/services/printer"
+
 	h_merchant "github.com/srv-cashpay/merchant/handlers/merchant"
 	r_merchant "github.com/srv-cashpay/merchant/repositories/merchant"
 	s_merchant "github.com/srv-cashpay/merchant/services/merchant"
@@ -85,6 +89,10 @@ var (
 	merchantR = r_merchant.NewMerchantRepository(DB)
 	merchantS = s_merchant.NewMerchantService(merchantR, JWT)
 	merchantH = h_merchant.NewMerchantHandler(merchantS)
+
+	printerR = r_printer.NewPrinterRepository(DB)
+	printerS = s_printer.NewPrinterService(printerR, JWT)
+	printerH = h_printer.NewPrinterHandler(printerS)
 
 	packagesR = r_packages.NewPackagesRepository(DB)
 	packagesS = s_packages.NewPackagesService(packagesR, JWT)
@@ -164,6 +172,13 @@ func New() *echo.Echo {
 	{
 		merchant.PUT("/update", merchantH.Update)
 		merchant.GET("/get", merchantH.Get)
+	}
+	printer := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
+	{
+		printer.PUT("/printer/update", printerH.Update)
+		printer.GET("/printer/get", printerH.Get)
+		printer.POST("/printer/create", printerH.Create)
+
 	}
 
 	merk := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))

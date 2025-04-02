@@ -68,6 +68,8 @@ func InitDB() *gorm.DB {
 		&entity.Role{},
 		&entity.RoleUser{},
 		&entity.RoleUserPermission{},
+		&entity.Printer{},
+		&entity.PrinterAutoIncrement{},
 	)
 
 	return db
