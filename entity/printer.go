@@ -7,7 +7,7 @@ import (
 )
 
 type Printer struct {
-	ID          string         `gorm:"primary_key" json:"id"`
+	ID          string         `gorm:"id" json:"id"`
 	UserID      string         `gorm:"type:varchar(36);index" json:"user_id"`
 	MerchantID  string         `gorm:"type:varchar(36);index" json:"merchant_id"`
 	PrinterName string         `gorm:"type:varchar(50)" json:"printer_name"`
