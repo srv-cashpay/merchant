@@ -17,6 +17,16 @@ type PrinterRequest struct {
 	CreatedAt   time.Time `json:"created_at"`
 }
 
+type DeletePrinterRequest struct {
+	ID        string `param:"id" validate:"required"`
+	DeletedBy string `json:"deleted_by"`
+}
+
+type DeletePrinterResponse struct {
+	ID        string `param:"id" validate:"required"`
+	DeletedBy string `json:"deleted_by"`
+}
+
 type PrinterResponse struct {
 	ID          string    `json:"id"`
 	UserID      string    `json:"user_id"`

@@ -11,6 +11,7 @@ type DomainRepository interface {
 	Get(req dto.GetPrinterRequest) (dto.GetPrinterResponse, error)
 	GetById(req dto.GetByIdRequest) (*dto.GetPrinterResponse, error)
 	Update(req dto.UpdatePrinterRequest) (dto.UpdatePrinterResponse, error)
+	Delete(req dto.DeletePrinterRequest) (dto.DeletePrinterResponse, error)
 }
 
 type printerRepository struct {

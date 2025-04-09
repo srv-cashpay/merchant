@@ -178,7 +178,7 @@ func New() *echo.Echo {
 		printer.PUT("/printer/update", printerH.Update)
 		printer.GET("/printer/get", printerH.Get)
 		printer.POST("/printer/create", printerH.Create)
-
+		printer.DELETE("/printer/:id", printerH.Delete)
 	}
 
 	merk := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
