@@ -47,9 +47,9 @@ func (s *packagesService) Create(req dto.PackagesRequest) (dto.PackagesResponse,
 	}
 
 	snapTokenResp, err := midtransClient.CreateTransaction(transactionReq)
-	if err != nil || snapTokenResp.Token == "" {
+	if snapTokenResp == nil || snapTokenResp.Token == "" {
 		_ = s.Repo.UpdateStatus(orderID, constant.StatusFailed)
-		return dto.PackagesResponse{}, fmt.Errorf("failed to create Midtrans transaction")
+		return dto.PackagesResponse{}, nil
 	}
 
 	_ = s.Repo.UpdateStatus(orderID, constant.StatusPending)
