@@ -22,23 +22,24 @@ func (h *domainHandler) MidtransCallback(c echo.Context) error {
 	var notificationPayload MidtransNotification
 
 	if err := c.Bind(&notificationPayload); err != nil {
-		return res.ErrorBuilder(&res.ErrorConstant.BadRequest, err).Send(c)
+		return res.ErrorResponse(err).Send(c)
 	}
 
-	orderID := notificationPayload.OrderID
-	midtransStatus := notificationPayload.TransactionStatus
-
-	internalStatus, err := MapMidtransStatusToInternal(midtransStatus)
+	internalStatus, err := MapMidtransStatusToInternal(notificationPayload.TransactionStatus)
 	if err != nil {
-		return res.ErrorBuilder(&res.ErrorConstant.BadRequest, err).Send(c)
+		return res.ErrorResponse(err).Send(c)
 	}
 
-	err = h.servicePackages.UpdateStatus(orderID, internalStatus)
+	err = h.servicePackages.UpdateStatus(notificationPayload.OrderID, internalStatus)
 	if err != nil {
-		return res.ErrorBuilder(&res.ErrorConstant.InternalServerError, err).Send(c)
+		return res.ErrorResponse(err).Send(c)
 	}
 
-	return res.SuccessResponse("Payment status updated successfully").Send(c)
+	return res.SuccessResponse(map[string]string{
+		"message": "Payment status updated successfully",
+		"orderId": notificationPayload.OrderID,
+		"status":  internalStatus,
+	}).Send(c)
 }
 
 func MapMidtransStatusToInternal(midtransStatus string) (string, error) {
