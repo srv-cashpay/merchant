@@ -2,6 +2,7 @@ package packages
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/labstack/echo/v4"
 	"github.com/srv-cashpay/merchant/constant"
@@ -11,11 +12,11 @@ import (
 type MidtransNotification struct {
 	OrderID           string `json:"order_id"`
 	TransactionStatus string `json:"transaction_status"`
-	StatusCode        string `json:"status_code"` // <- tambahkan ini
+	StatusCode        string `json:"status_code"`
 	GrossAmount       string `json:"gross_amount"`
 	SignatureKey      string `json:"signature_key"`
 	PaymentType       string `json:"payment_type"`
-	FraudStatus       string `json:"fraud_status"` // penting untuk kartu kredit
+	FraudStatus       string `json:"fraud_status"`
 }
 
 func (h *domainHandler) MidtransCallback(c echo.Context) error {
@@ -25,13 +26,13 @@ func (h *domainHandler) MidtransCallback(c echo.Context) error {
 		return res.ErrorResponse(err).Send(c)
 	}
 
-	internalStatus, err := MapMidtransStatusToInternal(notificationPayload.TransactionStatus)
+	internalStatus, err := mapMidtransStatusToInternal(notificationPayload.TransactionStatus)
 	if err != nil {
+		log.Printf("MidtransCallback: unknown transaction status received: %s", notificationPayload.TransactionStatus)
 		return res.ErrorResponse(err).Send(c)
 	}
 
-	err = h.servicePackages.UpdateStatus(notificationPayload.OrderID, internalStatus)
-	if err != nil {
+	if err := h.servicePackages.UpdateStatus(notificationPayload.OrderID, internalStatus); err != nil {
 		return res.ErrorResponse(err).Send(c)
 	}
 
@@ -42,7 +43,7 @@ func (h *domainHandler) MidtransCallback(c echo.Context) error {
 	}).Send(c)
 }
 
-func MapMidtransStatusToInternal(midtransStatus string) (string, error) {
+func mapMidtransStatusToInternal(midtransStatus string) (string, error) {
 	switch midtransStatus {
 	case "capture", "settlement":
 		return constant.StatusPaid, nil

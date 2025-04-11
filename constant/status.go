@@ -3,6 +3,6 @@ package constant
 const (
 	StatusInitiated = "initiated"
 	StatusPending   = "pending"
-	StatusPaid      = "paid"
+	StatusPaid      = "settlement"
 	StatusFailed    = "failed"
 )
