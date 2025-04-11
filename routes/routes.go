@@ -110,10 +110,6 @@ var (
 	permissionS = s_permission.NewPermissionService(permissionR, JWT)
 	permissionH = h_permission.NewPermissionHandler(permissionS)
 
-	// roleR = r_role.NewPermissionRepository(DB)
-	// roleS = s_role.NewPermissionService(roleR, JWT)
-	// roleH = h_role.NewPermissionHandler(roleS)
-
 	categoryR = r_category.NewCategoryRepository(DB)
 	categoryS = s_category.NewCategoryService(categoryR, JWT)
 	categoryH = h_category.NewCategoryHandler(categoryS)
@@ -158,6 +154,7 @@ var (
 func New() *echo.Echo {
 
 	e := echo.New()
+	e.POST("/midtrans/callback", packagesH.MidtransCallback)
 
 	pos := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
 	{
@@ -166,7 +163,6 @@ func New() *echo.Echo {
 	packages := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
 	{
 		packages.POST("/packages/create", packagesH.Create)
-		packages.POST("/midtrans/callback", packagesH.MidtransCallback)
 	}
 	merchant := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
 	{
