@@ -1,16 +1,18 @@
 module github.com/srv-cashpay/merchant
 
-go 1.21.0
+go 1.23.0
+
+toolchain go1.23.8
 
 require (
 	github.com/joho/godotenv v1.5.1
 	github.com/labstack/echo/v4 v4.12.0
 	github.com/midtrans/midtrans-go v1.3.8
-	github.com/srv-cashpay/auth v0.0.0-20241021072459-2fad1b3b2aa5
-	github.com/srv-cashpay/middlewares v0.0.0-20241205063440-0179e9f99fa9
-	github.com/srv-cashpay/pos v0.0.0-20241202032618-ba70a5017da1
-	github.com/srv-cashpay/product v0.0.0-20241229044857-acd5abb0a25c
-	github.com/srv-cashpay/util v0.0.0-20250108210154-3a9782749bbc
+	github.com/srv-cashpay/auth v0.0.0-20250420081851-2a728276c864
+	github.com/srv-cashpay/middlewares v0.0.0-20250120090519-4aa5ca3d5cac
+	github.com/srv-cashpay/pos v0.0.0-20250317074838-1b049d295205
+	github.com/srv-cashpay/product v0.0.0-20250222060502-e322c7544bae
+	github.com/srv-cashpay/util v0.0.0-20250421062020-671f81a9b5f4
 	gorm.io/driver/postgres v1.5.9
 )
 
@@ -33,7 +35,7 @@ require (
 	github.com/sirupsen/logrus v1.9.3 // indirect
 	github.com/streadway/amqp v1.1.0 // indirect
 	github.com/teris-io/shortid v0.0.0-20220617161101-71ec9f2aa569 // indirect
-	golang.org/x/sync v0.8.0 // indirect
+	golang.org/x/sync v0.13.0 // indirect
 	golang.org/x/time v0.5.0 // indirect
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
 	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df // indirect
@@ -47,7 +49,7 @@ require (
 	github.com/valyala/fasttemplate v1.2.2 // indirect
 	golang.org/x/crypto v0.28.0
 	golang.org/x/net v0.24.0 // indirect
-	golang.org/x/sys v0.26.0 // indirect
-	golang.org/x/text v0.19.0 // indirect
+	golang.org/x/sys v0.32.0 // indirect
+	golang.org/x/text v0.24.0 // indirect
 	gorm.io/gorm v1.25.12
 )

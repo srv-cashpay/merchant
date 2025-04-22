@@ -55,7 +55,7 @@ func (r *userRepository) Get(req *dto.Pagination) (RepositoryResult, int) {
 	}
 
 	for i := range users {
-		users[i].UserDetail.FullName = helpers.TruncateString(users[i].UserDetail.FullName, 47)
+		users[i].FullName = helpers.TruncateString(users[i].FullName, 47)
 	}
 
 	req.TotalRows = int(totalRows)
