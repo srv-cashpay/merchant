@@ -39,7 +39,7 @@ func (s *packagesService) Create(req dto.PackagesRequest) (dto.PackagesResponse,
 			GrossAmt: int64(create.GrossAmount),
 		},
 		CustomerDetail: &midtrans.CustomerDetails{
-			FName: req.FirstName,
+			FName: create.CreatedBy,
 			LName: req.LastName,
 			Email: req.Email,
 			Phone: req.CreatedBy,
