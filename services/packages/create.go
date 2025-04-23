@@ -30,6 +30,11 @@ func (s *packagesService) Create(req dto.PackagesRequest) (dto.PackagesResponse,
 		return dto.PackagesResponse{}, err
 	}
 
+	user, err := s.Repo.FindByID(req.CreatedBy)
+	if err != nil {
+		return dto.PackagesResponse{}, fmt.Errorf("user not found: %w", err)
+	}
+
 	midtransClient := snap.Client{}
 	midtransClient.New(os.Getenv("MidKeyProd"), midtrans.Production)
 
@@ -39,9 +44,8 @@ func (s *packagesService) Create(req dto.PackagesRequest) (dto.PackagesResponse,
 			GrossAmt: int64(create.GrossAmount),
 		},
 		CustomerDetail: &midtrans.CustomerDetails{
-			FName: create.CreatedBy,
-			LName: req.LastName,
-			Email: req.Email,
+			FName: user.FullName,
+			Email: user.Email,
 			Phone: req.CreatedBy,
 		},
 	}
