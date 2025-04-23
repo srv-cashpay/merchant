@@ -30,7 +30,7 @@ func (s *packagesService) Create(req dto.PackagesRequest) (dto.PackagesResponse,
 		return dto.PackagesResponse{}, err
 	}
 
-	user, err := s.Repo.FindByID(req.CreatedBy)
+	user, err := s.Repo.FindByID(req.UserID)
 	if err != nil {
 		return dto.PackagesResponse{}, fmt.Errorf("user not found: %w", err)
 	}
@@ -44,7 +44,7 @@ func (s *packagesService) Create(req dto.PackagesRequest) (dto.PackagesResponse,
 			GrossAmt: int64(create.GrossAmount),
 		},
 		CustomerDetail: &midtrans.CustomerDetails{
-			FName: user.FullName,
+			FName: create.CreatedBy,
 			Email: user.Email,
 			Phone: req.CreatedBy,
 		},

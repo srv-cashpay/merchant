@@ -8,6 +8,7 @@ import (
 
 func (r *packagesRepository) Create(req dto.PackagesRequest) (dto.PackagesResponse, error) {
 	// 1. Membuat entitas package berdasarkan request
+
 	create := entity.Package{
 		ID:          req.ID,
 		UserID:      req.UserID,
@@ -16,7 +17,6 @@ func (r *packagesRepository) Create(req dto.PackagesRequest) (dto.PackagesRespon
 		GrossAmount: req.GrossAmount,
 		OrderID:     req.OrderID, // Order ID di sini digunakan untuk transaksi Midtrans
 	}
-
 	// 2. Simpan package ke database
 	if err := r.DB.Save(&create).Error; err != nil {
 		return dto.PackagesResponse{}, err
@@ -45,9 +45,9 @@ func (r *packagesRepository) UpdateStatus(orderID string, status string) error {
 	return nil
 }
 
-func (r *packagesRepository) FindByID(id string) (auth.AccessDoor, error) {
+func (r *packagesRepository) FindByID(userID string) (auth.AccessDoor, error) {
 	var user auth.AccessDoor
-	if err := r.DB.Where("id = ?", id).First(&user).Error; err != nil {
+	if err := r.DB.Where("id = ?", userID).First(&user).Error; err != nil {
 		return auth.AccessDoor{}, err
 	}
 	return user, nil
