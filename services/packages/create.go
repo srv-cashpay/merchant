@@ -30,7 +30,7 @@ func (s *packagesService) Create(req dto.PackagesRequest) (dto.PackagesResponse,
 		return dto.PackagesResponse{}, err
 	}
 
-	user, err := s.Repo.FindByID(req.UserID)
+	user, err := s.Repo.FindByID(created.UserID)
 	if err != nil {
 		return dto.PackagesResponse{}, fmt.Errorf("user not found: %w", err)
 	}
