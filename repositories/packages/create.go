@@ -1,7 +1,6 @@
 package packages
 
 import (
-	auth "github.com/srv-cashpay/auth/entity"
 	dto "github.com/srv-cashpay/merchant/dto"
 	"github.com/srv-cashpay/merchant/entity"
 )
@@ -43,12 +42,4 @@ func (r *packagesRepository) UpdateStatus(orderID string, status string) error {
 		return err
 	}
 	return nil
-}
-
-func (r *packagesRepository) FindByID(userID string) (auth.AccessDoor, error) {
-	var user auth.AccessDoor
-	if err := r.DB.Where("id = ?", userID).First(&user).Error; err != nil {
-		return auth.AccessDoor{}, err
-	}
-	return user, nil
 }
