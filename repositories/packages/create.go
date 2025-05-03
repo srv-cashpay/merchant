@@ -1,6 +1,9 @@
 package packages
 
 import (
+	"time"
+
+	auth "github.com/srv-cashpay/auth/entity"
 	dto "github.com/srv-cashpay/merchant/dto"
 	"github.com/srv-cashpay/merchant/entity"
 )
@@ -41,5 +44,25 @@ func (r *packagesRepository) UpdateStatus(orderID string, status string) error {
 		Update("status", status).Error; err != nil {
 		return err
 	}
+	return nil
+}
+
+func (r *packagesRepository) UpdateUserVerified(orderID string) error {
+	// Cari UserID berdasarkan OrderID
+	var pkg entity.Package
+	if err := r.DB.Where("order_id = ?", orderID).First(&pkg).Error; err != nil {
+		return err
+	}
+
+	// Update UserVerified
+	if err := r.DB.Model(&auth.UserVerified{}).
+		Where("user_id = ?", pkg.UserID).
+		Updates(map[string]interface{}{
+			"status_account":  true,
+			"account_expired": time.Now().Add(30 * 24 * time.Hour), // fix 30 hari
+		}).Error; err != nil {
+		return err
+	}
+
 	return nil
 }

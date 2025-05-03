@@ -30,9 +30,14 @@ func (s *packagesService) Create(req dto.PackagesRequest) (dto.PackagesResponse,
 		return dto.PackagesResponse{}, err
 	}
 
+	// Init Snap client
 	midtransClient := snap.Client{}
 	midtransClient.New(os.Getenv("MidKeyProd"), midtrans.Production)
 
+	// Mapping dari user input ke SnapPaymentType
+	paymentType := mapPaymentType(req.PaymentType)
+
+	// Build Snap Request
 	transactionReq := &snap.Request{
 		TransactionDetails: midtrans.TransactionDetails{
 			OrderID:  create.OrderID,
@@ -40,9 +45,12 @@ func (s *packagesService) Create(req dto.PackagesRequest) (dto.PackagesResponse,
 		},
 		CustomerDetail: &midtrans.CustomerDetails{
 			FName: create.CreatedBy,
-			Phone: req.CreatedBy,
 		},
+		EnabledPayments: []snap.SnapPaymentType{paymentType}, // This is the correct type
+
 	}
+
+	// Create Snap Transaction
 
 	snapTokenResp, err := midtransClient.CreateTransaction(transactionReq)
 	if snapTokenResp == nil || snapTokenResp.Token == "" {
@@ -84,5 +92,37 @@ func (s *packagesService) UpdateStatus(orderID string, transactionStatus string)
 		return fmt.Errorf("unknown transaction status: %s", transactionStatus)
 	}
 
-	return s.Repo.UpdateStatus(orderID, status)
+	if err := s.Repo.UpdateStatus(orderID, status); err != nil {
+		return err
+	}
+
+	if transactionStatus == "settlement" {
+		if err := s.Repo.UpdateUserVerified(orderID); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func mapPaymentType(userInput string) snap.SnapPaymentType {
+	switch userInput {
+
+	case "gopay":
+		return snap.PaymentTypeGopay
+	case "bca_va":
+		return snap.PaymentTypeBCAVA
+	case "bni_va":
+		return snap.PaymentTypeBNIVA
+	case "permata_va":
+		return snap.PaymentTypePermataVA
+	case "bank_transfer":
+		return snap.PaymentTypeBankTransfer
+	case "alfamart":
+		return snap.PaymentTypeAlfamart
+	case "indomaret":
+		return snap.PaymentTypeIndomaret
+	default:
+		return snap.PaymentTypeGopay // default QRIS
+	}
 }

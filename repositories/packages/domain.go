@@ -9,6 +9,7 @@ import (
 type DomainRepository interface {
 	Create(req dto.PackagesRequest) (dto.PackagesResponse, error)
 	UpdateStatus(orderID string, status string) error
+	UpdateUserVerified(orderID string) error
 }
 
 type packagesRepository struct {

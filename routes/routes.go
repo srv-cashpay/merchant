@@ -155,6 +155,7 @@ func New() *echo.Echo {
 
 	e := echo.New()
 	e.POST("/midtrans/callback", packagesH.MidtransCallback)
+	e.POST("/charge", packagesH.Charge)
 
 	pos := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
 	{

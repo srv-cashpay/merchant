@@ -8,6 +8,7 @@ type PackagesRequest struct {
 	Phone       string `json:"phone"`
 	UserID      string `json:"user_id"`
 	CreatedBy   string `json:"created_by"`
+	PaymentType string `json:"payment_type"`
 	OrderID     string `json:"order_id"`
 	GrossAmount int64  `json:"gross_amount"`
 	Status      string `json:"status"`
