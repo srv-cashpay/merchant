@@ -6,14 +6,15 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/labstack/echo/v4"
 )
 
-const (
-	MidtransServerKey = "SB-Mid-server-NYdY8JWbr0L0pc0f3jPXsLHH" // Ganti dengan server key kamu
-	MidtransEndpoint  = "https://api.sandbox.midtrans.com/v2/charge"
+var (
+	MidtransServerKey = os.Getenv("MIDTRANS_SERVER_KEY")
+	MidtransEndpoint  = os.Getenv("MIDTRANS_ENDPOINT")
 )
 
 type ChargeRequest struct {
