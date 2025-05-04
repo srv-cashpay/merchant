@@ -9,7 +9,16 @@ import (
 type DomainHandler interface {
 	Create(c echo.Context) error
 	MidtransCallback(c echo.Context) error
-	Charge(c echo.Context) error
+	ChargeBni(c echo.Context) error
+	ChargeBca(c echo.Context) error
+	ChargeMandiri(c echo.Context) error
+	ChargeBri(c echo.Context) error
+
+	ChargeGpay(c echo.Context) error
+
+	ChargeQris(c echo.Context) error
+	ChargeGopay(c echo.Context) error
+	ChargeShopeePay(c echo.Context) error
 }
 
 type domainHandler struct {

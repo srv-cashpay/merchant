@@ -155,7 +155,16 @@ func New() *echo.Echo {
 
 	e := echo.New()
 	e.POST("/midtrans/callback", packagesH.MidtransCallback)
-	e.POST("/charge", packagesH.Charge)
+	e.POST("/charge", packagesH.ChargeBni)
+	e.POST("/charge-bca", packagesH.ChargeBca)
+	e.POST("/charge-mandiri", packagesH.ChargeMandiri)
+	e.POST("/charge-bri", packagesH.ChargeBri)
+
+	e.POST("/charge-qris", packagesH.ChargeQris)
+	e.POST("/charge-gopay", packagesH.ChargeGopay)
+	e.POST("/charge-shopeepay", packagesH.ChargeShopeePay)
+
+	e.POST("/charge-gpay", packagesH.ChargeGpay)
 
 	pos := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
 	{

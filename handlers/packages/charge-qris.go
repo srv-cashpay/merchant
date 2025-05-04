@@ -6,37 +6,15 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
-	"os"
 	"time"
+
+	dto "github.com/srv-cashpay/merchant/dto"
 
 	"github.com/labstack/echo/v4"
 )
 
-var (
-	MidtransServerKey = os.Getenv("MIDTRANS_SERVER_KEY")
-	MidtransEndpoint  = os.Getenv("MIDTRANS_ENDPOINT")
-)
-
-type ChargeRequest struct {
-	OrderID string `json:"order_id"`
-	Amount  int64  `json:"amount"`
-}
-
-type VAResponse struct {
-	OrderID           string `json:"order_id"`
-	TransactionID     string `json:"transaction_id"`
-	TransactionStatus string `json:"transaction_status"`
-	StatusCode        string `json:"status_code"`
-	StatusMessage     string `json:"status_message"`
-	VANumbers         []struct {
-		Bank     string `json:"bank"`
-		VANumber string `json:"va_number"`
-	} `json:"va_numbers"`
-	ExpiryTime string `json:"expiry_time"`
-}
-
-func (h *domainHandler) Charge(c echo.Context) error {
-	var req ChargeRequest
+func (h *domainHandler) ChargeQris(c echo.Context) error {
+	var req dto.ChargeRequest
 	if err := c.Bind(&req); err != nil {
 		return c.JSON(http.StatusBadRequest, echo.Map{
 			"error":   "Invalid request payload",
@@ -51,18 +29,10 @@ func (h *domainHandler) Charge(c echo.Context) error {
 	}
 
 	payload := map[string]interface{}{
-		"payment_type": "bank_transfer",
+		"payment_type": "qris",
 		"transaction_details": map[string]interface{}{
 			"order_id":     req.OrderID,
 			"gross_amount": req.Amount,
-		},
-		"bank_transfer": map[string]interface{}{
-			"bank": "bni",
-		},
-		"custom_expiry": map[string]interface{}{
-			"order_time":      time.Now().Format("2006-01-02 15:04:05 -0700"),
-			"expiry_duration": 1,
-			"unit":            "hour",
 		},
 	}
 
@@ -73,14 +43,14 @@ func (h *domainHandler) Charge(c echo.Context) error {
 		})
 	}
 
-	httpReq, err := http.NewRequest("POST", MidtransEndpoint, bytes.NewBuffer(bodyBytes))
+	httpReq, err := http.NewRequest("POST", dto.GetMidtransEndpoint(), bytes.NewBuffer(bodyBytes))
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, echo.Map{
 			"error": "Failed to create HTTP request",
 		})
 	}
 
-	auth := base64.StdEncoding.EncodeToString([]byte(MidtransServerKey + ":"))
+	auth := base64.StdEncoding.EncodeToString([]byte(dto.GetMidtransServerKey() + ":"))
 	httpReq.Header.Set("Authorization", "Basic "+auth)
 	httpReq.Header.Set("Content-Type", "application/json")
 
@@ -101,7 +71,7 @@ func (h *domainHandler) Charge(c echo.Context) error {
 		})
 	}
 
-	var parsed VAResponse
+	var parsed dto.QrisResponse
 	if err := json.Unmarshal(resBody, &parsed); err != nil {
 		return c.JSON(http.StatusInternalServerError, echo.Map{
 			"error":   "Invalid response from Midtrans",
@@ -109,7 +79,6 @@ func (h *domainHandler) Charge(c echo.Context) error {
 		})
 	}
 
-	// Cek status_code di dalam isi response
 	if parsed.StatusCode != "201" {
 		return c.JSON(http.StatusBadGateway, echo.Map{
 			"error":   "Midtrans returned an error",
@@ -118,6 +87,5 @@ func (h *domainHandler) Charge(c echo.Context) error {
 		})
 	}
 
-	// Berhasil
 	return c.JSON(http.StatusOK, parsed)
 }
