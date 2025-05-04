@@ -154,6 +154,7 @@ var (
 func New() *echo.Echo {
 
 	e := echo.New()
+	e.GET("/transaction/:order_id/status", packagesH.CheckTransactionStatus)
 	e.POST("/midtrans/callback", packagesH.MidtransCallback)
 	e.POST("/charge-bni", packagesH.ChargeBni)
 	e.POST("/charge-bca", packagesH.ChargeBca)

@@ -19,6 +19,8 @@ type DomainHandler interface {
 	ChargeQris(c echo.Context) error
 	ChargeGopay(c echo.Context) error
 	ChargeShopeePay(c echo.Context) error
+
+	CheckTransactionStatus(c echo.Context) error
 }
 
 type domainHandler struct {
