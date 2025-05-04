@@ -155,7 +155,7 @@ func New() *echo.Echo {
 
 	e := echo.New()
 	e.POST("/midtrans/callback", packagesH.MidtransCallback)
-	e.POST("/charge", packagesH.ChargeBni)
+	e.POST("/charge-bni", packagesH.ChargeBni)
 	e.POST("/charge-bca", packagesH.ChargeBca)
 	e.POST("/charge-mandiri", packagesH.ChargeMandiri)
 	e.POST("/charge-bri", packagesH.ChargeBri)
