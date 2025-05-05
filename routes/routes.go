@@ -154,20 +154,22 @@ var (
 func New() *echo.Echo {
 
 	e := echo.New()
-	e.GET("/transaction/:order_id/status", subscribeH.CheckTransactionStatus)
-	e.POST("/midtrans/callback", subscribeH.MidtransCallback)
-	e.POST("/charge-bni", subscribeH.ChargeBni)
-	e.POST("/charge-bca", subscribeH.ChargeBca)
-	e.POST("/charge-mandiri", subscribeH.ChargeMandiri)
-	e.POST("/charge-bri", subscribeH.ChargeBri)
+	sub := e.Group("sub", middlewares.AuthorizeJWT(JWT))
+	{
+		sub.GET("/transaction/:order_id/status", subscribeH.CheckTransactionStatus)
+		sub.POST("/midtrans/callback", subscribeH.MidtransCallback)
+		sub.POST("/charge-bni", subscribeH.ChargeBni)
+		sub.POST("/charge-bca", subscribeH.ChargeBca)
+		sub.POST("/charge-mandiri", subscribeH.ChargeMandiri)
+		sub.POST("/charge-bri", subscribeH.ChargeBri)
 
-	e.POST("/charge-qris", subscribeH.ChargeQris)
-	e.POST("/charge-gopay", subscribeH.ChargeGopay)
-	e.POST("/charge-shopeepay", subscribeH.ChargeShopeePay)
+		sub.POST("/charge-qris", subscribeH.ChargeQris)
+		sub.POST("/charge-gopay", subscribeH.ChargeGopay)
+		sub.POST("/charge-shopeepay", subscribeH.ChargeShopeePay)
 
-	e.POST("/charge-gpay", subscribeH.ChargeGpay)
-	e.POST("/charge-gpay", subscribeH.ChargeGpay)
-
+		sub.POST("/charge-gpay", subscribeH.ChargeGpay)
+		sub.POST("/charge-gpay", subscribeH.ChargeGpay)
+	}
 	pos := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
 	{
 		pos.POST("/pos/create", posH.Create)
