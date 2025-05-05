@@ -9,6 +9,7 @@ import (
 	"time"
 
 	dto "github.com/srv-cashpay/merchant/dto"
+	resp "github.com/srv-cashpay/util/s/response"
 
 	"github.com/labstack/echo/v4"
 )
@@ -85,6 +86,15 @@ func (h *domainHandler) ChargeQris(c echo.Context) error {
 			"code":    parsed.StatusCode,
 			"message": parsed.StatusMessage,
 		})
+	}
+
+	internalStatus, err := mapMidtransStatusToInternal(parsed.TransactionStatus)
+	if err != nil {
+		return resp.ErrorResponse(err).Send(c)
+	}
+
+	if err := h.servicePackages.UpdateStatus(req.OrderID, internalStatus); err != nil {
+		return resp.ErrorResponse(err).Send(c)
 	}
 
 	return c.JSON(http.StatusOK, parsed)
