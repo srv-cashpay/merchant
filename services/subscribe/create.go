@@ -32,7 +32,7 @@ func (s *subscribeService) Create(req dto.PackagesRequest) (dto.PackagesResponse
 
 	// Init Snap client
 	midtransClient := snap.Client{}
-	midtransClient.New(os.Getenv("MidKeyProd"), midtrans.Production)
+	midtransClient.New(os.Getenv("MIDTRANS_SERVER_KEY"), midtrans.Production)
 
 	// Mapping dari user input ke SnapPaymentType
 	paymentType := mapPaymentType(req.PaymentType)
