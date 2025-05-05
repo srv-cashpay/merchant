@@ -1,4 +1,4 @@
-package packages
+package subscribe
 
 import (
 	"encoding/base64"

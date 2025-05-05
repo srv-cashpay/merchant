@@ -7,6 +7,8 @@ type ChargeRequest struct {
 	Amount    int64  `json:"amount"`
 	CardToken string `json:"card_token"` // Token kartu kredit yang didapatkan dari frontend
 	Channel   string `json:"channel"`    // Metode pembayaran yang digunakan, contoh: "credit_card"
+	UserID    string `json:"user_id"`
+	CreatedBy string `json:"created_by"`
 }
 
 type VAResponse struct {

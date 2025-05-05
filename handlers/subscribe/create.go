@@ -1,4 +1,4 @@
-package packages
+package subscribe
 
 import (
 	"github.com/labstack/echo/v4"
@@ -27,7 +27,7 @@ func (h *domainHandler) Create(c echo.Context) error {
 		return res.ErrorBuilder(&res.ErrorConstant.BadRequest, err).Send(c)
 	}
 
-	resp, err = h.servicePackages.Create(req)
+	resp, err = h.serviceSubscribe.Create(req)
 	if err != nil {
 		return res.ErrorResponse(err).Send(c)
 	}

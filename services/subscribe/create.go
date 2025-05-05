@@ -1,4 +1,4 @@
-package packages
+package subscribe
 
 import (
 	"fmt"
@@ -13,7 +13,7 @@ import (
 	util "github.com/srv-cashpay/util/s"
 )
 
-func (s *packagesService) Create(req dto.PackagesRequest) (dto.PackagesResponse, error) {
+func (s *subscribeService) Create(req dto.PackagesRequest) (dto.PackagesResponse, error) {
 	orderID := util.GenerateRandomString()
 
 	create := dto.PackagesRequest{
@@ -74,7 +74,7 @@ func (s *packagesService) Create(req dto.PackagesRequest) (dto.PackagesResponse,
 	return response, nil
 }
 
-func (s *packagesService) UpdateStatus(orderID string, transactionStatus string) error {
+func (s *subscribeService) UpdateStatus(orderID string, transactionStatus string) error {
 	var status string
 
 	switch transactionStatus {

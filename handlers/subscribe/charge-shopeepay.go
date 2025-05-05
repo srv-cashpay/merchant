@@ -1,4 +1,4 @@
-package packages
+package subscribe
 
 import (
 	"bytes"
@@ -8,11 +8,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/labstack/echo/v4"
 	dto "github.com/srv-cashpay/merchant/dto"
+
+	"github.com/labstack/echo/v4"
 )
 
-func (h *domainHandler) ChargeBni(c echo.Context) error {
+func (h *domainHandler) ChargeShopeePay(c echo.Context) error {
 	var req dto.ChargeRequest
 	if err := c.Bind(&req); err != nil {
 		return c.JSON(http.StatusBadRequest, echo.Map{
@@ -28,18 +29,14 @@ func (h *domainHandler) ChargeBni(c echo.Context) error {
 	}
 
 	payload := map[string]interface{}{
-		"payment_type": "bank_transfer",
+		"payment_type": "shopeepay",
 		"transaction_details": map[string]interface{}{
 			"order_id":     req.OrderID,
 			"gross_amount": req.Amount,
 		},
-		"bank_transfer": map[string]interface{}{
-			"bank": "bni",
-		},
-		"custom_expiry": map[string]interface{}{
-			"order_time":      time.Now().Format("2006-01-02 15:04:05 -0700"),
-			"expiry_duration": 1,
-			"unit":            "hour",
+		"shopeepay": map[string]interface{}{
+			"callback_url": "https://your-callback-url.com/notification", // Sesuaikan
+			"redirect_url": "https://your-web-app.com/payment/success",   // Jika ingin redirect ke frontend
 		},
 	}
 
@@ -78,7 +75,7 @@ func (h *domainHandler) ChargeBni(c echo.Context) error {
 		})
 	}
 
-	var parsed dto.VAResponse
+	var parsed dto.ShopeePayResponse
 	if err := json.Unmarshal(resBody, &parsed); err != nil {
 		return c.JSON(http.StatusInternalServerError, echo.Map{
 			"error":   "Invalid response from Midtrans",
@@ -86,7 +83,6 @@ func (h *domainHandler) ChargeBni(c echo.Context) error {
 		})
 	}
 
-	// Cek status_code di dalam isi response
 	if parsed.StatusCode != "201" {
 		return c.JSON(http.StatusBadGateway, echo.Map{
 			"error":   "Midtrans returned an error",
@@ -95,6 +91,5 @@ func (h *domainHandler) ChargeBni(c echo.Context) error {
 		})
 	}
 
-	// Berhasil
 	return c.JSON(http.StatusOK, parsed)
 }

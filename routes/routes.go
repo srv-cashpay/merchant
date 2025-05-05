@@ -30,9 +30,9 @@ import (
 	// r_role "github.com/srv-cashpay/merchant/repositories/dashboard/role"
 	// s_role "github.com/srv-cashpay/merchant/services/dashboard/role"
 
-	h_packages "github.com/srv-cashpay/merchant/handlers/packages"
-	r_packages "github.com/srv-cashpay/merchant/repositories/packages"
-	s_packages "github.com/srv-cashpay/merchant/services/packages"
+	h_subscribe "github.com/srv-cashpay/merchant/handlers/subscribe"
+	r_subscribe "github.com/srv-cashpay/merchant/repositories/subscribe"
+	s_subscribe "github.com/srv-cashpay/merchant/services/subscribe"
 
 	h_authenticator "github.com/srv-cashpay/merchant/handlers/authenticator_request"
 	r_authenticator "github.com/srv-cashpay/merchant/repositories/authenticator_request"
@@ -94,9 +94,9 @@ var (
 	printerS = s_printer.NewPrinterService(printerR, JWT)
 	printerH = h_printer.NewPrinterHandler(printerS)
 
-	packagesR = r_packages.NewPackagesRepository(DB)
-	packagesS = s_packages.NewPackagesService(packagesR, JWT)
-	packagesH = h_packages.NewPackagesHandler(packagesS)
+	subscribeR = r_subscribe.NewSubscribeRepository(DB)
+	subscribeS = s_subscribe.NewSubscribeService(subscribeR, JWT)
+	subscribeH = h_subscribe.NewSubscribeHandler(subscribeS)
 
 	posR = r_pos.NewPosRepository(DB)
 	posS = s_pos.NewPosService(posR, JWT)
@@ -154,18 +154,18 @@ var (
 func New() *echo.Echo {
 
 	e := echo.New()
-	e.GET("/transaction/:order_id/status", packagesH.CheckTransactionStatus)
-	e.POST("/midtrans/callback", packagesH.MidtransCallback)
-	e.POST("/charge-bni", packagesH.ChargeBni)
-	e.POST("/charge-bca", packagesH.ChargeBca)
-	e.POST("/charge-mandiri", packagesH.ChargeMandiri)
-	e.POST("/charge-bri", packagesH.ChargeBri)
+	e.GET("/transaction/:order_id/status", subscribeH.CheckTransactionStatus)
+	e.POST("/midtrans/callback", subscribeH.MidtransCallback)
+	e.POST("/charge-bni", subscribeH.ChargeBni)
+	e.POST("/charge-bca", subscribeH.ChargeBca)
+	e.POST("/charge-mandiri", subscribeH.ChargeMandiri)
+	e.POST("/charge-bri", subscribeH.ChargeBri)
 
-	e.POST("/charge-qris", packagesH.ChargeQris)
-	e.POST("/charge-gopay", packagesH.ChargeGopay)
-	e.POST("/charge-shopeepay", packagesH.ChargeShopeePay)
+	e.POST("/charge-qris", subscribeH.ChargeQris)
+	e.POST("/charge-gopay", subscribeH.ChargeGopay)
+	e.POST("/charge-shopeepay", subscribeH.ChargeShopeePay)
 
-	e.POST("/charge-gpay", packagesH.ChargeGpay)
+	e.POST("/charge-gpay", subscribeH.ChargeGpay)
 
 	pos := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
 	{
@@ -173,7 +173,7 @@ func New() *echo.Echo {
 	}
 	packages := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
 	{
-		packages.POST("/packages/create", packagesH.Create)
+		packages.POST("/packages/create", subscribeH.Create)
 	}
 	merchant := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
 	{

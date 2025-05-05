@@ -1,7 +1,7 @@
-package packages
+package subscribe
 
 import (
-	s "github.com/srv-cashpay/merchant/services/packages"
+	s "github.com/srv-cashpay/merchant/services/subscribe"
 
 	"github.com/labstack/echo/v4"
 )
@@ -24,11 +24,11 @@ type DomainHandler interface {
 }
 
 type domainHandler struct {
-	servicePackages s.PackagesService
+	serviceSubscribe s.SubscribeService
 }
 
-func NewPackagesHandler(service s.PackagesService) DomainHandler {
+func NewSubscribeHandler(service s.SubscribeService) DomainHandler {
 	return &domainHandler{
-		servicePackages: service,
+		serviceSubscribe: service,
 	}
 }

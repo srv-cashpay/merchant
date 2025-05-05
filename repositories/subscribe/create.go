@@ -1,4 +1,4 @@
-package packages
+package subscribe
 
 import (
 	"time"
@@ -8,7 +8,7 @@ import (
 	"github.com/srv-cashpay/merchant/entity"
 )
 
-func (r *packagesRepository) Create(req dto.PackagesRequest) (dto.PackagesResponse, error) {
+func (r *subscribeRepository) Create(req dto.PackagesRequest) (dto.PackagesResponse, error) {
 	// 1. Membuat entitas package berdasarkan request
 
 	create := entity.Package{
@@ -37,7 +37,7 @@ func (r *packagesRepository) Create(req dto.PackagesRequest) (dto.PackagesRespon
 	return response, nil
 }
 
-func (r *packagesRepository) UpdateStatus(orderID string, status string) error {
+func (r *subscribeRepository) UpdateStatus(orderID string, status string) error {
 	// Update status berdasarkan OrderID
 	if err := r.DB.Model(&entity.Package{}).
 		Where("order_id = ?", orderID).
@@ -47,7 +47,7 @@ func (r *packagesRepository) UpdateStatus(orderID string, status string) error {
 	return nil
 }
 
-func (r *packagesRepository) UpdateUserVerified(orderID string) error {
+func (r *subscribeRepository) UpdateUserVerified(orderID string) error {
 	// Cari UserID berdasarkan OrderID
 	var pkg entity.Package
 	if err := r.DB.Where("order_id = ?", orderID).First(&pkg).Error; err != nil {

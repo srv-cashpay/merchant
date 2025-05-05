@@ -1,4 +1,4 @@
-package packages
+package subscribe
 
 import (
 	"fmt"
@@ -32,7 +32,7 @@ func (h *domainHandler) MidtransCallback(c echo.Context) error {
 		return res.ErrorResponse(err).Send(c)
 	}
 
-	if err := h.servicePackages.UpdateStatus(notificationPayload.OrderID, internalStatus); err != nil {
+	if err := h.serviceSubscribe.UpdateStatus(notificationPayload.OrderID, internalStatus); err != nil {
 		return res.ErrorResponse(err).Send(c)
 	}
 

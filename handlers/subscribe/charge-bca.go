@@ -1,4 +1,4 @@
-package packages
+package subscribe
 
 import (
 	"bytes"
@@ -13,7 +13,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (h *domainHandler) ChargeShopeePay(c echo.Context) error {
+func (h *domainHandler) ChargeBca(c echo.Context) error {
 	var req dto.ChargeRequest
 	if err := c.Bind(&req); err != nil {
 		return c.JSON(http.StatusBadRequest, echo.Map{
@@ -29,14 +29,18 @@ func (h *domainHandler) ChargeShopeePay(c echo.Context) error {
 	}
 
 	payload := map[string]interface{}{
-		"payment_type": "shopeepay",
+		"payment_type": "bank_transfer",
 		"transaction_details": map[string]interface{}{
 			"order_id":     req.OrderID,
 			"gross_amount": req.Amount,
 		},
-		"shopeepay": map[string]interface{}{
-			"callback_url": "https://your-callback-url.com/notification", // Sesuaikan
-			"redirect_url": "https://your-web-app.com/payment/success",   // Jika ingin redirect ke frontend
+		"bank_transfer": map[string]interface{}{
+			"bank": "bca",
+		},
+		"custom_expiry": map[string]interface{}{
+			"order_time":      time.Now().Format("2006-01-02 15:04:05 -0700"),
+			"expiry_duration": 1,
+			"unit":            "hour",
 		},
 	}
 
@@ -75,7 +79,7 @@ func (h *domainHandler) ChargeShopeePay(c echo.Context) error {
 		})
 	}
 
-	var parsed dto.ShopeePayResponse
+	var parsed dto.VAResponse
 	if err := json.Unmarshal(resBody, &parsed); err != nil {
 		return c.JSON(http.StatusInternalServerError, echo.Map{
 			"error":   "Invalid response from Midtrans",
@@ -83,6 +87,7 @@ func (h *domainHandler) ChargeShopeePay(c echo.Context) error {
 		})
 	}
 
+	// Cek status_code di dalam isi response
 	if parsed.StatusCode != "201" {
 		return c.JSON(http.StatusBadGateway, echo.Map{
 			"error":   "Midtrans returned an error",
@@ -91,5 +96,6 @@ func (h *domainHandler) ChargeShopeePay(c echo.Context) error {
 		})
 	}
 
+	// Berhasil
 	return c.JSON(http.StatusOK, parsed)
 }

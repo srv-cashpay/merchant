@@ -1,0 +1,26 @@
+package subscribe
+
+import (
+	dto "github.com/srv-cashpay/merchant/dto"
+	m "github.com/srv-cashpay/middlewares/middlewares"
+
+	r "github.com/srv-cashpay/merchant/repositories/subscribe"
+)
+
+type SubscribeService interface {
+	Create(req dto.PackagesRequest) (dto.PackagesResponse, error)
+	UpdateStatus(orderID string, transactionStatus string) error
+	ChargeQris(req dto.ChargeRequest) (*dto.QrisResponse, error)
+}
+
+type subscribeService struct {
+	Repo r.DomainRepository
+	jwt  m.JWTService
+}
+
+func NewSubscribeService(Repo r.DomainRepository, jwtS m.JWTService) SubscribeService {
+	return &subscribeService{
+		Repo: Repo,
+		jwt:  jwtS,
+	}
+}

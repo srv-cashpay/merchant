@@ -1,4 +1,4 @@
-package packages
+package subscribe
 
 import (
 	"bytes"
@@ -8,12 +8,11 @@ import (
 	"net/http"
 	"time"
 
-	dto "github.com/srv-cashpay/merchant/dto"
-
 	"github.com/labstack/echo/v4"
+	dto "github.com/srv-cashpay/merchant/dto"
 )
 
-func (h *domainHandler) ChargeBca(c echo.Context) error {
+func (h *domainHandler) ChargeBni(c echo.Context) error {
 	var req dto.ChargeRequest
 	if err := c.Bind(&req); err != nil {
 		return c.JSON(http.StatusBadRequest, echo.Map{
@@ -35,7 +34,7 @@ func (h *domainHandler) ChargeBca(c echo.Context) error {
 			"gross_amount": req.Amount,
 		},
 		"bank_transfer": map[string]interface{}{
-			"bank": "bca",
+			"bank": "bni",
 		},
 		"custom_expiry": map[string]interface{}{
 			"order_time":      time.Now().Format("2006-01-02 15:04:05 -0700"),
