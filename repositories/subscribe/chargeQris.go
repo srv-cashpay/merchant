@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/srv-cashpay/merchant/entity"
+	util "github.com/srv-cashpay/util/s"
 
 	dto "github.com/srv-cashpay/merchant/dto"
 )
@@ -63,6 +64,9 @@ func (r *subscribeRepository) ChargeQris(req dto.ChargeRequest) (*dto.QrisRespon
 	}
 
 	tx := entity.Package{
+		ID:              util.GenerateRandomString(),
+		UserID:          req.UserID,
+		CreatedBy:       req.CreatedBy,
 		OrderID:         parsed.OrderID,
 		TransactionID:   parsed.TransactionID,
 		GrossAmount:     req.Amount,
