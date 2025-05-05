@@ -11,6 +11,7 @@ type DomainRepository interface {
 	UpdateStatus(orderID string, status string) error
 	UpdateUserVerified(orderID string) error
 	ChargeQris(req dto.ChargeRequest) (*dto.QrisResponse, error)
+	CheckStatus(orderID string) (map[string]interface{}, error)
 }
 
 type subscribeRepository struct {

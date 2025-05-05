@@ -4,8 +4,10 @@ import (
 	"bytes"
 	"encoding/base64"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/srv-cashpay/merchant/entity"
@@ -89,4 +91,40 @@ func parseTime(str string) time.Time {
 		return time.Now()
 	}
 	return t
+}
+
+func (r *subscribeRepository) CheckStatus(orderID string) (map[string]interface{}, error) {
+	serverKey := os.Getenv("MIDTRANS_SERVER_KEY")
+	if serverKey == "" {
+		return nil, fmt.Errorf("Midtrans server key is not set")
+	}
+
+	url := fmt.Sprintf("https://api.sandbox.midtrans.com/v2/%s/status", orderID)
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	auth := base64.StdEncoding.EncodeToString([]byte(serverKey + ":"))
+	req.Header.Set("Authorization", "Basic "+auth)
+	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	var result map[string]interface{}
+	if err := json.Unmarshal(body, &result); err != nil {
+		return nil, err
+	}
+
+	return result, nil
 }
