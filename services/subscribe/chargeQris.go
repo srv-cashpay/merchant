@@ -29,16 +29,16 @@ func (s *subscribeService) ChargeQris(req dto.ChargeRequest) (*dto.QrisResponse,
 	return resp, nil
 }
 
-func (s *subscribeService) CheckTransactionStatus(orderID string) (map[string]interface{}, error) {
+func (s *subscribeService) CheckTransactionStatus(request dto.CreateTransactionRequest) (dto.TransactionStatusResponse, error) {
 	serverKey := os.Getenv("MIDTRANS_SERVER_KEY")
 	if serverKey == "" {
-		return nil, fmt.Errorf("midtrans server key is not set")
+		return dto.TransactionStatusResponse{}, fmt.Errorf("midtrans server key is not set")
 	}
 
-	url := fmt.Sprintf("https://api.sandbox.midtrans.com/v2/%s/status", orderID)
+	url := fmt.Sprintf("https://api.sandbox.midtrans.com/v2/%s/status", request.OrderID)
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-		return nil, err
+		return dto.TransactionStatusResponse{}, err
 	}
 
 	auth := base64.StdEncoding.EncodeToString([]byte(serverKey + ":"))
@@ -48,31 +48,28 @@ func (s *subscribeService) CheckTransactionStatus(orderID string) (map[string]in
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		return nil, err
+		return dto.TransactionStatusResponse{}, err
 	}
 	defer resp.Body.Close()
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return nil, err
+		return dto.TransactionStatusResponse{}, err
 	}
 
-	var result map[string]interface{}
+	var result dto.TransactionStatusResponse
 	if err := json.Unmarshal(body, &result); err != nil {
-		return nil, err
+		return dto.TransactionStatusResponse{}, err
 	}
-
-	transactionStatus := result["transaction_status"].(string)
 
 	// Update DB status
-	if err := s.Repo.UpdateStatus(orderID, transactionStatus); err != nil {
-		return nil, err
+	if err := s.Repo.UpdateStatus(request.OrderID, result.TransactionStatus); err != nil {
+		return dto.TransactionStatusResponse{}, err
 	}
 
-	// Jika berhasil dibayar, aktifkan akun
-	if transactionStatus == "settlement" {
-		if err := s.Repo.UpdateUserVerified(orderID); err != nil {
-			return nil, err
+	if result.TransactionStatus == "settlement" {
+		if err := s.Repo.UpdateUserVerified(request.OrderID); err != nil {
+			return dto.TransactionStatusResponse{}, err
 		}
 	}
 

@@ -11,7 +11,7 @@ type SubscribeService interface {
 	Create(req dto.PackagesRequest) (dto.PackagesResponse, error)
 	UpdateStatus(orderID string, transactionStatus string) error
 	ChargeQris(req dto.ChargeRequest) (*dto.QrisResponse, error)
-	CheckTransactionStatus(orderID string) (map[string]interface{}, error)
+	CheckTransactionStatus(request dto.CreateTransactionRequest) (dto.TransactionStatusResponse, error)
 }
 
 type subscribeService struct {

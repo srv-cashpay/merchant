@@ -2,6 +2,27 @@ package dto
 
 import "os"
 
+type CreateTransactionRequest struct {
+	OrderID     string  `json:"order_id"`
+	UserID      string  `json:"user_id"`
+	CreatedBy   string  `json:"created_by"`
+	GrossAmount float64 `json:"gross_amount"`
+	PaymentType string  `json:"payment_type"` // misalnya: gopay, bca_va, etc.
+}
+
+type TransactionStatusResponse struct {
+	OrderID           string `json:"order_id"`
+	TransactionStatus string `json:"transaction_status"`
+	PaymentType       string `json:"payment_type"`
+	GrossAmount       string `json:"gross_amount"`
+	TransactionTime   string `json:"transaction_time"`
+	TransactionID     string `json:"transaction_id"`
+	StatusCode        string `json:"status_code"`
+	StatusMessage     string `json:"status_message"`
+	FraudStatus       string `json:"fraud_status,omitempty"`
+	SettlementTime    string `json:"settlement_time,omitempty"`
+}
+
 type ChargeRequest struct {
 	OrderID   string `json:"order_id"`
 	Amount    int64  `json:"amount"`
