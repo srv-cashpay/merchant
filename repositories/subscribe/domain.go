@@ -12,6 +12,7 @@ type DomainRepository interface {
 	UpdateUserVerified(orderID string) error
 	ChargeQris(req dto.ChargeRequest) (*dto.QrisResponse, error)
 	CheckStatus(orderID string) (map[string]interface{}, error)
+	ChargeBca(req dto.ChargeRequest) (*dto.VAResponse, error)
 }
 
 type subscribeRepository struct {

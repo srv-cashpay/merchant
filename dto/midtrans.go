@@ -36,7 +36,9 @@ type VAResponse struct {
 	OrderID           string `json:"order_id"`
 	TransactionID     string `json:"transaction_id"`
 	TransactionStatus string `json:"transaction_status"`
+	PaymentType       string `json:"payment_type"`
 	StatusCode        string `json:"status_code"`
+	TransactionTime   string `json:"transaction_time"`
 	StatusMessage     string `json:"status_message"`
 	VANumbers         []struct {
 		Bank     string `json:"bank"`
@@ -86,9 +88,9 @@ type Address struct {
 }
 
 type CustomExpiry struct {
-	OrderTime      string `json:"order_time"`      // format: "2006-01-02 15:04:05 -0700"
-	ExpiryDuration int    `json:"expiry_duration"` // in minutes or hours
-	Unit           string `json:"unit"`            // "minute", "hour", or "day"
+	OrderTime     string `json:"order_time"`      // format: "2006-01-02 15:04:05 -0700"
+	ExpiryDuratio int    `json:"expiry_duration"` // in minutes or hours
+	Unit          string `json:"unit"`            // "minute", "hour", or "day"
 }
 
 type QrisResponse struct {

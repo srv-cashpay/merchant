@@ -12,6 +12,7 @@ type SubscribeService interface {
 	UpdateStatus(orderID string, transactionStatus string) error
 	ChargeQris(req dto.ChargeRequest) (*dto.QrisResponse, error)
 	CheckTransactionStatus(request dto.CreateTransactionRequest) (dto.TransactionStatusResponse, error)
+	ChargeBca(req dto.ChargeRequest) (*dto.VAResponse, error)
 }
 
 type subscribeService struct {
