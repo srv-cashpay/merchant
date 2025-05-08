@@ -13,6 +13,8 @@ type SubscribeService interface {
 	ChargeQris(req dto.ChargeRequest) (*dto.QrisResponse, error)
 	CheckTransactionStatus(request dto.CreateTransactionRequest) (dto.TransactionStatusResponse, error)
 	ChargeBca(req dto.ChargeRequest) (*dto.VAResponse, error)
+	ChargeBri(req dto.ChargeRequest) (*dto.VAResponse, error)
+	ChargeBni(req dto.ChargeRequest) (*dto.VAResponse, error)
 }
 
 type subscribeService struct {

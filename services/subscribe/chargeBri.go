@@ -6,12 +6,12 @@ import (
 	dto "github.com/srv-cashpay/merchant/dto"
 )
 
-func (s *subscribeService) ChargeBca(req dto.ChargeRequest) (*dto.VAResponse, error) {
+func (s *subscribeService) ChargeBri(req dto.ChargeRequest) (*dto.VAResponse, error) {
 	if req.OrderID == "" || req.Amount <= 0 {
 		return nil, errors.New("missing required fields: order_id or amount")
 	}
 
-	resp, err := s.Repo.ChargeBca(req)
+	resp, err := s.Repo.ChargeBri(req)
 	if err != nil {
 		return nil, err
 	}

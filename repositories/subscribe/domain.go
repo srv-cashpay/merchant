@@ -13,6 +13,8 @@ type DomainRepository interface {
 	ChargeQris(req dto.ChargeRequest) (*dto.QrisResponse, error)
 	CheckStatus(orderID string) (map[string]interface{}, error)
 	ChargeBca(req dto.ChargeRequest) (*dto.VAResponse, error)
+	ChargeBri(req dto.ChargeRequest) (*dto.VAResponse, error)
+	ChargeBni(req dto.ChargeRequest) (*dto.VAResponse, error)
 }
 
 type subscribeRepository struct {
