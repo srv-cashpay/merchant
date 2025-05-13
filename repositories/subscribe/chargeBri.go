@@ -68,7 +68,7 @@ func (r *subscribeRepository) ChargeBri(req dto.ChargeRequest) (*dto.VAResponse,
 
 	// return &parsed,
 
-	tx := entity.Package{
+	tx := entity.Subscribe{
 		ID:              util.GenerateRandomString(),
 		UserID:          req.UserID,
 		CreatedBy:       req.CreatedBy,

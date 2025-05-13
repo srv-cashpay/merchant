@@ -65,7 +65,7 @@ func (r *subscribeRepository) ChargeQris(req dto.ChargeRequest) (*dto.QrisRespon
 		}
 	}
 
-	tx := entity.Package{
+	tx := entity.Subscribe{
 		ID:              util.GenerateRandomString(),
 		UserID:          req.UserID,
 		CreatedBy:       req.CreatedBy,

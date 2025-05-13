@@ -8,7 +8,7 @@ import (
 )
 
 type SubscribeService interface {
-	Create(req dto.PackagesRequest) (dto.PackagesResponse, error)
+	Create(req dto.SubscribeRequest) (dto.SubscribeResponse, error)
 	UpdateStatus(orderID string, transactionStatus string) error
 	ChargeQris(req dto.ChargeRequest) (*dto.QrisResponse, error)
 	CheckTransactionStatus(request dto.CreateTransactionRequest) (dto.TransactionStatusResponse, error)

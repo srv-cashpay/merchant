@@ -7,8 +7,8 @@ import (
 )
 
 func (h *domainHandler) Create(c echo.Context) error {
-	var req dto.PackagesRequest
-	var resp dto.PackagesResponse
+	var req dto.SubscribeRequest
+	var resp dto.SubscribeResponse
 
 	userid, ok := c.Get("UserId").(string)
 	if !ok {

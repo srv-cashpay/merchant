@@ -13,10 +13,10 @@ import (
 	util "github.com/srv-cashpay/util/s"
 )
 
-func (s *subscribeService) Create(req dto.PackagesRequest) (dto.PackagesResponse, error) {
+func (s *subscribeService) Create(req dto.SubscribeRequest) (dto.SubscribeResponse, error) {
 	orderID := util.GenerateRandomString()
 
-	create := dto.PackagesRequest{
+	create := dto.SubscribeRequest{
 		ID:          util.GenerateRandomString(),
 		UserID:      req.UserID,
 		CreatedBy:   req.CreatedBy,
@@ -27,7 +27,7 @@ func (s *subscribeService) Create(req dto.PackagesRequest) (dto.PackagesResponse
 
 	created, err := s.Repo.Create(create)
 	if err != nil {
-		return dto.PackagesResponse{}, err
+		return dto.SubscribeResponse{}, err
 	}
 
 	// Init Snap client
@@ -55,12 +55,12 @@ func (s *subscribeService) Create(req dto.PackagesRequest) (dto.PackagesResponse
 	snapTokenResp, err := midtransClient.CreateTransaction(transactionReq)
 	if snapTokenResp == nil || snapTokenResp.Token == "" {
 		_ = s.Repo.UpdateStatus(orderID, constant.StatusFailed)
-		return dto.PackagesResponse{}, nil
+		return dto.SubscribeResponse{}, nil
 	}
 
 	_ = s.Repo.UpdateStatus(orderID, constant.StatusPending)
 
-	response := dto.PackagesResponse{
+	response := dto.SubscribeResponse{
 		ID:          created.ID,
 		OrderID:     orderID,
 		GrossAmount: create.GrossAmount,

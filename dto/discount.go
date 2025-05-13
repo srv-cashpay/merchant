@@ -8,8 +8,8 @@ type DiscountRequest struct {
 	ID                 string    `json:"id"`
 	UserID             string    `json:"user_id"`
 	MerchantID         string    `json:"merchant_id"`
-	DiscountName       string    `json:"discount_name"`
-	DiscountPercentage uint      `json:"discount_percentage"`
+	DiscountName       string    `json:"payment_name"`
+	DiscountPercentage uint      `json:"payment_percentage"`
 	Status             int       `json:"status"`
 	Description        string    `json:"description"`
 	CreatedBy          string    `json:"created_by"`
@@ -22,8 +22,8 @@ type DiscountResponse struct {
 	ID                 string    `json:"id"`
 	UserID             string    `json:"user_id"`
 	MerchantID         string    `json:"merchant_id"`
-	DiscountName       string    `json:"discount_name"`
-	DiscountPercentage uint      `json:"discount_percentage"`
+	DiscountName       string    `json:"payment_name"`
+	DiscountPercentage uint      `json:"payment_percentage"`
 	Status             string    `json:"status"`
 	Description        string    `json:"description"`
 	CreatedBy          string    `json:"created_by"`
@@ -35,8 +35,8 @@ type DiscountUpdateRequest struct {
 	ID                 string    `json:"id"`
 	UserID             string    `json:"user_id"`
 	MerchantID         string    `json:"merchant_id"`
-	DiscountName       string    `json:"discount_name"`
-	DiscountPercentage uint      `json:"discount_percentage"`
+	DiscountName       string    `json:"payment_name"`
+	DiscountPercentage uint      `json:"payment_percentage"`
 	Status             int       `json:"status"`
 	Description        string    `json:"description"`
 	CreatedBy          string    `json:"created_by"`
@@ -49,8 +49,8 @@ type DiscountUpdateResponse struct {
 	ID                 string    `json:"id"`
 	UserID             string    `json:"user_id"`
 	MerchantID         string    `json:"merchant_id"`
-	DiscountName       string    `json:"discount_name"`
-	DiscountPercentage uint      `json:"discount_percentage"`
+	DiscountName       string    `json:"payment_name"`
+	DiscountPercentage uint      `json:"payment_percentage"`
 	Status             int       `json:"status"`
 	Description        string    `json:"description"`
 	CreatedBy          string    `json:"created_by"`

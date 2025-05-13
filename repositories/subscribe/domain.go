@@ -7,7 +7,7 @@ import (
 )
 
 type DomainRepository interface {
-	Create(req dto.PackagesRequest) (dto.PackagesResponse, error)
+	Create(req dto.SubscribeRequest) (dto.SubscribeResponse, error)
 	UpdateStatus(orderID string, status string) error
 	UpdateUserVerified(orderID string) error
 	ChargeQris(req dto.ChargeRequest) (*dto.QrisResponse, error)

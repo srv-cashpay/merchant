@@ -8,10 +8,10 @@ import (
 	"github.com/srv-cashpay/merchant/entity"
 )
 
-func (r *subscribeRepository) Create(req dto.PackagesRequest) (dto.PackagesResponse, error) {
+func (r *subscribeRepository) Create(req dto.SubscribeRequest) (dto.SubscribeResponse, error) {
 	// 1. Membuat entitas package berdasarkan request
 
-	create := entity.Package{
+	create := entity.Subscribe{
 		ID:          req.ID,
 		UserID:      req.UserID,
 		CreatedBy:   req.CreatedBy,
@@ -21,11 +21,11 @@ func (r *subscribeRepository) Create(req dto.PackagesRequest) (dto.PackagesRespo
 	}
 	// 2. Simpan package ke database
 	if err := r.DB.Save(&create).Error; err != nil {
-		return dto.PackagesResponse{}, err
+		return dto.SubscribeResponse{}, err
 	}
 
 	// 3. Return response dengan data yang telah disimpan
-	response := dto.PackagesResponse{
+	response := dto.SubscribeResponse{
 		ID:          create.ID,
 		UserID:      create.UserID,
 		CreatedBy:   create.CreatedBy,
@@ -39,7 +39,7 @@ func (r *subscribeRepository) Create(req dto.PackagesRequest) (dto.PackagesRespo
 
 func (r *subscribeRepository) UpdateStatus(orderID string, status string) error {
 	// Update status berdasarkan OrderID
-	if err := r.DB.Model(&entity.Package{}).
+	if err := r.DB.Model(&entity.Subscribe{}).
 		Where("order_id = ?", orderID).
 		Update("status", status).Error; err != nil {
 		return err
@@ -49,7 +49,7 @@ func (r *subscribeRepository) UpdateStatus(orderID string, status string) error 
 
 func (r *subscribeRepository) UpdateUserVerified(orderID string) error {
 	// Cari UserID berdasarkan OrderID
-	var pkg entity.Package
+	var pkg entity.Subscribe
 	if err := r.DB.Where("order_id = ?", orderID).First(&pkg).Error; err != nil {
 		return err
 	}

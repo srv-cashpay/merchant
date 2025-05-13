@@ -1,6 +1,6 @@
 package dto
 
-type PackagesRequest struct {
+type SubscribeRequest struct {
 	ID          string `json:"id"`
 	Email       string `json:"email"`
 	FirstName   string `json:"first_name"`
@@ -15,7 +15,7 @@ type PackagesRequest struct {
 	RedirectURL string `json:"redirect_url"`
 }
 
-type PackagesResponse struct {
+type SubscribeResponse struct {
 	ID          string `json:"id"`
 	UserID      string `json:"user_id"`
 	CreatedBy   string `json:"created_by"`
