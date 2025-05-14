@@ -26,13 +26,11 @@ func (s *paymentService) Create(req dto.PaymentRequest) (dto.PaymentResponse, er
 	}
 
 	create := dto.PaymentRequest{
-		PaymentName:       req.PaymentName,
-		PaymentPercentage: req.PaymentPercentage,
-		Description:       req.Description,
-		Status:            req.Status,
-		UserID:            req.UserID,
-		MerchantID:        req.MerchantID,
-		CreatedBy:         req.CreatedBy,
+		PaymentName: req.PaymentName,
+		Status:      req.Status,
+		UserID:      req.UserID,
+		MerchantID:  req.MerchantID,
+		CreatedBy:   req.CreatedBy,
 	}
 
 	created, err := s.Repo.Create(create)
@@ -52,14 +50,12 @@ func (s *paymentService) Create(req dto.PaymentRequest) (dto.PaymentResponse, er
 	}
 
 	response := dto.PaymentResponse{
-		ID:                created.ID,
-		UserID:            created.UserID,
-		PaymentName:       created.PaymentName,
-		PaymentPercentage: created.PaymentPercentage,
-		Description:       created.Description,
-		Status:            statusString,
-		MerchantID:        created.MerchantID,
-		CreatedBy:         created.CreatedBy,
+		ID:          created.ID,
+		UserID:      created.UserID,
+		PaymentName: created.PaymentName,
+		Status:      statusString,
+		MerchantID:  created.MerchantID,
+		CreatedBy:   created.CreatedBy,
 	}
 
 	return response, nil

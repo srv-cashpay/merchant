@@ -34,14 +34,12 @@ func (r *paymentRepository) Create(req dto.PaymentRequest) (dto.PaymentResponse,
 
 	// Create the new payment entry
 	create := entity.Payment{
-		ID:                secureID,
-		PaymentName:       req.PaymentName,
-		PaymentPercentage: req.PaymentPercentage,
-		Status:            req.Status,
-		UserID:            req.UserID,
-		MerchantID:        req.MerchantID,
-		CreatedBy:         req.CreatedBy,
-		Description:       req.Description,
+		ID:          secureID,
+		PaymentName: req.PaymentName,
+		Status:      req.Status,
+		UserID:      req.UserID,
+		MerchantID:  req.MerchantID,
+		CreatedBy:   req.CreatedBy,
 	}
 
 	// Save the new payment to the database
@@ -67,12 +65,11 @@ func (r *paymentRepository) Create(req dto.PaymentRequest) (dto.PaymentResponse,
 
 	// Build the response for the created payment
 	response := dto.PaymentResponse{
-		ID:          create.ID,
-		UserID:      create.UserID,
-		MerchantID:  create.MerchantID,
-		Description: create.Description,
-		Status:      statusString,
-		CreatedBy:   create.CreatedBy,
+		ID:         create.ID,
+		UserID:     create.UserID,
+		MerchantID: create.MerchantID,
+		Status:     statusString,
+		CreatedBy:  create.CreatedBy,
 	}
 
 	return response, nil

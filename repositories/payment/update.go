@@ -8,13 +8,11 @@ import (
 func (b *paymentRepository) Update(req dto.PaymentUpdateRequest) (dto.PaymentUpdateResponse, error) {
 	// Menyiapkan struktur update untuk produk
 	updatePayment := entity.Payment{
-		PaymentName:       req.PaymentName,
-		PaymentPercentage: req.PaymentPercentage,
-		Status:            req.Status, // Pastikan status boolean diterima dengan benar
-		UpdatedBy:         req.UpdatedBy,
-		UserID:            req.UserID,
-		Description:       req.Description,
-		MerchantID:        req.MerchantID,
+		PaymentName: req.PaymentName,
+		Status:      req.Status, // Pastikan status boolean diterima dengan benar
+		UpdatedBy:   req.UpdatedBy,
+		UserID:      req.UserID,
+		MerchantID:  req.MerchantID,
 	}
 
 	// Cek apakah produk ada terlebih dahulu
@@ -32,13 +30,11 @@ func (b *paymentRepository) Update(req dto.PaymentUpdateRequest) (dto.PaymentUpd
 
 	// Menyiapkan response setelah pembaruan berhasil
 	response := dto.PaymentUpdateResponse{
-		PaymentName:       updatePayment.PaymentName,
-		PaymentPercentage: updatePayment.PaymentPercentage,
-		Status:            updatePayment.Status,
-		UpdatedBy:         updatePayment.UpdatedBy,
-		UserID:            updatePayment.UserID,
-		MerchantID:        updatePayment.MerchantID,
-		Description:       updatePayment.Description,
+		PaymentName: updatePayment.PaymentName,
+		Status:      updatePayment.Status,
+		UpdatedBy:   updatePayment.UpdatedBy,
+		UserID:      updatePayment.UserID,
+		MerchantID:  updatePayment.MerchantID,
 	}
 
 	return response, nil

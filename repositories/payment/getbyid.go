@@ -15,8 +15,7 @@ func (b *paymentRepository) GetById(req dto.GetByIdRequest) (*dto.PaymentRespons
 	}
 
 	response := &dto.PaymentResponse{
-		PaymentName:       tr.PaymentName,
-		PaymentPercentage: tr.PaymentPercentage,
+		PaymentName: tr.PaymentName,
 	}
 
 	return response, nil

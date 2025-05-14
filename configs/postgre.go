@@ -56,6 +56,7 @@ func InitDB() *gorm.DB {
 	// Migrate the schema
 	db.AutoMigrate(
 		&entity.Subscribe{},
+		&entity.UploadedPayment{},
 		&entity.Package{},
 		&entity.Merk{},
 		&entity.Unit{},

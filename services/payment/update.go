@@ -4,12 +4,10 @@ import "github.com/srv-cashpay/merchant/dto"
 
 func (b *paymentService) Update(req dto.PaymentUpdateRequest) (dto.PaymentUpdateResponse, error) {
 	request := dto.PaymentUpdateRequest{
-		PaymentName:       req.PaymentName,
-		PaymentPercentage: req.PaymentPercentage,
-		Status:            req.Status,
-		UpdatedBy:         req.UpdatedBy,
-		UserID:            req.UserID,
-		Description:       req.Description,
+		PaymentName: req.PaymentName,
+		Status:      req.Status,
+		UpdatedBy:   req.UpdatedBy,
+		UserID:      req.UserID,
 	}
 
 	payment, err := b.Repo.Update(req)
@@ -18,12 +16,10 @@ func (b *paymentService) Update(req dto.PaymentUpdateRequest) (dto.PaymentUpdate
 	}
 
 	response := dto.PaymentUpdateResponse{
-		PaymentName:       request.PaymentName,
-		PaymentPercentage: request.PaymentPercentage,
-		Status:            request.Status,
-		UpdatedBy:         request.UpdatedBy,
-		UserID:            request.UserID,
-		Description:       request.Description,
+		PaymentName: request.PaymentName,
+		Status:      request.Status,
+		UpdatedBy:   request.UpdatedBy,
+		UserID:      request.UserID,
 	}
 
 	return response, nil
