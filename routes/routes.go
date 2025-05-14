@@ -46,6 +46,10 @@ import (
 	r_discount "github.com/srv-cashpay/merchant/repositories/discount"
 	s_discount "github.com/srv-cashpay/merchant/services/discount"
 
+	h_payment "github.com/srv-cashpay/merchant/handlers/payment"
+	r_payment "github.com/srv-cashpay/merchant/repositories/payment"
+	s_payment "github.com/srv-cashpay/merchant/services/payment"
+
 	h_user "github.com/srv-cashpay/merchant/handlers/user"
 	r_user "github.com/srv-cashpay/merchant/repositories/user"
 	s_user "github.com/srv-cashpay/merchant/services/user"
@@ -133,6 +137,10 @@ var (
 	discountR = r_discount.NewDiscountRepository(DB)
 	discountS = s_discount.NewDiscountService(discountR, JWT)
 	discountH = h_discount.NewDiscountHandler(discountS)
+
+	paymentR = r_payment.NewPaymentRepository(DB)
+	paymentS = s_payment.NewPaymentService(paymentR, JWT)
+	paymentH = h_payment.NewPaymentHandler(paymentS)
 
 	tableR = r_table.NewTableRepository(DB)
 	tableS = s_table.NewTableService(tableR, JWT)
@@ -233,6 +241,15 @@ func New() *echo.Echo {
 		table.PUT("/table/update/:id", tableH.Update)
 		table.DELETE("/table/:id", tableH.Delete)
 		table.DELETE("/table/bulk-delete", tableH.BulkDelete)
+	}
+
+	payment := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
+	{
+		payment.POST("/payment/create", paymentH.Create)
+		payment.GET("/payment/pagination", paymentH.Get)
+		payment.PUT("/payment/update/:id", paymentH.Update)
+		payment.DELETE("/payment/:id", paymentH.Delete)
+		payment.DELETE("/payment/bulk-delete", paymentH.BulkDelete)
 	}
 
 	discount := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
