@@ -16,13 +16,10 @@ import (
 
 func (r *subscribeRepository) ChargePermata(req dto.ChargeRequest) (*dto.VAResponse, error) {
 	payload := map[string]interface{}{
-		"payment_type": "bank_transfer",
+		"payment_type": "permata",
 		"transaction_details": map[string]interface{}{
 			"order_id":     req.OrderID,
 			"gross_amount": req.Amount,
-		},
-		"bank_transfer": map[string]interface{}{
-			"bank": "permata",
 		},
 		"custom_expiry": map[string]interface{}{
 			"order_time":      time.Now().Format("2006-01-02 15:04:05 -0700"),
