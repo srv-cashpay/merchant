@@ -6,7 +6,7 @@ import (
 	dto "github.com/srv-cashpay/merchant/dto"
 )
 
-func (s *subscribeService) ChargePermata(req dto.ChargeRequest) (*dto.VAResponse, error) {
+func (s *subscribeService) ChargePermata(req dto.ChargeRequest) (*dto.VAPermataResponse, error) {
 	if req.OrderID == "" || req.Amount <= 0 {
 		return nil, errors.New("missing required fields: order_id or amount")
 	}

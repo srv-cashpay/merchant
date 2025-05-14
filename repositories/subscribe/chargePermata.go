@@ -14,7 +14,7 @@ import (
 	util "github.com/srv-cashpay/util/s"
 )
 
-func (r *subscribeRepository) ChargePermata(req dto.ChargeRequest) (*dto.VAResponse, error) {
+func (r *subscribeRepository) ChargePermata(req dto.ChargeRequest) (*dto.VAPermataResponse, error) {
 	payload := map[string]interface{}{
 		"payment_type": "permata",
 		"transaction_details": map[string]interface{}{
@@ -54,7 +54,7 @@ func (r *subscribeRepository) ChargePermata(req dto.ChargeRequest) (*dto.VARespo
 		return nil, errors.New("failed to read Midtrans response")
 	}
 
-	var parsed dto.VAResponse
+	var parsed dto.VAPermataResponse
 	if err := json.Unmarshal(resBody, &parsed); err != nil {
 		return nil, errors.New("invalid response from Midtrans")
 	}
