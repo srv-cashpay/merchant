@@ -12,8 +12,9 @@ type DomainRepository interface {
 	UpdateUserVerified(orderID string) error
 	ChargeQris(req dto.ChargeRequest) (*dto.QrisResponse, error)
 	CheckStatus(orderID string) (map[string]interface{}, error)
-	ChargeBca(req dto.ChargeRequest) (*dto.VAResponse, error)
+	ChargePermata(req dto.ChargeRequest) (*dto.VAResponse, error)
 	ChargeBri(req dto.ChargeRequest) (*dto.VAResponse, error)
+	ChargeCimb(req dto.ChargeRequest) (*dto.VAResponse, error)
 	ChargeBni(req dto.ChargeRequest) (*dto.VAResponse, error)
 }
 

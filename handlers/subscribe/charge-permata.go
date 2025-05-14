@@ -9,7 +9,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (h *domainHandler) ChargeBca(c echo.Context) error {
+func (h *domainHandler) ChargePermata(c echo.Context) error {
 	var req dto.ChargeRequest
 	userid, ok := c.Get("UserId").(string)
 	if !ok {
@@ -31,7 +31,7 @@ func (h *domainHandler) ChargeBca(c echo.Context) error {
 	}
 
 	// Call the service to charge the BCA account
-	response, err := h.serviceSubscribe.ChargeBca(req)
+	response, err := h.serviceSubscribe.ChargePermata(req)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, echo.Map{
 			"error": err.Error(),

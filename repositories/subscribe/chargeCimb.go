@@ -14,7 +14,7 @@ import (
 	util "github.com/srv-cashpay/util/s"
 )
 
-func (r *subscribeRepository) ChargeBca(req dto.ChargeRequest) (*dto.VAResponse, error) {
+func (r *subscribeRepository) ChargeCimb(req dto.ChargeRequest) (*dto.VAResponse, error) {
 	payload := map[string]interface{}{
 		"payment_type": "bank_transfer",
 		"transaction_details": map[string]interface{}{
@@ -22,7 +22,7 @@ func (r *subscribeRepository) ChargeBca(req dto.ChargeRequest) (*dto.VAResponse,
 			"gross_amount": req.Amount,
 		},
 		"bank_transfer": map[string]interface{}{
-			"bank": "bca",
+			"bank": "cimb",
 		},
 		"custom_expiry": map[string]interface{}{
 			"order_time":      time.Now().Format("2006-01-02 15:04:05 -0700"),

@@ -167,7 +167,7 @@ func New() *echo.Echo {
 		sub.GET("/transaction/:order_id/status", subscribeH.CheckTransactionStatus)
 		sub.POST("/midtrans/callback", subscribeH.MidtransCallback)
 		sub.POST("/charge-bni", subscribeH.ChargeBni)
-		sub.POST("/charge-bca", subscribeH.ChargeBca)
+		sub.POST("/charge-bca", subscribeH.ChargePermata)
 		sub.POST("/charge-mandiri", subscribeH.ChargeMandiri)
 		sub.POST("/charge-bri", subscribeH.ChargeBri)
 

@@ -12,8 +12,9 @@ type SubscribeService interface {
 	UpdateStatus(orderID string, transactionStatus string) error
 	ChargeQris(req dto.ChargeRequest) (*dto.QrisResponse, error)
 	CheckTransactionStatus(request dto.CreateTransactionRequest) (dto.TransactionStatusResponse, error)
-	ChargeBca(req dto.ChargeRequest) (*dto.VAResponse, error)
+	ChargePermata(req dto.ChargeRequest) (*dto.VAResponse, error)
 	ChargeBri(req dto.ChargeRequest) (*dto.VAResponse, error)
+	ChargeCimb(req dto.ChargeRequest) (*dto.VAResponse, error)
 	ChargeBni(req dto.ChargeRequest) (*dto.VAResponse, error)
 }
 
