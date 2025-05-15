@@ -42,7 +42,7 @@ import (
 // }
 
 // handler.go
-func (h *domainHandler) TokenizeCard(c echo.Context) error {
+func (h *domainHandler) TokenizeCardHandler(c echo.Context) error {
 	var req dto.TokenizeRequest
 	if err := c.Bind(&req); err != nil {
 		return c.JSON(http.StatusBadRequest, echo.Map{"error": "Invalid payload"})
