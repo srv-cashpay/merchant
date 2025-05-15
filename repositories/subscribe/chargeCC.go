@@ -34,7 +34,7 @@ func (r *subscribeRepository) CardPayment(req dto.TokenizeRequest) (*dto.Tokeniz
 	}
 
 	// Buat request
-	httpReq, err := http.NewRequest("POST", dto.GetMidtransTokenize(), bytes.NewBuffer(body))
+	httpReq, err := http.NewRequest("POST", dto.GetMidtransEndpoint(), bytes.NewBuffer(body))
 	if err != nil {
 		return nil, err
 	}
