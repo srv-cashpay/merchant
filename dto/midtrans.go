@@ -196,6 +196,8 @@ type TokenizeRequest struct {
 }
 
 type CreditCardChargeRequest struct {
+	UserID             string             `json:"user_id"`
+	CreatedBy          string             `json:"created_by"`
 	PaymentType        string             `json:"payment_type"`
 	TransactionDetails TransactionDetails `json:"transaction_details"`
 	CreditCard         CreditCardData     `json:"credit_card"`

@@ -15,16 +15,16 @@ import (
 	util "github.com/srv-cashpay/util/s"
 )
 
-func (r *subscribeRepository) CardPayment(req dto.TokenizeRequest) (*dto.TokenizeResponse, error) {
+func (r *subscribeRepository) CardPayment(req dto.CreditCardChargeRequest) (*dto.TokenizeResponse, error) {
 	// Siapkan data request
 	requestBody := dto.CreditCardChargeRequest{
 		PaymentType: "credit_card",
 		TransactionDetails: dto.TransactionDetails{
-			OrderID:     req.OrderID,
-			GrossAmount: req.GrossAmount,
+			OrderID:     req.TransactionDetails.OrderID,
+			GrossAmount: req.TransactionDetails.GrossAmount,
 		},
 		CreditCard: dto.CreditCardData{
-			TokenID:        req.TokenID,
+			TokenID:        req.CreditCard.TokenID,
 			Authentication: true,
 		},
 	}
@@ -81,12 +81,7 @@ func (r *subscribeRepository) CardPayment(req dto.TokenizeRequest) (*dto.Tokeniz
 		ID:            util.GenerateRandomString(),
 		UserID:        req.UserID,
 		CreatedBy:     req.CreatedBy,
-		OrderID:       req.OrderID,
-		CardNumber:    req.CardNumber,
-		ExpiryMonth:   req.ExpiryMonth,
-		ExpiryYear:    req.ExpiryYear,
-		CVV:           req.CVV,
-		Amount:        req.GrossAmount,
+		Amount:        req.TransactionDetails.GrossAmount,
 		TokenID:       response.TokenID,
 		TransactionID: response.TransactionID,
 		Status:        response.Status,

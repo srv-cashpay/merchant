@@ -16,7 +16,7 @@ type DomainRepository interface {
 	ChargeBri(req dto.ChargeRequest) (*dto.VAResponse, error)
 	ChargeCimb(req dto.ChargeRequest) (*dto.VAResponse, error)
 	ChargeBni(req dto.ChargeRequest) (*dto.VAResponse, error)
-	CardPayment(cardData dto.TokenizeRequest) (*dto.TokenizeResponse, error)
+	CardPayment(cardData dto.CreditCardChargeRequest) (*dto.TokenizeResponse, error)
 }
 
 type subscribeRepository struct {
