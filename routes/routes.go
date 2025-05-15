@@ -177,7 +177,7 @@ func New() *echo.Echo {
 		sub.POST("/charge-shopeepay", subscribeH.ChargeShopeePay)
 
 		sub.POST("/charge-gpay", subscribeH.ChargeGpay)
-		sub.POST("/charge-gpay", subscribeH.ChargeGpay)
+		sub.POST("/tokenize", subscribeH.TokenizeCardHandler)
 	}
 	pos := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
 	{

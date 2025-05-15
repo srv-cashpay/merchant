@@ -224,6 +224,14 @@ func GetMidtransEndpoint() string {
 	return val
 }
 
+func GetMidtransTokenize() string {
+	val := os.Getenv("MIDTRANS_TOKENIZE")
+	if val == "" {
+		return "https://api.sandbox.midtrans.com/v2/token"
+	}
+	return val
+}
+
 func GetMidtransServerKey() string {
 	val := os.Getenv("MIDTRANS_SERVER_KEY")
 	if val == "" {
