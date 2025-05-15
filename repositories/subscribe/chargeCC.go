@@ -5,6 +5,8 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"errors"
+	"fmt"
+	"io"
 	"net/http"
 	"time"
 
@@ -33,13 +35,13 @@ func (r *subscribeRepository) CardPayment(req dto.TokenizeRequest) (*dto.Tokeniz
 		return nil, err
 	}
 
-	// Buat request
+	// Buat request HTTP
 	httpReq, err := http.NewRequest("POST", dto.GetMidtransEndpoint(), bytes.NewBuffer(body))
 	if err != nil {
 		return nil, err
 	}
 
-	// Set header
+	// Set header yang wajib
 	auth := base64.StdEncoding.EncodeToString([]byte(dto.GetMidtransServerKey() + ":"))
 	httpReq.Header.Set("Content-Type", "application/json")
 	httpReq.Header.Set("Authorization", "Basic "+auth)
@@ -52,17 +54,29 @@ func (r *subscribeRepository) CardPayment(req dto.TokenizeRequest) (*dto.Tokeniz
 	}
 	defer resp.Body.Close()
 
-	// Parse response
+	// === DEBUG: Baca raw response body ===
+	respBody, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, errors.New("failed to read Midtrans response")
+	}
+	// Print raw response ke console/log supaya bisa dicek
+	fmt.Println("Midtrans raw response:", string(respBody))
+
+	// Reset resp.Body supaya bisa decode ulang JSON dari data yang sudah dibaca
+	resp.Body = io.NopCloser(bytes.NewBuffer(respBody))
+
+	// Parse JSON response ke struct
 	var response dto.TokenizeResponse
 	if err := json.NewDecoder(resp.Body).Decode(&response); err != nil {
 		return nil, err
 	}
 
-	// Jika ada error dari API
-	// if resp.StatusCode != 200 {
-	// 	return nil, fmt.Errorf("failed to tokenize card: %s", response.Status)
-	// }
+	// Jika Midtrans kembalikan status gagal, kembalikan error
+	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated {
+		return nil, errors.New("Midtrans error: " + response.StatusMessage)
+	}
 
+	// Simpan transaksi ke DB
 	tx := entity.CreditCard{
 		ID:            util.GenerateRandomString(),
 		UserID:        req.UserID,
