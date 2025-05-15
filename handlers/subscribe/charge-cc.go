@@ -5,7 +5,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-	"strings"
+	"os"
 
 	dto "github.com/srv-cashpay/merchant/dto"
 
@@ -47,14 +47,21 @@ func (h *domainHandler) TokenizeCardHandler(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, echo.Map{"error": "Invalid payload"})
 	}
 
-	form := url.Values{}
-	form.Set("card_number", req.CardNumber)
-	form.Set("card_exp_month", req.ExpiryMonth)
-	form.Set("card_exp_year", req.ExpiryYear)
-	form.Set("card_cvv", req.CVV)
+	// Bangun URL dengan query parameter
+	query := url.Values{}
+	query.Set("card_number", req.CardNumber)
+	query.Set("card_exp_month", req.ExpiryMonth)
+	query.Set("card_exp_year", req.ExpiryYear)
+	query.Set("card_cvv", req.CVV)
+	query.Set("client_key", os.Getenv("MIDTRANS_CLIENT_KEY"))
 
-	httpReq, _ := http.NewRequest("GET", "https://api.midtrans.com/v2/token", strings.NewReader(form.Encode()))
-	httpReq.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	endpoint := "https://api.midtrans.com/v2/token?" + query.Encode()
+
+	// Buat GET request dengan query
+	httpReq, err := http.NewRequest("GET", endpoint, nil)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, echo.Map{"error": "Failed to build request"})
+	}
 
 	client := &http.Client{}
 	resp, err := client.Do(httpReq)
@@ -71,7 +78,7 @@ func (h *domainHandler) TokenizeCardHandler(c echo.Context) error {
 		return c.JSON(resp.StatusCode, result)
 	}
 
-	// Optional: langsung charge ke Midtrans
+	// Optional: lanjut ke proses charge di sini kalau mau
 	// h.ChargeWithToken(result["token_id"].(string), req.OrderID, req.Amount)
 
 	return c.JSON(http.StatusOK, result)
