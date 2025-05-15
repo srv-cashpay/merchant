@@ -1,19 +1,26 @@
 package subscribe
 
-import dto "github.com/srv-cashpay/merchant/dto"
+import (
+	"errors"
+
+	dto "github.com/srv-cashpay/merchant/dto"
+)
 
 // TokenizeCard adalah service untuk men-tokenisasi kartu kredit
-func (s *subscribeService) TokenizeCard(cardData dto.TokenizeRequest) (*dto.TokenizeResponse, error) {
-	// Panggil repository untuk tokenisasi
-	response, err := s.Repo.TokenizeCard(cardData)
+func (s *subscribeService) TokenizeCard(req dto.TokenizeRequest) (*dto.TokenizeResponse, error) {
+
+	if req.OrderID == "" || req.Amount <= 0 {
+		return nil, errors.New("missing required fields: order_id or amount")
+	}
+
+	resp, err := s.Repo.TokenizeCard(req)
 	if err != nil {
 		return nil, err
 	}
 
-	// Return transaksi dalam bentuk entity
-	return &dto.TokenizeResponse{
-		TokenID:       response.TokenID,
-		TransactionID: response.TransactionID,
-		Status:        response.Status,
-	}, nil
+	if resp.StatusCode != "201" {
+		return nil, errors.New(resp.StatusMessage)
+	}
+
+	return resp, nil
 }

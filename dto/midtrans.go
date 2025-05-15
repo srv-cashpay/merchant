@@ -205,6 +205,8 @@ type TokenizeResponse struct {
 	TokenID       string `json:"token_id"`
 	TransactionID string `json:"transaction_id"`
 	Status        string `json:"status"`
+	StatusCode    string `json:"status_code"`
+	StatusMessage string `json:"status_message"`
 	CreatedBy     string `json:"created_by"`
 	UpdatedBy     string `json:"updated_by"`
 }
