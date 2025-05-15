@@ -18,7 +18,7 @@ func (s *subscribeService) TokenizeCard(req dto.TokenizeRequest) (*dto.TokenizeR
 		return nil, err
 	}
 
-	if resp.StatusCode != "201" {
+	if resp.Status != "success" {
 		return nil, errors.New(resp.StatusMessage)
 	}
 
