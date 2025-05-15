@@ -58,6 +58,7 @@ func InitDB() *gorm.DB {
 		&entity.Subscribe{},
 		&entity.UploadedPayment{},
 		&entity.Package{},
+		&entity.CreditCard{},
 		&entity.Merk{},
 		&entity.Unit{},
 		&entity.Type{},
