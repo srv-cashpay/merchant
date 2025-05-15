@@ -55,7 +55,7 @@ func (h *domainHandler) TokenizeCardHandler(c echo.Context) error {
 	form.Set("card_cvv", req.CVV)
 	form.Set("client_key", os.Getenv("MIDTRANS_CLIENT_KEY"))
 
-	httpReq, _ := http.NewRequest("POST", "https://api.midtrans.com/v2/token", strings.NewReader(form.Encode()))
+	httpReq, _ := http.NewRequest("GET", "https://api.midtrans.com/v2/token", strings.NewReader(form.Encode()))
 	httpReq.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
 	client := &http.Client{}
