@@ -192,7 +192,7 @@ type TokenizeRequest struct {
 	ExpiryMonth string `json:"expiry_month"`
 	ExpiryYear  string `json:"expiry_year"`
 	CVV         string `json:"cvv"`
-	Amount      int    `json:"amount"`
+	GrossAmount int    `json:"gross_amount"`
 }
 
 type CreditCardChargeRequest struct {

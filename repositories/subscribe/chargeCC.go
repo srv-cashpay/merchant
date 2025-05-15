@@ -19,7 +19,7 @@ func (r *subscribeRepository) CardPayment(req dto.TokenizeRequest) (*dto.Tokeniz
 		PaymentType: "credit_card",
 		TransactionDetails: dto.TransactionDetails{
 			OrderID:     req.OrderID,
-			GrossAmount: req.Amount,
+			GrossAmount: req.GrossAmount,
 		},
 		CreditCard: dto.CreditCardData{
 			TokenID:        req.TokenID,
@@ -72,7 +72,7 @@ func (r *subscribeRepository) CardPayment(req dto.TokenizeRequest) (*dto.Tokeniz
 		ExpiryMonth:   req.ExpiryMonth,
 		ExpiryYear:    req.ExpiryYear,
 		CVV:           req.CVV,
-		Amount:        req.Amount,
+		Amount:        req.GrossAmount,
 		TokenID:       response.TokenID,
 		TransactionID: response.TransactionID,
 		Status:        response.Status,
