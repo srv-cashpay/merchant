@@ -1,6 +1,8 @@
 package dto
 
-import "os"
+import (
+	"os"
+)
 
 type CreateTransactionRequest struct {
 	OrderID     string  `json:"order_id"`
@@ -179,6 +181,32 @@ type ShopeePayResponse struct {
 	TransactionStatus string        `json:"transaction_status"`
 	FraudStatus       string        `json:"fraud_status,omitempty"`
 	Actions           []GopayAction `json:"actions,omitempty"` // Sama dengan GoPay, bisa reuse struct
+}
+
+type TokenizeRequest struct {
+	UserID      string `json:"user_id"`
+	CreatedBy   string `json:"created_by"`
+	OrderID     string `json:"order_id"`
+	CardNumber  string `json:"card_number"`
+	ExpiryMonth string `json:"expiry_month"`
+	ExpiryYear  string `json:"expiry_year"`
+	CVV         string `json:"cvv"`
+	Amount      int    `json:"amount"`
+}
+
+type TokenizeResponse struct {
+	ID            string `json:"id"`
+	OrderID       string `json:"order_id"`
+	CardNumber    string `json:"card_number"`
+	ExpiryMonth   string `json:"expiry_month"`
+	ExpiryYear    string `json:"expiry_year"`
+	CVV           string `json:"cvv"`
+	Amount        int    `json:"amount"`
+	TokenID       string `json:"token_id"`
+	TransactionID string `json:"transaction_id"`
+	Status        string `json:"status"`
+	CreatedBy     string `json:"created_by"`
+	UpdatedBy     string `json:"updated_by"`
 }
 
 // Untuk menampung informasi actions (seperti deeplink, QR, dsb)
