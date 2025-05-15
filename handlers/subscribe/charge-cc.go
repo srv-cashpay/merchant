@@ -5,7 +5,6 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-	"os"
 	"strings"
 
 	dto "github.com/srv-cashpay/merchant/dto"
@@ -53,7 +52,6 @@ func (h *domainHandler) TokenizeCardHandler(c echo.Context) error {
 	form.Set("card_exp_month", req.ExpiryMonth)
 	form.Set("card_exp_year", req.ExpiryYear)
 	form.Set("card_cvv", req.CVV)
-	form.Set("client_key", os.Getenv("MIDTRANS_CLIENT_KEY"))
 
 	httpReq, _ := http.NewRequest("GET", "https://api.midtrans.com/v2/token", strings.NewReader(form.Encode()))
 	httpReq.Header.Set("Content-Type", "application/x-www-form-urlencoded")
