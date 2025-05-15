@@ -1,7 +1,6 @@
 package subscribe
 
 import (
-	"log"
 	"net/http"
 
 	dto "github.com/srv-cashpay/merchant/dto"
@@ -31,9 +30,9 @@ func (h *domainHandler) TokenizeCardHandler(c echo.Context) error {
 	// Proses tokenisasi kartu
 	transaction, err := h.serviceSubscribe.TokenizeCard(req)
 	if err != nil {
-		log.Println("Error during card tokenization:", err)
-		return c.JSON(http.StatusInternalServerError, map[string]string{"message": "Tokenization failed"})
+		return c.JSON(http.StatusBadRequest, echo.Map{
+			"error": err.Error(),
+		})
 	}
-
 	return c.JSON(http.StatusOK, transaction)
 }
