@@ -14,7 +14,7 @@ import (
 )
 
 func (h *domainHandler) CardPayment(c echo.Context) error {
-	var req dto.TokenizeRequest
+	var req dto.CreditCardChargeRequest
 	userid, ok := c.Get("UserId").(string)
 	if !ok {
 		return res.ErrorBuilder(&res.ErrorConstant.InternalServerError, nil).Send(c)

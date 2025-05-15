@@ -6,7 +6,7 @@ import (
 	dto "github.com/srv-cashpay/merchant/dto"
 )
 
-func (s *subscribeService) CardPayment(req dto.TokenizeRequest) (*dto.TokenizeResponse, error) {
+func (s *subscribeService) CardPayment(req dto.CreditCardChargeRequest) (*dto.TokenizeResponse, error) {
 	resp, err := s.Repo.CardPayment(req)
 	if err != nil {
 		return nil, err
