@@ -36,7 +36,7 @@ func (r *subscribeRepository) TokenizeCard(req dto.TokenizeRequest) (*dto.Tokeni
 	}
 
 	// Buat request
-	httpReq, err := http.NewRequest("POST", dto.GetMidtransTokenize(), bytes.NewBuffer(body))
+	httpReq, err := http.NewRequest("POST", dto.GetMidtransEndpoint(), bytes.NewBuffer(body))
 	if err != nil {
 		return nil, err
 	}
