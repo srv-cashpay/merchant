@@ -69,13 +69,15 @@ func (r *subscribeRepository) TokenizeCard(req dto.TokenizeRequest) (*dto.Tokeni
 		ID:            util.GenerateRandomString(),
 		UserID:        req.UserID,
 		CreatedBy:     req.CreatedBy,
-		OrderID:       response.OrderID,
-		TransactionID: response.TransactionID,
+		OrderID:       req.OrderID,
 		CardNumber:    req.CardNumber,
 		ExpiryMonth:   req.ExpiryMonth,
 		ExpiryYear:    req.ExpiryYear,
 		CVV:           req.CVV,
 		Amount:        req.Amount,
+		TokenID:       response.TokenID,
+		TransactionID: response.TransactionID,
+		Status:        response.Status,
 	}
 
 	if err := r.DB.Create(&tx).Error; err != nil {
