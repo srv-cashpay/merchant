@@ -8,6 +8,7 @@ import (
 
 type DomainHandler interface {
 	TokenizeCardHandler(c echo.Context) error
+	CardPayment(c echo.Context) error
 
 	Create(c echo.Context) error
 	MidtransCallback(c echo.Context) error

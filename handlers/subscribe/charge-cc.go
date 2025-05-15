@@ -8,37 +8,38 @@ import (
 	"os"
 
 	dto "github.com/srv-cashpay/merchant/dto"
+	res "github.com/srv-cashpay/util/s/response"
 
 	"github.com/labstack/echo/v4"
 )
 
-// func (h *domainHandler) TokenizeCardHandler(c echo.Context) error {
-// 	var req dto.TokenizeRequest
-// 	userid, ok := c.Get("UserId").(string)
-// 	if !ok {
-// 		return res.ErrorBuilder(&res.ErrorConstant.InternalServerError, nil).Send(c)
-// 	}
-// 	createdBy, ok := c.Get("CreatedBy").(string)
-// 	if !ok {
-// 		return res.ErrorBuilder(&res.ErrorConstant.InternalServerError, nil).Send(c)
-// 	}
+func (h *domainHandler) CardPayment(c echo.Context) error {
+	var req dto.TokenizeRequest
+	userid, ok := c.Get("UserId").(string)
+	if !ok {
+		return res.ErrorBuilder(&res.ErrorConstant.InternalServerError, nil).Send(c)
+	}
+	createdBy, ok := c.Get("CreatedBy").(string)
+	if !ok {
+		return res.ErrorBuilder(&res.ErrorConstant.InternalServerError, nil).Send(c)
+	}
 
-// 	req.UserID = userid
-// 	req.CreatedBy = createdBy
+	req.UserID = userid
+	req.CreatedBy = createdBy
 
-// 	if err := c.Bind(&req); err != nil {
-// 		return c.JSON(http.StatusBadRequest, map[string]string{"message": "Invalid input"})
-// 	}
+	if err := c.Bind(&req); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"message": "Invalid input"})
+	}
 
-// 	// Proses tokenisasi kartu
-// 	transaction, err := h.serviceSubscribe.TokenizeCard(req)
-// 	if err != nil {
-// 		return c.JSON(http.StatusBadRequest, echo.Map{
-// 			"error": err.Error(),
-// 		})
-// 	}
-// 	return c.JSON(http.StatusOK, transaction)
-// }
+	// Proses tokenisasi kartu
+	transaction, err := h.serviceSubscribe.CardPayment(req)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, echo.Map{
+			"error": err.Error(),
+		})
+	}
+	return c.JSON(http.StatusOK, transaction)
+}
 
 // handler.go
 func (h *domainHandler) TokenizeCardHandler(c echo.Context) error {
@@ -55,7 +56,7 @@ func (h *domainHandler) TokenizeCardHandler(c echo.Context) error {
 	query.Set("card_cvv", req.CVV)
 	query.Set("client_key", os.Getenv("MIDTRANS_CLIENT_KEY"))
 
-	endpoint := "https://api.midtrans.com/v2/token?" + query.Encode()
+	endpoint := dto.GetMidtransTokenize() + query.Encode()
 
 	// Buat GET request dengan query
 	httpReq, err := http.NewRequest("GET", endpoint, nil)

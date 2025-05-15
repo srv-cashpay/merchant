@@ -74,8 +74,8 @@ type QrisChargeRequest struct {
 }
 
 type TransactionDetails struct {
-	OrderID     string  `json:"order_id"`
-	GrossAmount float64 `json:"gross_amount"`
+	OrderID     string `json:"order_id"`
+	GrossAmount int    `json:"gross_amount"`
 }
 
 type ItemDetail struct {
@@ -184,6 +184,7 @@ type ShopeePayResponse struct {
 }
 
 type TokenizeRequest struct {
+	TokenID     string `json:"token_id"`
 	UserID      string `json:"user_id"`
 	CreatedBy   string `json:"created_by"`
 	OrderID     string `json:"order_id"`
@@ -192,6 +193,17 @@ type TokenizeRequest struct {
 	ExpiryYear  string `json:"expiry_year"`
 	CVV         string `json:"cvv"`
 	Amount      int    `json:"amount"`
+}
+
+type CreditCardChargeRequest struct {
+	PaymentType        string             `json:"payment_type"`
+	TransactionDetails TransactionDetails `json:"transaction_details"`
+	CreditCard         CreditCardData     `json:"credit_card"`
+}
+
+type CreditCardData struct {
+	TokenID        string `json:"token_id"`
+	Authentication bool   `json:"authentication"`
 }
 
 type TokenizeResponse struct {
