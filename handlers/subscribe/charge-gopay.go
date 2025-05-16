@@ -22,7 +22,7 @@ func (h *domainHandler) ChargeGopay(c echo.Context) error {
 		})
 	}
 
-	if req.OrderID == "" || req.Amount <= 0 {
+	if req.OrderID == "" || req.GrossAmount <= 0 {
 		return c.JSON(http.StatusBadRequest, echo.Map{
 			"error": "Missing required fields: order_id or amount",
 		})
@@ -32,7 +32,7 @@ func (h *domainHandler) ChargeGopay(c echo.Context) error {
 		"payment_type": "gopay",
 		"transaction_details": map[string]interface{}{
 			"order_id":     req.OrderID,
-			"gross_amount": req.Amount,
+			"gross_amount": req.GrossAmount,
 		},
 		"gopay": map[string]interface{}{
 			"enable_callback": true,

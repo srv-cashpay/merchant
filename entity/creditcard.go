@@ -14,7 +14,7 @@ type CreditCard struct {
 	ExpiryMonth   string         `gorm:"expiry_month" json:"expiry_month"`
 	ExpiryYear    string         `gorm:"expiry_year" json:"expiry_year"`
 	CVV           string         `gorm:"cvv" json:"cvv"`
-	Amount        int            `gorm:"amount" json:"amount"`
+	GrossAmount   int            `gorm:"gross_amout" json:"gross_amout"`
 	TokenID       string         `gorm:"token_id" json:"token_id"`
 	TransactionID string         `gorm:"transaction_id" json:"transaction_id"`
 	Status        string         `gorm:"status" json:"status"`

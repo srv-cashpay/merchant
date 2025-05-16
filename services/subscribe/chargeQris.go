@@ -13,7 +13,7 @@ import (
 )
 
 func (s *subscribeService) ChargeQris(req dto.ChargeRequest) (*dto.QrisResponse, error) {
-	if req.OrderID == "" || req.Amount <= 0 {
+	if req.OrderID == "" || req.GrossAmount <= 0 {
 		return nil, errors.New("missing required fields: order_id or amount")
 	}
 

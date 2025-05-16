@@ -19,7 +19,7 @@ func (r *subscribeRepository) ChargePermata(req dto.ChargeRequest) (*dto.VAPerma
 		"payment_type": "permata",
 		"transaction_details": map[string]interface{}{
 			"order_id":     req.OrderID,
-			"gross_amount": req.Amount,
+			"gross_amount": req.GrossAmount,
 		},
 		"custom_expiry": map[string]interface{}{
 			"order_time":      time.Now().Format("2006-01-02 15:04:05 -0700"),
@@ -71,7 +71,7 @@ func (r *subscribeRepository) ChargePermata(req dto.ChargeRequest) (*dto.VAPerma
 		CreatedBy:       req.CreatedBy,
 		OrderID:         parsed.OrderID,
 		TransactionID:   parsed.TransactionID,
-		GrossAmount:     req.Amount,
+		GrossAmount:     req.GrossAmount,
 		PaymentType:     parsed.PaymentType,
 		Status:          parsed.TransactionStatus,
 		TransactionTime: parseTime(parsed.TransactionTime),

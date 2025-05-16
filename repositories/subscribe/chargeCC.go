@@ -81,7 +81,7 @@ func (r *subscribeRepository) CardPayment(req dto.CreditCardChargeRequest) (*dto
 		ID:            util.GenerateRandomString(),
 		UserID:        req.UserID,
 		CreatedBy:     req.CreatedBy,
-		Amount:        req.TransactionDetails.GrossAmount,
+		GrossAmount:   req.TransactionDetails.GrossAmount,
 		TokenID:       response.TokenID,
 		TransactionID: response.TransactionID,
 		Status:        response.Status,

@@ -19,7 +19,7 @@ func (r *subscribeRepository) ChargeCimb(req dto.ChargeRequest) (*dto.VAResponse
 		"payment_type": "bank_transfer",
 		"transaction_details": map[string]interface{}{
 			"order_id":     req.OrderID,
-			"gross_amount": req.Amount,
+			"gross_amount": req.GrossAmount,
 		},
 		"bank_transfer": map[string]interface{}{
 			"bank": "cimb",
@@ -74,7 +74,7 @@ func (r *subscribeRepository) ChargeCimb(req dto.ChargeRequest) (*dto.VAResponse
 		CreatedBy:       req.CreatedBy,
 		OrderID:         parsed.OrderID,
 		TransactionID:   parsed.TransactionID,
-		GrossAmount:     req.Amount,
+		GrossAmount:     req.GrossAmount,
 		PaymentType:     parsed.PaymentType,
 		Status:          parsed.TransactionStatus,
 		TransactionTime: parseTime(parsed.TransactionTime),

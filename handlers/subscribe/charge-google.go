@@ -21,7 +21,7 @@ func (h *domainHandler) ChargeGpay(c echo.Context) error {
 		})
 	}
 
-	if req.OrderID == "" || req.Amount <= 0 || req.CardToken == "" {
+	if req.OrderID == "" || req.GrossAmount <= 0 || req.CardToken == "" {
 		return c.JSON(http.StatusBadRequest, echo.Map{
 			"error": "Missing required fields: order_id, amount, or card_token",
 		})
@@ -32,7 +32,7 @@ func (h *domainHandler) ChargeGpay(c echo.Context) error {
 		"payment_type": "google_pay",
 		"transaction_details": map[string]interface{}{
 			"order_id":     req.OrderID,
-			"gross_amount": req.Amount,
+			"gross_amount": req.GrossAmount,
 		},
 		"google_pay": map[string]interface{}{
 			"token_id": req.CardToken, // Token Google Pay yang diterima dari frontend

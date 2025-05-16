@@ -21,7 +21,7 @@ func (r *subscribeRepository) ChargeQris(req dto.ChargeRequest) (*dto.QrisRespon
 		"payment_type": "qris",
 		"transaction_details": map[string]interface{}{
 			"order_id":     req.OrderID,
-			"gross_amount": req.Amount,
+			"gross_amount": req.GrossAmount,
 		},
 	}
 
@@ -71,7 +71,7 @@ func (r *subscribeRepository) ChargeQris(req dto.ChargeRequest) (*dto.QrisRespon
 		CreatedBy:       req.CreatedBy,
 		OrderID:         parsed.OrderID,
 		TransactionID:   parsed.TransactionID,
-		GrossAmount:     req.Amount,
+		GrossAmount:     req.GrossAmount,
 		PaymentType:     parsed.PaymentType,
 		Status:          parsed.TransactionStatus,
 		TransactionTime: parseTime(parsed.TransactionTime),
