@@ -27,7 +27,7 @@ type TransactionStatusResponse struct {
 
 type ChargeRequest struct {
 	OrderID     string `json:"order_id"`
-	GrossAmount int64  `json:"gross_amout"`
+	GrossAmount int64  `json:"gross_amount"`
 	CardToken   string `json:"card_token"` // Token kartu kredit yang didapatkan dari frontend
 	Channel     string `json:"channel"`    // Metode pembayaran yang digunakan, contoh: "credit_card"
 	UserID      string `json:"user_id"`
@@ -215,7 +215,7 @@ type TokenizeResponse struct {
 	ExpiryMonth   string `json:"expiry_month"`
 	ExpiryYear    string `json:"expiry_year"`
 	CVV           string `json:"cvv"`
-	GrossAmount   int    `json:"gross_amout"`
+	GrossAmount   int    `json:"gross_amount"`
 	TokenID       string `json:"token_id"`
 	TransactionID string `json:"transaction_id"`
 	Status        string `json:"status"`
