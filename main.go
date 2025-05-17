@@ -1,9 +1,8 @@
 package main
 
 import (
-	"os"
+	"log"
 
-	"github.com/srv-cashpay/merchant/configs/seeder"
 	"github.com/srv-cashpay/merchant/routes"
 
 	"github.com/labstack/echo/v4"
@@ -12,15 +11,19 @@ import (
 
 func main() {
 
-	dbEvent := os.Getenv("DBEVENT")
-	if dbEvent == "seeder" {
-		seeder.RunSeeder()
-	}
-
 	e := routes.New()
+
 	e.Use(middleware.CORS())
 
-	e.Logger.Fatal(e.Start(":2345"))
+	// Sertifikat Let's Encrypt
+	certFile := "/certs/cashpay.my.id/fullchain.pem"
+	keyFile := "/certs/cashpay.my.id/privkey.pem"
+
+	// Jalankan HTTPS langsung dari Echo
+	err := e.StartTLS(":2345", certFile, keyFile)
+	if err != nil {
+		log.Fatal("StartTLS error: ", err)
+	}
 }
 
 // CORSMiddleware ..
