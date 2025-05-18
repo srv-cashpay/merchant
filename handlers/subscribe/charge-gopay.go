@@ -1,20 +1,28 @@
 package subscribe
 
 import (
-	"bytes"
-	"encoding/base64"
-	"encoding/json"
-	"io"
 	"net/http"
-	"time"
 
 	dto "github.com/srv-cashpay/merchant/dto"
+	res "github.com/srv-cashpay/util/s/response"
 
 	"github.com/labstack/echo/v4"
 )
 
 func (h *domainHandler) ChargeGopay(c echo.Context) error {
 	var req dto.ChargeRequest
+	userid, ok := c.Get("UserId").(string)
+	if !ok {
+		return res.ErrorBuilder(&res.ErrorConstant.InternalServerError, nil).Send(c)
+	}
+	createdBy, ok := c.Get("CreatedBy").(string)
+	if !ok {
+		return res.ErrorBuilder(&res.ErrorConstant.InternalServerError, nil).Send(c)
+	}
+
+	req.UserID = userid
+	req.CreatedBy = createdBy
+
 	if err := c.Bind(&req); err != nil {
 		return c.JSON(http.StatusBadRequest, echo.Map{
 			"error":   "Invalid request payload",
@@ -22,74 +30,13 @@ func (h *domainHandler) ChargeGopay(c echo.Context) error {
 		})
 	}
 
-	if req.OrderID == "" || req.GrossAmount <= 0 {
-		return c.JSON(http.StatusBadRequest, echo.Map{
-			"error": "Missing required fields: order_id or amount",
-		})
-	}
-
-	payload := map[string]interface{}{
-		"payment_type": "gopay",
-		"transaction_details": map[string]interface{}{
-			"order_id":     req.OrderID,
-			"gross_amount": req.GrossAmount,
-		},
-		"gopay": map[string]interface{}{
-			"enable_callback": true,
-			"callback_url":    "https://your-callback-url.com/notification", // Sesuaikan
-		},
-	}
-
-	bodyBytes, err := json.Marshal(payload)
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, echo.Map{
-			"error": "Failed to encode payload",
-		})
-	}
-
-	httpReq, err := http.NewRequest("POST", dto.GetMidtransEndpoint(), bytes.NewBuffer(bodyBytes))
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, echo.Map{
-			"error": "Failed to create HTTP request",
-		})
-	}
-
-	auth := base64.StdEncoding.EncodeToString([]byte(dto.GetMidtransServerKey() + ":"))
-	httpReq.Header.Set("Authorization", "Basic "+auth)
-	httpReq.Header.Set("Content-Type", "application/json")
-
-	client := &http.Client{Timeout: 20 * time.Second}
-	res, err := client.Do(httpReq)
+	response, err := h.serviceSubscribe.ChargeGopay(req)
 	if err != nil {
 		return c.JSON(http.StatusBadGateway, echo.Map{
-			"error":   "Failed to contact Midtrans",
+			"error":   "Failed to charge GoPay",
 			"details": err.Error(),
 		})
 	}
-	defer res.Body.Close()
 
-	resBody, err := io.ReadAll(res.Body)
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, echo.Map{
-			"error": "Failed to read Midtrans response",
-		})
-	}
-
-	var parsed dto.GopayResponse
-	if err := json.Unmarshal(resBody, &parsed); err != nil {
-		return c.JSON(http.StatusInternalServerError, echo.Map{
-			"error":   "Invalid response from Midtrans",
-			"details": string(resBody),
-		})
-	}
-
-	if parsed.StatusCode != "201" {
-		return c.JSON(http.StatusBadGateway, echo.Map{
-			"error":   "Midtrans returned an error",
-			"code":    parsed.StatusCode,
-			"message": parsed.StatusMessage,
-		})
-	}
-
-	return c.JSON(http.StatusOK, parsed)
+	return c.JSON(http.StatusOK, response)
 }

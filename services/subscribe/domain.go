@@ -17,6 +17,7 @@ type SubscribeService interface {
 	ChargeCimb(req dto.ChargeRequest) (*dto.VAResponse, error)
 	ChargeBni(req dto.ChargeRequest) (*dto.VAResponse, error)
 	CardPayment(cardData dto.CreditCardChargeRequest) (*dto.TokenizeResponse, error)
+	ChargeGopay(req dto.ChargeRequest) (*dto.GopayResponse, error)
 }
 
 type subscribeService struct {

@@ -31,7 +31,7 @@ func (h *domainHandler) ChargeBri(c echo.Context) error {
 	}
 
 	// Call the service to charge the Bni account
-	response, err := h.serviceSubscribe.ChargeBni(req)
+	response, err := h.serviceSubscribe.ChargeBri(req)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, echo.Map{
 			"error": err.Error(),
