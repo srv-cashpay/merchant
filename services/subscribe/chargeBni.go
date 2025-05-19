@@ -9,8 +9,8 @@ import (
 )
 
 func (s *subscribeService) ChargeBni(req dto.ChargeRequest) (*dto.VAResponse, error) {
-	if req.OrderID == "" || req.GrossAmount <= 0 {
-		return nil, errors.New("missing required fields: order_id or amount")
+	if req.GrossAmount <= 0 {
+		return nil, errors.New("amount")
 	}
 
 	// CEK APAKAH ORDER_ID SUDAH ADA DI DATABASE
