@@ -83,6 +83,6 @@ func (r *subscribeRepository) ChargeBni(req dto.ChargeRequest) (*dto.VAResponse,
 
 func (r *subscribeRepository) FindByOrderID(orderID string, userID string, out *entity.Subscribe) error {
 	return r.DB.
-		Where("order_id = ? AND user_id = ?", out.OrderID, out.UserID).
+		Where("order_id = ? AND user_id = ?", orderID, userID).
 		First(out).Error
 }
