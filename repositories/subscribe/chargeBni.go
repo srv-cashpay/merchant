@@ -62,12 +62,6 @@ func (r *subscribeRepository) ChargeBni(req dto.ChargeRequest) (*dto.VAResponse,
 		return nil, errors.New("invalid response from Midtrans")
 	}
 
-	// if parsed.StatusCode != "201" {
-	// 	return nil, errors.New("midtrans returned an error: " + parsed.StatusMessage)
-	// }
-
-	// return &parsed,
-
 	tx := entity.Subscribe{
 		ID:              util.GenerateRandomString(),
 		UserID:          req.UserID,
@@ -85,4 +79,10 @@ func (r *subscribeRepository) ChargeBni(req dto.ChargeRequest) (*dto.VAResponse,
 	}
 
 	return &parsed, nil
+}
+
+func (r *subscribeRepository) FindByOrderID(orderID string, userID string, out *entity.Subscribe) error {
+	return r.DB.
+		Where("order_id = ? AND user_id = ?", orderID, userID).
+		First(out).Error
 }

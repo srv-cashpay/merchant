@@ -2,6 +2,7 @@ package subscribe
 
 import (
 	dto "github.com/srv-cashpay/merchant/dto"
+	"github.com/srv-cashpay/merchant/entity"
 
 	"gorm.io/gorm"
 )
@@ -18,6 +19,8 @@ type DomainRepository interface {
 	ChargeBni(req dto.ChargeRequest) (*dto.VAResponse, error)
 	CardPayment(cardData dto.CreditCardChargeRequest) (*dto.TokenizeResponse, error)
 	ChargeGopay(req dto.ChargeRequest) (*dto.GopayResponse, error)
+
+	FindByOrderID(orderID string, userID string, out *entity.Subscribe) error
 }
 
 type subscribeRepository struct {
