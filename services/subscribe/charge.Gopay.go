@@ -8,7 +8,7 @@ import (
 
 func (s *subscribeService) ChargeGopay(req dto.ChargeRequest) (*dto.GopayResponse, error) {
 
-	if req.OrderID == "" || req.GrossAmount <= 0 {
+	if req.GrossAmount <= 0 {
 		return nil, errors.New("missing required fields: order_id or amount")
 	}
 	resp, err := s.Repo.ChargeGopay(req)

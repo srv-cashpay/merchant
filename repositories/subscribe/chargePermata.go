@@ -18,7 +18,7 @@ func (r *subscribeRepository) ChargePermata(req dto.ChargeRequest) (*dto.VAPerma
 	payload := map[string]interface{}{
 		"payment_type": "permata",
 		"transaction_details": map[string]interface{}{
-			"order_id":     req.OrderID,
+			"order_id":     time.Now().Format("20060102150405"),
 			"gross_amount": req.GrossAmount,
 		},
 		"custom_expiry": map[string]interface{}{

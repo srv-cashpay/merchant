@@ -18,7 +18,7 @@ func (r *subscribeRepository) ChargeGopay(req dto.ChargeRequest) (*dto.GopayResp
 	payload := map[string]interface{}{
 		"payment_type": "gopay",
 		"transaction_details": map[string]interface{}{
-			"order_id":     req.OrderID,
+			"order_id":     time.Now().Format("20060102150405"),
 			"gross_amount": req.GrossAmount,
 		},
 		"gopay": map[string]interface{}{

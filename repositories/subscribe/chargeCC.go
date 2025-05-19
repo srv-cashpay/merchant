@@ -20,7 +20,7 @@ func (r *subscribeRepository) CardPayment(req dto.CreditCardChargeRequest) (*dto
 	requestBody := dto.CreditCardChargeRequest{
 		PaymentType: "credit_card",
 		TransactionDetails: dto.TransactionDetails{
-			OrderID:     req.TransactionDetails.OrderID,
+			OrderID:     e.Now().Format("20060102150405"),
 			GrossAmount: req.TransactionDetails.GrossAmount,
 		},
 		CreditCard: dto.CreditCardData{
