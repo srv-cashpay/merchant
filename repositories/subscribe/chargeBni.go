@@ -12,9 +12,22 @@ import (
 	dto "github.com/srv-cashpay/merchant/dto"
 	"github.com/srv-cashpay/merchant/entity"
 	util "github.com/srv-cashpay/util/s"
+	"gorm.io/gorm"
 )
 
 func (r *subscribeRepository) ChargeBni(req dto.ChargeRequest) (*dto.VAResponse, error) {
+	var existingTx entity.Subscribe
+	err := r.DB.
+		Where("user_id = ? AND status = ?", req.UserID, "pending").
+		Order("created_at DESC").
+		First(&existingTx).Error
+
+	if err == nil {
+		return nil, errors.New("Masih ada transaksi aktif, silakan selesaikan terlebih dahulu.")
+	} else if !errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, errors.New("Gagal mengecek transaksi sebelumnya")
+	}
+
 	payload := map[string]interface{}{
 		"payment_type": "bank_transfer",
 		"transaction_details": map[string]interface{}{
@@ -79,10 +92,4 @@ func (r *subscribeRepository) ChargeBni(req dto.ChargeRequest) (*dto.VAResponse,
 	}
 
 	return &parsed, nil
-}
-
-func (r *subscribeRepository) FindByOrderID(orderID string, userID string, out *entity.Subscribe) error {
-	return r.DB.
-		Where("order_id = ? AND user_id = ?", orderID, userID).
-		First(out).Error
 }
