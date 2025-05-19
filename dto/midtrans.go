@@ -31,6 +31,7 @@ type ChargeRequest struct {
 	CardToken   string `json:"card_token"` // Token kartu kredit yang didapatkan dari frontend
 	Channel     string `json:"channel"`    // Metode pembayaran yang digunakan, contoh: "credit_card"
 	UserID      string `json:"user_id"`
+	MerchantID  string `json:"merchant_id"`
 	CreatedBy   string `json:"created_by"`
 }
 

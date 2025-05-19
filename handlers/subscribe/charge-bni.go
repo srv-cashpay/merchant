@@ -19,7 +19,12 @@ func (h *domainHandler) ChargeBni(c echo.Context) error {
 	if !ok {
 		return res.ErrorBuilder(&res.ErrorConstant.InternalServerError, nil).Send(c)
 	}
+	merchantId, ok := c.Get("MerchantId").(string)
+	if !ok {
+		return res.ErrorBuilder(&res.ErrorConstant.InternalServerError, nil).Send(c)
+	}
 
+	req.MerchantID = merchantId
 	req.UserID = userid
 	req.CreatedBy = createdBy
 

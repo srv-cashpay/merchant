@@ -77,6 +77,7 @@ func (r *subscribeRepository) ChargeBni(req dto.ChargeRequest) (*dto.VAResponse,
 
 	tx := entity.Subscribe{
 		ID:              util.GenerateRandomString(),
+		MerchantID:      req.MerchantID,
 		UserID:          req.UserID,
 		CreatedBy:       req.CreatedBy,
 		OrderID:         parsed.OrderID,
