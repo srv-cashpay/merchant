@@ -18,7 +18,7 @@ func (r *subscribeRepository) ChargeBni(req dto.ChargeRequest) (*dto.VAResponse,
 	payload := map[string]interface{}{
 		"payment_type": "bank_transfer",
 		"transaction_details": map[string]interface{}{
-			"order_id":     req.OrderID,
+			"order_id":     "order-" + time.Now().Format("20060102150405"),
 			"gross_amount": req.GrossAmount,
 		},
 		"bank_transfer": map[string]interface{}{
