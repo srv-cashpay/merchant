@@ -50,6 +50,10 @@ import (
 	r_payment "github.com/srv-cashpay/merchant/repositories/payment"
 	s_payment "github.com/srv-cashpay/merchant/services/payment"
 
+	h_history "github.com/srv-cashpay/merchant/handlers/subscribe/history"
+	r_history "github.com/srv-cashpay/merchant/repositories/subscribe/history"
+	s_history "github.com/srv-cashpay/merchant/services/subscribe/history"
+
 	h_user "github.com/srv-cashpay/merchant/handlers/user"
 	r_user "github.com/srv-cashpay/merchant/repositories/user"
 	s_user "github.com/srv-cashpay/merchant/services/user"
@@ -141,6 +145,10 @@ var (
 	paymentR = r_payment.NewPaymentRepository(DB)
 	paymentS = s_payment.NewPaymentService(paymentR, JWT)
 	paymentH = h_payment.NewPaymentHandler(paymentS)
+
+	historyR = r_history.NewHistoryRepository(DB)
+	historyS = s_history.NewHistoryService(historyR, JWT)
+	historyH = h_history.NewHistoryHandler(historyS)
 
 	tableR = r_table.NewTableRepository(DB)
 	tableS = s_table.NewTableService(tableR, JWT)
@@ -253,6 +261,11 @@ func New() *echo.Echo {
 		payment.PUT("/payment/update/:id", paymentH.Update)
 		payment.DELETE("/payment/:id", paymentH.Delete)
 		payment.DELETE("/payment/bulk-delete", paymentH.BulkDelete)
+	}
+	history := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
+	{
+		history.GET("/history/pagination", historyH.Get)
+
 	}
 
 	discount := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
