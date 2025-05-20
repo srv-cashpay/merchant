@@ -18,7 +18,7 @@ type SubscribeService interface {
 	ChargeBni(req dto.ChargeRequest) (*dto.VAResponse, error)
 	CardPayment(cardData dto.CreditCardChargeRequest) (*dto.TokenizeResponse, error)
 	ChargeGopay(req dto.ChargeRequest) (*dto.GopayResponse, error)
-	CancelPay(req dto.GetorderID) ([]byte, int, error)
+	CancelPay(req dto.GetorderID) (map[string]interface{}, int, error)
 }
 
 type subscribeService struct {

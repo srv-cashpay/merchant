@@ -5,8 +5,12 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strconv"
+	"strings"
+	"time"
 
 	"github.com/srv-cashpay/merchant/dto"
+	"github.com/srv-cashpay/merchant/entity"
 )
 
 func (r *subscribeRepository) CancelPay(request dto.GetorderID) ([]byte, int, error) {
@@ -32,4 +36,32 @@ func (r *subscribeRepository) CancelPay(request dto.GetorderID) ([]byte, int, er
 
 	body, _ := ioutil.ReadAll(resp.Body)
 	return body, resp.StatusCode, nil
+}
+
+func (r *subscribeRepository) UpdateSubscribeByOrderID(data dto.MidtransCancelResponse) error {
+	var subscribe entity.Subscribe
+
+	// cari berdasarkan order_id
+	if err := r.DB.Where("order_id = ?", data.OrderID).First(&subscribe).Error; err != nil {
+		return err
+	}
+
+	// parse TransactionTime
+	transactionTime, err := time.Parse("2006-01-02 15:04:05", data.TransactionTime)
+	if err != nil {
+		return err
+	}
+
+	// convert GrossAmount string ke int64
+	amount, _ := strconv.ParseInt(strings.Split(data.GrossAmount, ".")[0], 10, 64)
+
+	// update field
+	subscribe.Status = data.TransactionStatus
+	subscribe.TransactionID = data.TransactionID
+	subscribe.TransactionTime = transactionTime
+	subscribe.GrossAmount = amount
+	subscribe.PaymentType = data.PaymentType
+	subscribe.UpdatedAt = time.Now()
+
+	return r.DB.Save(&subscribe).Error
 }

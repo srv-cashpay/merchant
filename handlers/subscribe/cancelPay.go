@@ -21,5 +21,7 @@ func (h *domainHandler) CancelPay(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
-	return c.JSON(status, map[string]interface{}{"response": string(response)})
+
+	// Tidak perlu json.Unmarshal lagi, karena response sudah map[string]interface{}
+	return c.JSON(status, response)
 }
