@@ -74,7 +74,12 @@ func (r *subscribeRepository) ChargeBni(req dto.ChargeRequest) (*dto.VAResponse,
 	if err := json.Unmarshal(resBody, &parsed); err != nil {
 		return nil, errors.New("invalid response from Midtrans")
 	}
-
+	// Utility untuk gabung VA dan bank
+	var vaNumber, bank string
+	if len(parsed.VANumbers) > 0 {
+		vaNumber = parsed.VANumbers[0].VANumber
+		bank = parsed.VANumbers[0].Bank
+	}
 	tx := entity.Subscribe{
 		ID:              util.GenerateRandomString(),
 		MerchantID:      req.MerchantID,
@@ -85,6 +90,8 @@ func (r *subscribeRepository) ChargeBni(req dto.ChargeRequest) (*dto.VAResponse,
 		GrossAmount:     req.GrossAmount,
 		PaymentType:     parsed.PaymentType,
 		Status:          parsed.TransactionStatus,
+		VA:              vaNumber,
+		Bank:            bank,
 		TransactionTime: parseTime(parsed.TransactionTime),
 	}
 

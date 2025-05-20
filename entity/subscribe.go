@@ -17,6 +17,8 @@ type Subscribe struct {
 	Url             string         `gorm:"url,omitempty" json:"url"`
 	GrossAmount     int64          `gorm:"gross_amount" json:"gross_amount"`
 	Status          string         `gorm:"status" json:"status"`
+	VA              string         `gorm:"va" json:"va"`
+	Bank            string         `gorm:"bank" json:"bank"`
 	RedirectURL     string         `gorm:"redirect_url" json:"redirect_url"`
 	CreatedBy       string         `gorm:"created_by" json:"created_by"`
 	DeletedBy       string         `gorm:"deleted_by" json:"deleted_by"`
