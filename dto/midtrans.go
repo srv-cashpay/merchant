@@ -234,7 +234,7 @@ type GopayAction struct {
 }
 
 type GetorderID struct {
-	OrderID string `param:"order_id" validate:"required"`
+	OrderID string `json:"order_id"`
 }
 
 func GetMidtransEndpoint() string {

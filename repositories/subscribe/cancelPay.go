@@ -13,7 +13,7 @@ func (r *subscribeRepository) CancelPay(request dto.GetorderID) ([]byte, int, er
 	baseURL := dto.GetMidtransUrl()
 	serverKey := dto.GetMidtransServerKey()
 
-	url := fmt.Sprintf("%s%s/cancel", baseURL, request)
+	url := fmt.Sprintf("%s/%s/cancel", baseURL, request.OrderID)
 	auth := "Basic " + base64.StdEncoding.EncodeToString([]byte(serverKey+":"))
 
 	req, err := http.NewRequest("POST", url, nil)
