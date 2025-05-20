@@ -8,6 +8,7 @@ import (
 
 type DomainRepository interface {
 	Get(req *dto.Pagination) (RepositoryResult, int)
+	GetById(req dto.GetHistory) (*dto.VAResponse, error)
 }
 
 type historyRepository struct {

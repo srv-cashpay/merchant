@@ -10,6 +10,7 @@ import (
 
 type HistoryService interface {
 	Get(context echo.Context, req *dto.Pagination) dto.Response
+	GetById(req dto.GetHistory) (*dto.VAResponse, error)
 }
 
 type historyService struct {

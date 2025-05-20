@@ -237,6 +237,10 @@ type GetorderID struct {
 	OrderID string `json:"order_id"`
 }
 
+type GetHistory struct {
+	ID string `param:"id" validate:"required"`
+}
+
 type MidtransCancelResponse struct {
 	StatusCode        string `json:"status_code"`
 	StatusMessage     string `json:"status_message"`

@@ -23,7 +23,7 @@ func (r *subscribeRepository) ChargeBni(req dto.ChargeRequest) (*dto.VAResponse,
 		First(&existingTx).Error
 
 	if err == nil {
-		return nil, errors.New("Masih ada transaksi aktif, silakan selesaikan terlebih dahulu.")
+		return nil, errors.New("There is still an active transaction. Please check your Payment history.")
 	} else if !errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, errors.New("Gagal mengecek transaksi sebelumnya")
 	}
