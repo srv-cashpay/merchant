@@ -233,6 +233,10 @@ type GopayAction struct {
 	URL    string `json:"url"`
 }
 
+type GetorderID struct {
+	OrderID string `param:"order_id" validate:"required"`
+}
+
 func GetMidtransEndpoint() string {
 	val := os.Getenv("MIDTRANS_ENDPOINT")
 	if val == "" {
@@ -251,6 +255,13 @@ func GetMidtransTokenize() string {
 
 func GetMidtransServerKey() string {
 	val := os.Getenv("MIDTRANS_SERVER_KEY")
+	if val == "" {
+		return "your-default-midtrans-server-key"
+	}
+	return val
+}
+func GetMidtransUrl() string {
+	val := os.Getenv("MIDTRANS_BASE_URL")
 	if val == "" {
 		return "your-default-midtrans-server-key"
 	}

@@ -25,6 +25,7 @@ type DomainHandler interface {
 	ChargeShopeePay(c echo.Context) error
 
 	CheckTransactionStatus(c echo.Context) error
+	CancelPay(c echo.Context) error
 }
 
 type domainHandler struct {
