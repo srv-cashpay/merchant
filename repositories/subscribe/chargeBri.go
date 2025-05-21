@@ -93,6 +93,7 @@ func (r *subscribeRepository) ChargeBri(req dto.ChargeRequest) (*dto.VAResponse,
 		VA:              vaNumber,
 		Bank:            bank,
 		TransactionTime: parseTime(parsed.TransactionTime),
+		ExpiryTime:      parseTime(parsed.ExpiryTime),
 	}
 
 	if err := r.DB.Create(&tx).Error; err != nil {

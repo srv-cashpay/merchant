@@ -99,6 +99,7 @@ func (r *subscribeRepository) ChargeGopay(req dto.ChargeRequest) (*dto.GopayResp
 		Status:          parsed.TransactionStatus,
 		TransactionTime: parseTime(parsed.TransactionTime),
 		Url:             qrUrl,
+		ExpiryTime:      parseTime(parsed.ExpiryTime),
 	}
 
 	if err := r.DB.Create(&tx).Error; err != nil {

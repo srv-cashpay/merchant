@@ -95,6 +95,7 @@ func (r *subscribeRepository) ChargePermata(req dto.ChargeRequest) (*dto.VAPerma
 		VA:              vaNumber,
 		Bank:            bank,
 		TransactionTime: parseTime(parsed.TransactionTime),
+		ExpiryTime:      parseTime(parsed.ExpiryTime),
 	}
 
 	if err := r.DB.Create(&tx).Error; err != nil {

@@ -126,6 +126,7 @@ type QrisResponse struct {
 		Method string `json:"method"`
 		URL    string `json:"url"`
 	} `json:"actions"`
+	ExpiryTime string `json:"expiry_time"`
 }
 
 type GooglePayResponse struct {
@@ -169,6 +170,7 @@ type GopayResponse struct {
 	Actions           []GopayAction `json:"actions,omitempty"`
 	FraudStatus       string        `json:"fraud_status,omitempty"`
 	GopayPaymentURL   string        `json:"gopay_payment_url,omitempty"`
+	ExpiryTime        string        `json:"expiry_time"`
 }
 
 type ShopeePayResponse struct {

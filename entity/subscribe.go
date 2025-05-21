@@ -18,6 +18,7 @@ type Subscribe struct {
 	GrossAmount     int64          `gorm:"gross_amount" json:"gross_amount"`
 	Status          string         `gorm:"status" json:"status"`
 	VA              string         `gorm:"va" json:"va"`
+	ExpiryTime      time.Time      `gorm:"expiry_time" json:"expiry_time"`
 	Bank            string         `gorm:"bank" json:"bank"`
 	RedirectURL     string         `gorm:"redirect_url" json:"redirect_url"`
 	CreatedBy       string         `gorm:"created_by" json:"created_by"`

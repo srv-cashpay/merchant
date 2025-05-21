@@ -93,6 +93,7 @@ func (r *subscribeRepository) ChargeQris(req dto.ChargeRequest) (*dto.QrisRespon
 		Status:          parsed.TransactionStatus,
 		TransactionTime: parseTime(parsed.TransactionTime),
 		Url:             qrUrl,
+		ExpiryTime:      parseTime(parsed.ExpiryTime),
 	}
 
 	if err := r.DB.Create(&tx).Error; err != nil {
