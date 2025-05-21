@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/base64"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -12,11 +13,23 @@ import (
 
 	"github.com/srv-cashpay/merchant/entity"
 	util "github.com/srv-cashpay/util/s"
+	"gorm.io/gorm"
 
 	dto "github.com/srv-cashpay/merchant/dto"
 )
 
 func (r *subscribeRepository) ChargeQris(req dto.ChargeRequest) (*dto.QrisResponse, error) {
+	var existingTx entity.Subscribe
+	err := r.DB.
+		Where("user_id = ? AND status = ?", req.UserID, "pending").
+		Order("created_at DESC").
+		First(&existingTx).Error
+
+	if err == nil {
+		return nil, errors.New("There is still an active transaction. Please check your Transaction.")
+	} else if !errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, errors.New("Gagal mengecek transaksi sebelumnya")
+	}
 	payload := map[string]interface{}{
 		"payment_type": "qris",
 		"transaction_details": map[string]interface{}{
@@ -64,7 +77,6 @@ func (r *subscribeRepository) ChargeQris(req dto.ChargeRequest) (*dto.QrisRespon
 			break
 		}
 	}
-
 	tx := entity.Subscribe{
 		ID:              util.GenerateRandomString(),
 		UserID:          req.UserID,

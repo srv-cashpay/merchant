@@ -12,9 +12,21 @@ import (
 	dto "github.com/srv-cashpay/merchant/dto"
 	"github.com/srv-cashpay/merchant/entity"
 	util "github.com/srv-cashpay/util/s"
+	"gorm.io/gorm"
 )
 
 func (r *subscribeRepository) ChargeGopay(req dto.ChargeRequest) (*dto.GopayResponse, error) {
+	var existingTx entity.Subscribe
+	err := r.DB.
+		Where("user_id = ? AND status = ?", req.UserID, "pending").
+		Order("created_at DESC").
+		First(&existingTx).Error
+
+	if err == nil {
+		return nil, errors.New("There is still an active transaction. Please check your Transaction.")
+	} else if !errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, errors.New("Gagal mengecek transaksi sebelumnya")
+	}
 	payload := map[string]interface{}{
 		"payment_type": "gopay",
 		"transaction_details": map[string]interface{}{
@@ -63,7 +75,13 @@ func (r *subscribeRepository) ChargeGopay(req dto.ChargeRequest) (*dto.GopayResp
 	// }
 
 	// return &parsed,
-
+	var qrUrl string
+	for _, action := range parsed.Actions {
+		if action.Name == "generate-qr-code" {
+			qrUrl = action.URL
+			break
+		}
+	}
 	tx := entity.Subscribe{
 		ID:              util.GenerateRandomString(),
 		UserID:          req.UserID,
@@ -74,6 +92,7 @@ func (r *subscribeRepository) ChargeGopay(req dto.ChargeRequest) (*dto.GopayResp
 		PaymentType:     parsed.PaymentType,
 		Status:          parsed.TransactionStatus,
 		TransactionTime: parseTime(parsed.TransactionTime),
+		Url:             qrUrl,
 	}
 
 	if err := r.DB.Create(&tx).Error; err != nil {
