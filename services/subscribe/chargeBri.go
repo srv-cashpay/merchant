@@ -8,7 +8,7 @@ import (
 
 func (s *subscribeService) ChargeBri(req dto.ChargeRequest) (*dto.VAResponse, error) {
 	if req.GrossAmount <= 0 {
-		return nil, errors.New("missing required fields: order_id or amount")
+		return nil, errors.New("missing required fields: amount")
 	}
 
 	resp, err := s.Repo.ChargeBri(req)

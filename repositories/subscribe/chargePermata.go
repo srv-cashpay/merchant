@@ -12,9 +12,21 @@ import (
 	dto "github.com/srv-cashpay/merchant/dto"
 	"github.com/srv-cashpay/merchant/entity"
 	util "github.com/srv-cashpay/util/s"
+	"gorm.io/gorm"
 )
 
 func (r *subscribeRepository) ChargePermata(req dto.ChargeRequest) (*dto.VAPermataResponse, error) {
+	var existingTx entity.Subscribe
+	err := r.DB.
+		Where("user_id = ? AND status = ?", req.UserID, "pending").
+		Order("created_at DESC").
+		First(&existingTx).Error
+
+	if err == nil {
+		return nil, errors.New("There is still an active transaction. Please check your Transaction.")
+	} else if !errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, errors.New("Gagal mengecek transaksi sebelumnya")
+	}
 	payload := map[string]interface{}{
 		"payment_type": "permata",
 		"transaction_details": map[string]interface{}{
@@ -65,8 +77,14 @@ func (r *subscribeRepository) ChargePermata(req dto.ChargeRequest) (*dto.VAPerma
 
 	// return &parsed,
 
+	var vaNumber, bank string
+	if len(parsed.PermataVANumber) > 0 {
+		vaNumber = parsed.PermataVANumber
+		bank = parsed.PaymentType
+	}
 	tx := entity.Subscribe{
 		ID:              util.GenerateRandomString(),
+		MerchantID:      req.MerchantID,
 		UserID:          req.UserID,
 		CreatedBy:       req.CreatedBy,
 		OrderID:         parsed.OrderID,
@@ -74,6 +92,8 @@ func (r *subscribeRepository) ChargePermata(req dto.ChargeRequest) (*dto.VAPerma
 		GrossAmount:     req.GrossAmount,
 		PaymentType:     parsed.PaymentType,
 		Status:          parsed.TransactionStatus,
+		VA:              vaNumber,
+		Bank:            bank,
 		TransactionTime: parseTime(parsed.TransactionTime),
 	}
 

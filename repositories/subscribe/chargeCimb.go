@@ -12,9 +12,21 @@ import (
 	dto "github.com/srv-cashpay/merchant/dto"
 	"github.com/srv-cashpay/merchant/entity"
 	util "github.com/srv-cashpay/util/s"
+	"gorm.io/gorm"
 )
 
 func (r *subscribeRepository) ChargeCimb(req dto.ChargeRequest) (*dto.VAResponse, error) {
+	var existingTx entity.Subscribe
+	err := r.DB.
+		Where("user_id = ? AND status = ?", req.UserID, "pending").
+		Order("created_at DESC").
+		First(&existingTx).Error
+
+	if err == nil {
+		return nil, errors.New("There is still an active transaction. Please check your Transaction.")
+	} else if !errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, errors.New("Gagal mengecek transaksi sebelumnya")
+	}
 	payload := map[string]interface{}{
 		"payment_type": "bank_transfer",
 		"transaction_details": map[string]interface{}{
@@ -67,9 +79,14 @@ func (r *subscribeRepository) ChargeCimb(req dto.ChargeRequest) (*dto.VAResponse
 	// }
 
 	// return &parsed,
-
+	var vaNumber, bank string
+	if len(parsed.VANumbers) > 0 {
+		vaNumber = parsed.VANumbers[0].VANumber
+		bank = parsed.VANumbers[0].Bank
+	}
 	tx := entity.Subscribe{
 		ID:              util.GenerateRandomString(),
+		MerchantID:      req.MerchantID,
 		UserID:          req.UserID,
 		CreatedBy:       req.CreatedBy,
 		OrderID:         parsed.OrderID,
@@ -77,9 +94,10 @@ func (r *subscribeRepository) ChargeCimb(req dto.ChargeRequest) (*dto.VAResponse
 		GrossAmount:     req.GrossAmount,
 		PaymentType:     parsed.PaymentType,
 		Status:          parsed.TransactionStatus,
+		VA:              vaNumber,
+		Bank:            bank,
 		TransactionTime: parseTime(parsed.TransactionTime),
 	}
-
 	if err := r.DB.Create(&tx).Error; err != nil {
 		return nil, err
 	}
