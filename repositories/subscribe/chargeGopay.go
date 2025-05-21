@@ -37,6 +37,11 @@ func (r *subscribeRepository) ChargeGopay(req dto.ChargeRequest) (*dto.GopayResp
 			"enable_callback": true,
 			"callback_url":    "myapp://payment-callback?order_id=" + req.OrderID,
 		},
+		"custom_expiry": map[string]interface{}{
+			"order_time":      time.Now().Format("2006-01-02 15:04:05 -0700"),
+			"expiry_duration": 4,
+			"unit":            "minutes",
+		},
 	}
 
 	bodyBytes, err := json.Marshal(payload)

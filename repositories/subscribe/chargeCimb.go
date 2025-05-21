@@ -38,8 +38,8 @@ func (r *subscribeRepository) ChargeCimb(req dto.ChargeRequest) (*dto.VAResponse
 		},
 		"custom_expiry": map[string]interface{}{
 			"order_time":      time.Now().Format("2006-01-02 15:04:05 -0700"),
-			"expiry_duration": 1,
-			"unit":            "hour",
+			"expiry_duration": 4,
+			"unit":            "minutes",
 		},
 	}
 

@@ -36,6 +36,11 @@ func (r *subscribeRepository) ChargeQris(req dto.ChargeRequest) (*dto.QrisRespon
 			"order_id":     time.Now().Format("20060102150405"),
 			"gross_amount": req.GrossAmount,
 		},
+		"custom_expiry": map[string]interface{}{
+			"order_time":      time.Now().Format("2006-01-02 15:04:05 -0700"),
+			"expiry_duration": 4,
+			"unit":            "minutes",
+		},
 	}
 
 	bodyBytes, err := json.Marshal(payload)
