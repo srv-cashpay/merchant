@@ -9,6 +9,7 @@ import (
 type DomainHandler interface {
 	Get(c echo.Context) error
 	GetById(c echo.Context) error
+	CheckExpire(c echo.Context) error
 }
 
 type domainHandler struct {

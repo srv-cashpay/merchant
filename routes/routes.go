@@ -188,6 +188,7 @@ func New() *echo.Echo {
 		sub.GET("/tokenize", subscribeH.TokenizeCardHandler)
 		sub.POST("/charge-card", subscribeH.CardPayment)
 		sub.POST("/cancel/:order_id", subscribeH.CancelPay)
+
 	}
 	pos := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
 	{
@@ -266,6 +267,7 @@ func New() *echo.Echo {
 	{
 		history.GET("/history/pagination", historyH.Get)
 		history.GET("/history/:id", historyH.GetById)
+		history.GET("/history/:order_id/check-expire", historyH.CheckExpire)
 	}
 
 	discount := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
