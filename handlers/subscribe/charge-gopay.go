@@ -37,9 +37,8 @@ func (h *domainHandler) ChargeGopay(c echo.Context) error {
 
 	response, err := h.serviceSubscribe.ChargeGopay(req)
 	if err != nil {
-		return c.JSON(http.StatusBadGateway, echo.Map{
-			"error":   "Failed to charge GoPay",
-			"details": err.Error(),
+		return c.JSON(http.StatusBadRequest, echo.Map{
+			"error": err.Error(),
 		})
 	}
 
