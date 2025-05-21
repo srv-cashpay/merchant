@@ -29,6 +29,7 @@ func (b *historyRepository) GetById(req dto.GetHistory) (*dto.VAResponse, error)
 				VANumber: tr.VA,
 			},
 		},
+		ExpiryTime: tr.ExpiryTime.Format("2006-01-02 15:04:05"),
 	}
 
 	return response, nil
