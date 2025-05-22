@@ -1,7 +1,15 @@
 package history
 
-import "github.com/srv-cashpay/merchant/entity"
+func (s *historyService) ExpireTransaction(orderID string) error {
+	subscribe, err := s.Repo.FindByOrderID(orderID)
+	if err != nil {
+		return err
+	}
 
-func (s *historyService) CheckAndExpire(orderID string) (*entity.Subscribe, error) {
-	return s.Repo.CheckAndExpireIfNeeded(orderID)
+	if subscribe.Status != "pending" {
+		return nil // tidak perlu update jika sudah bukan pending
+	}
+
+	return s.Repo.UpdateStatus(orderID, "expired")
+
 }

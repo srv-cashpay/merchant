@@ -8,16 +8,14 @@ import (
 
 func (h *domainHandler) CheckExpire(c echo.Context) error {
 	orderID := c.Param("order_id")
-
-	result, err := h.serviceHistory.CheckAndExpire(orderID)
-	if err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]interface{}{
-			"message": err.Error(),
-		})
+	if orderID == "" {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "order_id is required"})
 	}
 
-	return c.JSON(http.StatusOK, map[string]interface{}{
-		"order_id": result.OrderID,
-		"status":   result.Status,
-	})
+	if err := h.serviceHistory.ExpireTransaction(orderID); err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
+	}
+
+	return c.JSON(http.StatusOK, map[string]string{"message": "Transaction expired"})
+
 }

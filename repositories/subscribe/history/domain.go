@@ -9,8 +9,9 @@ import (
 
 type DomainRepository interface {
 	Get(req *dto.Pagination) (RepositoryResult, int)
-	CheckAndExpireIfNeeded(orderID string) (*entity.Subscribe, error)
 	GetById(req dto.GetHistory) (*dto.VAResponse, error)
+	FindByOrderID(orderID string) (*entity.Subscribe, error)
+	UpdateStatus(orderID, status string) error
 }
 
 type historyRepository struct {

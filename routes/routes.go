@@ -267,7 +267,7 @@ func New() *echo.Echo {
 	{
 		history.GET("/history/pagination", historyH.Get)
 		history.GET("/history/:id", historyH.GetById)
-		history.GET("/history/:order_id/check-expire", historyH.CheckExpire)
+		e.PUT("/subscribe/expire/:order_id", historyH.CheckExpire)
 	}
 
 	discount := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
