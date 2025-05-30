@@ -12,7 +12,6 @@ func (r *PermissionRepository) Create(req dto.PermissionRequest) (dto.Permission
 
 	// Create the new Permission entry
 	create := entity.Permission{
-		ID:         req.ID,
 		Label:      req.Label,
 		Icon:       req.Icon,
 		UserID:     req.UserID,
