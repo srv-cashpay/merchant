@@ -82,6 +82,10 @@ import (
 	r_table "github.com/srv-cashpay/merchant/repositories/table"
 	s_table "github.com/srv-cashpay/merchant/services/table"
 
+	h_pin "github.com/srv-cashpay/merchant/handlers/pin"
+	r_pin "github.com/srv-cashpay/merchant/repositories/pin"
+	s_pin "github.com/srv-cashpay/merchant/services/pin"
+
 	"github.com/srv-cashpay/middlewares/middlewares"
 )
 
@@ -165,6 +169,10 @@ var (
 	getcategoryR = r_getcategory.NewGetCategoryRepository(DB)
 	getcategoryS = s_getcategory.NewGetCategoryService(getcategoryR, JWT)
 	getcategoryH = h_getcategory.NewCategoryHandler(getcategoryS)
+
+	pinR = r_pin.NewPinRepository(DB)
+	pinS = s_pin.NewPinService(pinR, JWT)
+	pinH = h_pin.NewPinHandler(pinS)
 )
 
 func New() *echo.Echo {
@@ -219,6 +227,16 @@ func New() *echo.Echo {
 		merk.PUT("/merk/update/:id", merkH.Update)
 		merk.DELETE("/merk/:id", merkH.Delete)
 		merk.DELETE("/merk/bulk-delete", merkH.BulkDelete)
+	}
+
+	pin := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
+	{
+		pin.POST("/pin/create", pinH.Create)
+		pin.GET("/pin/pagination", pinH.Get)
+		pin.GET("/pin/:id", pinH.GetById)
+		pin.PUT("/pin/update/:id", pinH.Update)
+		pin.DELETE("/pin/:id", pinH.Delete)
+		pin.DELETE("/pin/bulk-delete", pinH.BulkDelete)
 	}
 	permission := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
 	{

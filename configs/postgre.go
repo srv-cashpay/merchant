@@ -74,6 +74,7 @@ func InitDB() *gorm.DB {
 		&entity.Printer{},
 		&entity.PrinterAutoIncrement{},
 		&entity.Payment{},
+		&entity.Pin{},
 	)
 
 	return db

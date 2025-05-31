@@ -1,0 +1,28 @@
+package pin
+
+import (
+	dto "github.com/srv-cashpay/merchant/dto"
+	"github.com/srv-cashpay/merchant/entity"
+
+	"gorm.io/gorm"
+)
+
+type DomainRepository interface {
+	Create(req dto.PinRequest) (dto.PinResponse, error)
+	Delete(req dto.DeletePinRequest) (dto.DeletePinResponse, error)
+	BulkDelete(req dto.BulkDeletePinRequest) (int, error)
+	Get(req *dto.Pagination) (RepositoryResult, int)
+	GetById(req dto.GetByIdPinRequest) (*dto.PinResponse, error)
+	Update(req dto.PinUpdateRequest) (dto.PinUpdateResponse, error)
+	CheckMerchantDetail(merchantID string, merchantDetail *entity.MerchantDetail) error
+}
+
+type pinRepository struct {
+	DB *gorm.DB
+}
+
+func NewPinRepository(DB *gorm.DB) DomainRepository {
+	return &pinRepository{
+		DB: DB,
+	}
+}
