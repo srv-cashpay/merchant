@@ -1,23 +1,18 @@
 package user
 
 import (
+	"github.com/srv-cashpay/auth/entity"
 	"github.com/srv-cashpay/merchant/dto"
-	"github.com/srv-cashpay/merchant/entity"
 )
 
 func (b *userRepository) Update(req dto.UserUpdateRequest) (dto.UserUpdateResponse, error) {
 	// Menyiapkan struktur update untuk produk
-	updateUser := entity.User{
-		User:        req.User,
-		Status:      req.Status, // Pastikan status boolean diterima dengan benar
-		UpdatedBy:   req.UpdatedBy,
-		UserID:      req.UserID,
-		Description: req.Description,
-		MerchantID:  req.MerchantID,
+	updateUser := entity.AccessDoor{
+		FullName: req.FullName,
 	}
 
 	// Cek apakah produk ada terlebih dahulu
-	var existingUser entity.User
+	var existingUser entity.AccessDoor
 	err := b.DB.Where("id = ?", req.ID).First(&existingUser).Error
 	if err != nil {
 		return dto.UserUpdateResponse{}, err
@@ -31,12 +26,7 @@ func (b *userRepository) Update(req dto.UserUpdateRequest) (dto.UserUpdateRespon
 
 	// Menyiapkan response setelah pembaruan berhasil
 	response := dto.UserUpdateResponse{
-		User:        updateUser.User,
-		Status:      updateUser.Status,
-		UpdatedBy:   updateUser.UpdatedBy,
-		UserID:      updateUser.UserID,
-		MerchantID:  updateUser.MerchantID,
-		Description: updateUser.Description,
+		FullName: updateUser.FullName,
 	}
 
 	return response, nil

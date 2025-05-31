@@ -24,6 +24,7 @@ type UserRequest struct {
 	ID          string    `json:"id"`
 	UserID      string    `json:"user_id"`
 	MerchantID  string    `json:"merchant_id"`
+	FullName    string    `json:"full_name"`
 	User        string    `json:"user"`
 	Status      int       `json:"status"`
 	Description string    `json:"description"`
@@ -70,8 +71,9 @@ type UserUpdateRequest struct {
 	ID          string    `json:"id"`
 	UserID      string    `json:"user_id"`
 	MerchantID  string    `json:"merchant_id"`
-	User        string    `json:"user"`
-	Status      int       `json:"status"`
+	FullName    string    `json:"full_name"`
+	Email       string    `json:"email"`
+	Status      bool      `json:"status"`
 	Description string    `json:"description"`
 	CreatedBy   string    `json:"created_by"`
 	UpdatedBy   string    `json:"updated_by"`
@@ -83,8 +85,8 @@ type UserUpdateResponse struct {
 	ID          string    `json:"id"`
 	UserID      string    `json:"user_id"`
 	MerchantID  string    `json:"merchant_id"`
-	User        string    `json:"user"`
-	Status      int       `json:"status"`
+	FullName    string    `json:"full_name"`
+	Status      bool      `json:"status"`
 	Description string    `json:"description"`
 	CreatedBy   string    `json:"created_by"`
 	UpdatedBy   string    `json:"updated_by"`

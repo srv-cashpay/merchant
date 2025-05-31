@@ -1,8 +1,8 @@
 package user
 
 import (
+	"github.com/srv-cashpay/auth/entity"
 	dto "github.com/srv-cashpay/merchant/dto"
-	"github.com/srv-cashpay/merchant/entity"
 )
 
 func (b *userRepository) Delete(req dto.DeleteRequest) (dto.DeleteResponse, error) {
@@ -16,7 +16,7 @@ func (b *userRepository) Delete(req dto.DeleteRequest) (dto.DeleteResponse, erro
 	}
 
 	// Use GORM BeforeDelete hook to set DeletedBy
-	if err := b.DB.Where("id = ?", req.ID).Delete(&entity.User{}).Error; err != nil {
+	if err := b.DB.Where("id = ?", req.ID).Delete(&entity.AccessDoor{}).Error; err != nil {
 		return dto.DeleteResponse{}, err
 	}
 

@@ -1,13 +1,13 @@
 package user
 
 import (
+	"github.com/srv-cashpay/auth/entity"
 	dto "github.com/srv-cashpay/merchant/dto"
-	"github.com/srv-cashpay/merchant/entity"
 )
 
 func (b *userRepository) BulkDelete(req dto.BulkDeleteRequest) (int, error) {
 	// Hapus semua produk yang sesuai dengan ID
-	result := b.DB.Where("id IN ?", req.ID).Delete(&entity.User{})
+	result := b.DB.Where("id IN ?", req.ID).Delete(&entity.AccessDoor{})
 	if result.Error != nil {
 		return 0, result.Error
 	}

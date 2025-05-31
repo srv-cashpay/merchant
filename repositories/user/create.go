@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/srv-cashpay/auth/entity"
 	dto "github.com/srv-cashpay/merchant/dto"
-	"github.com/srv-cashpay/merchant/entity"
 )
 
 func (r *userRepository) Create(req dto.UserRequest) (dto.UserResponse, error) {
@@ -32,14 +32,9 @@ func (r *userRepository) Create(req dto.UserRequest) (dto.UserResponse, error) {
 	}
 
 	// Create the new user entry
-	create := entity.User{
-		ID:          secureID,
-		User:        req.User,
-		Status:      req.Status,
-		UserID:      req.UserID,
-		MerchantID:  req.MerchantID,
-		CreatedBy:   req.CreatedBy,
-		Description: req.Description,
+	create := entity.AccessDoor{
+		ID:       secureID,
+		FullName: req.FullName,
 	}
 
 	// Save the new user to the database
@@ -53,9 +48,9 @@ func (r *userRepository) Create(req dto.UserRequest) (dto.UserResponse, error) {
 		2: "inactive",
 	}
 
-	createdStatus, err := strconv.Atoi(fmt.Sprintf("%v", create.Status))
+	createdStatus, err := strconv.Atoi(fmt.Sprintf("%v", create.Verified.StatusAccount))
 	if err != nil {
-		return dto.UserResponse{}, fmt.Errorf("invalid status value: %v", create.Status)
+		return dto.UserResponse{}, fmt.Errorf("invalid status value: %v", create.Verified.StatusAccount)
 	}
 
 	statusString, ok := statusMap[createdStatus]
@@ -65,12 +60,9 @@ func (r *userRepository) Create(req dto.UserRequest) (dto.UserResponse, error) {
 
 	// Build the response for the created user
 	response := dto.UserResponse{
-		ID:          create.ID,
-		UserID:      create.UserID,
-		MerchantID:  create.MerchantID,
-		Description: create.Description,
-		Status:      statusString,
-		CreatedBy:   create.CreatedBy,
+		ID:       create.ID,
+		FullName: create.FullName,
+		Status:   statusString,
 	}
 
 	return response, nil
