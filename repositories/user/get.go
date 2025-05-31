@@ -21,7 +21,7 @@ func (r *userRepository) Get(req *dto.Pagination) (dto.UserPaginationResponse, i
 	offset := (req.Page - 1) * req.Limit
 
 	// Ambil data sesuai limit, offset, dan urutan
-	find := r.DB.Preload("Verified").Limit(req.Limit).Offset(offset).Order(req.Sort)
+	find := r.DB.Preload("Verified").Preload("Merchant").Limit(req.Limit).Offset(offset).Order(req.Sort)
 
 	// Generate where query untuk search
 	if req.Searchs != nil {
@@ -106,6 +106,15 @@ func (r *userRepository) Get(req *dto.Pagination) (dto.UserPaginationResponse, i
 				AccountExpired: u.Verified.AccountExpired,
 				Otp:            u.Verified.Otp,
 				ExpiredAt:      u.Verified.ExpiredAt,
+			},
+			Merchant: dto.GetMerchantResponse{
+				MerchantName: u.Merchant.MerchantName,
+				Address:      u.Merchant.Address,
+				Country:      u.Merchant.Country,
+				City:         u.Merchant.City,
+				Zip:          u.Merchant.Zip,
+				CurrencyID:   u.Merchant.CurrencyID,
+				Phone:        u.Merchant.Phone,
 			},
 		}
 		userResponses = append(userResponses, userResp)
