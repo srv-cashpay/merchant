@@ -15,7 +15,7 @@ func (b *userRepository) GetById(req dto.GetByIdRequest) (*dto.UserResponse, err
 	}
 
 	response := &dto.UserResponse{
-		User: tr.FullName,
+		FullName: tr.FullName,
 	}
 
 	return response, nil

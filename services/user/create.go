@@ -42,7 +42,7 @@ func (s *userService) Create(req dto.UserRequest) (dto.UserResponse, error) {
 	response := dto.UserResponse{
 		ID:          created.ID,
 		UserID:      created.UserID,
-		User:        created.User,
+		FullName:    created.FullName,
 		Description: created.Description,
 		Status:      statusString,
 		MerchantID:  created.MerchantID,

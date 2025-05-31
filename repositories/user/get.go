@@ -8,9 +8,10 @@ import (
 	"github.com/srv-cashpay/auth/entity"
 	dto "github.com/srv-cashpay/merchant/dto"
 	"github.com/srv-cashpay/merchant/helpers"
+	util "github.com/srv-cashpay/util/s"
 )
 
-func (r *userRepository) Get(req *dto.Pagination) (RepositoryResult, int) {
+func (r *userRepository) Get(req *dto.Pagination) (dto.UserPaginationResponse, int) {
 	var users []entity.AccessDoor
 
 	var totalRows int64
@@ -44,14 +45,14 @@ func (r *userRepository) Get(req *dto.Pagination) (RepositoryResult, int) {
 
 	// Periksa jika ada error saat pengambilan data
 	if errFind := find.Error; errFind != nil {
-		return RepositoryResult{Error: errFind}, totalPages
+		return dto.UserPaginationResponse{}, totalPages
 	}
 
 	req.Rows = users
 
 	// Hitung total data
 	if errCount := r.DB.Model(&entity.AccessDoor{}).Count(&totalRows).Error; errCount != nil {
-		return RepositoryResult{Error: errCount}, totalPages
+		return dto.UserPaginationResponse{}, totalPages
 	}
 
 	for i := range users {
@@ -83,6 +84,47 @@ func (r *userRepository) Get(req *dto.Pagination) (RepositoryResult, int) {
 	// Set hasil akhir
 	req.FromRow = fromRow
 	req.ToRow = toRow
+	var userResponses []dto.UserResponse
+	for _, u := range users {
 
-	return RepositoryResult{Result: req}, totalPages
+		decryptedEmail, err := util.Decrypt(u.Email)
+		if err != nil {
+			return dto.UserPaginationResponse{}, totalPages
+
+		}
+		userResp := dto.UserResponse{
+			ID:       u.ID,
+			FullName: u.FullName,
+			Whatsapp: u.Whatsapp,
+			Email:    decryptedEmail,
+			Verified: dto.UserVerified{
+				ID:             u.Verified.ID,
+				UserID:         u.Verified.UserID,
+				Token:          u.Verified.Token,
+				Verified:       u.Verified.Verified,
+				StatusAccount:  u.Verified.StatusAccount,
+				AccountExpired: u.Verified.AccountExpired,
+				Otp:            u.Verified.Otp,
+				ExpiredAt:      u.Verified.ExpiredAt,
+			},
+		}
+		userResponses = append(userResponses, userResp)
+	}
+	response := dto.UserPaginationResponse{
+		Limit:        req.Limit,
+		Page:         req.Page,
+		Sort:         req.Sort,
+		TotalRows:    req.TotalRows,
+		TotalPages:   req.TotalPages,
+		FirstPage:    req.FirstPage,
+		PreviousPage: req.PreviousPage,
+		NextPage:     req.NextPage,
+		LastPage:     req.LastPage,
+		FromRow:      req.FromRow,
+		ToRow:        req.ToRow,
+		Data:         userResponses,
+		Searchs:      req.Searchs,
+	}
+
+	return response, totalPages
 }
