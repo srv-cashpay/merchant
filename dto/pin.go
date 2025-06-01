@@ -76,3 +76,7 @@ type VerifyPinResponse struct {
 	IsValid bool   `json:"is_valid"`
 	Message string `json:"message"`
 }
+
+type PinStatusResponse struct {
+	IsPinEnabled bool `json:"is_pin_enabled"`
+}

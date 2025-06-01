@@ -16,6 +16,7 @@ type PinService interface {
 	GetById(req dto.GetByIdPinRequest) (*dto.PinResponse, error)
 	Update(req dto.PinUpdateRequest) (dto.PinUpdateResponse, error)
 	VerifyPIN(req dto.VerifyPinRequest) (*dto.VerifyPinResponse, error)
+	GetPinStatus(req dto.PinRequest) (dto.PinStatusResponse, error)
 }
 
 type pinService struct {

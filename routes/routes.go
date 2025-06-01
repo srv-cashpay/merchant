@@ -238,6 +238,9 @@ func New() *echo.Echo {
 		pin.DELETE("/pin/:id", pinH.Delete)
 		pin.DELETE("/pin/bulk-delete", pinH.BulkDelete)
 		pin.POST("/verify-pin", pinH.VerifyPIN)
+		pin.POST("/verify-pin", pinH.VerifyPIN)
+		pin.GET("/pin/status", pinH.GetPinStatus)
+
 	}
 	permission := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
 	{

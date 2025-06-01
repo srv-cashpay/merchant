@@ -15,6 +15,7 @@ type DomainRepository interface {
 	GetById(req dto.GetByIdPinRequest) (*dto.PinResponse, error)
 	Update(req dto.PinUpdateRequest) (dto.PinUpdateResponse, error)
 	Verify(req dto.VerifyPinRequest) (*entity.Pin, error)
+	GetPinStatus(req dto.PinRequest) (*entity.Pin, error)
 }
 
 type pinRepository struct {

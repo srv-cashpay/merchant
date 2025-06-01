@@ -1,14 +1,16 @@
 package pin
 
 import (
-	dto "github.com/srv-cashpay/merchant/dto"
-	res "github.com/srv-cashpay/util/s/response"
+	"errors"
 
 	"github.com/labstack/echo/v4"
+	dto "github.com/srv-cashpay/merchant/dto"
+	res "github.com/srv-cashpay/util/s/response"
+	"gorm.io/gorm"
 )
 
-func (h *domainHandler) VerifyPIN(c echo.Context) error {
-	var req dto.VerifyPinRequest
+func (h *domainHandler) GetPinStatus(c echo.Context) error {
+	var req dto.PinRequest
 
 	userid, ok := c.Get("UserId").(string)
 	if !ok {
@@ -29,15 +31,12 @@ func (h *domainHandler) VerifyPIN(c echo.Context) error {
 	req.MerchantID = merchantId
 	req.CreatedBy = createdBy
 
-	err := c.Bind(&req)
-	if err != nil {
-		return res.ErrorBuilder(&res.ErrorConstant.BadRequest, err).Send(c)
+	status, err := h.servicePin.GetPinStatus(req)
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		return res.ErrorBuilder(&res.ErrorConstant.InternalServerError, err).Send(c)
 	}
 
-	resp, err := h.servicePin.VerifyPIN(req)
-	if err != nil {
-		return res.ErrorResponse(err).Send(c)
-	}
-
-	return res.SuccessResponse(resp).Send(c)
+	return res.SuccessResponse(map[string]bool{
+		"is_pin_enabled": status.IsPinEnabled,
+	}).Send(c)
 }

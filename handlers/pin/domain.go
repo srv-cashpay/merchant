@@ -14,6 +14,7 @@ type DomainHandler interface {
 	Delete(c echo.Context) error
 	Update(c echo.Context) error
 	VerifyPIN(c echo.Context) error
+	GetPinStatus(c echo.Context) error
 }
 
 type domainHandler struct {
