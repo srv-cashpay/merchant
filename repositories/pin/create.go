@@ -10,28 +10,9 @@ import (
 )
 
 func (r *pinRepository) Create(req dto.PinRequest) (dto.PinResponse, error) {
-	// Insert or update the auto_increment value based on merchant_id
-	var autoIncrement int
-	err := r.DB.Raw(`
-	INSERT INTO merchant_auto_increments (merchant_id, next_increment)
-	VALUES (?, 1)
-	ON CONFLICT (merchant_id) DO UPDATE
-	SET next_increment = merchant_auto_increments.next_increment + 1
-	RETURNING next_increment - 1;
-`, req.MerchantID).Scan(&autoIncrement).Error
 
-	if err != nil {
-		return dto.PinResponse{}, err
-	}
-
-	// Generate Product ID with prefix and auto increment value
-	prefix := "m="
-	secureID, err := generateProductID(prefix, autoIncrement)
-	if err != nil {
-		return dto.PinResponse{}, err
-	}
 	create := entity.Pin{
-		ID:         secureID,
+		ID:         req.ID,
 		Pin:        req.Pin,
 		MerchantID: req.MerchantID,
 		UserID:     req.UserID,
