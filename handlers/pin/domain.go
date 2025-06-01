@@ -13,6 +13,7 @@ type DomainHandler interface {
 	BulkDelete(c echo.Context) error
 	Delete(c echo.Context) error
 	Update(c echo.Context) error
+	VerifyPIN(c echo.Context) error
 }
 
 type domainHandler struct {

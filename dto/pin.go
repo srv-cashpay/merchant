@@ -64,3 +64,15 @@ type BulkDeletePinResponse struct {
 	DeletedBy string   `json:"deleted_by"`
 	Count     int      `json:"count"`
 }
+
+type VerifyPinRequest struct {
+	UserID     string `json:"user_id" validate:"required"`
+	PIN        string `json:"pin" validate:"required"`
+	MerchantID string `json:"merchant_id"`
+	CreatedBy  string `json:"created_by"`
+}
+
+type VerifyPinResponse struct {
+	IsValid bool   `json:"is_valid"`
+	Message string `json:"message"`
+}

@@ -14,7 +14,7 @@ type DomainRepository interface {
 	Get(req *dto.Pagination) (RepositoryResult, int)
 	GetById(req dto.GetByIdPinRequest) (*dto.PinResponse, error)
 	Update(req dto.PinUpdateRequest) (dto.PinUpdateResponse, error)
-	CheckMerchantDetail(merchantID string, merchantDetail *entity.MerchantDetail) error
+	Verify(req dto.VerifyPinRequest) (*entity.Pin, error)
 }
 
 type pinRepository struct {

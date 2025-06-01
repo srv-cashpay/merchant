@@ -15,6 +15,7 @@ type PinService interface {
 	Get(context echo.Context, req *dto.Pagination) dto.Response
 	GetById(req dto.GetByIdPinRequest) (*dto.PinResponse, error)
 	Update(req dto.PinUpdateRequest) (dto.PinUpdateResponse, error)
+	VerifyPIN(req dto.VerifyPinRequest) (*dto.VerifyPinResponse, error)
 }
 
 type pinService struct {

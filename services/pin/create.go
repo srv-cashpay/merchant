@@ -3,16 +3,22 @@ package pin
 import (
 	dto "github.com/srv-cashpay/merchant/dto"
 	util "github.com/srv-cashpay/util/s"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func (s *pinService) Create(req dto.PinRequest) (dto.PinResponse, error) {
+	// Hash the PIN
+	hashedPin, err := bcrypt.GenerateFromPassword([]byte(req.Pin), bcrypt.DefaultCost)
+	if err != nil {
+		return dto.PinResponse{}, err
+	}
 
 	// Proses pembuatan data Pin
 	create := dto.PinRequest{
 		ID:         util.GenerateRandomString(),
 		UserID:     req.UserID,
 		MerchantID: req.MerchantID,
-		Pin:        req.Pin,
+		Pin:        string(hashedPin),
 		CreatedBy:  req.CreatedBy,
 	}
 
@@ -24,7 +30,7 @@ func (s *pinService) Create(req dto.PinRequest) (dto.PinResponse, error) {
 	response := dto.PinResponse{
 		ID:         created.ID,
 		MerchantID: created.MerchantID,
-		Pin:        created.Pin,
+		Pin:        "",
 		UserID:     created.UserID,
 		CreatedBy:  created.CreatedBy,
 	}

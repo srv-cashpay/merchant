@@ -1,23 +1,10 @@
 package pin
 
 import (
-	"errors"
-	"fmt"
-
 	"github.com/srv-cashpay/merchant/dto"
-	"github.com/srv-cashpay/merchant/entity"
-	"gorm.io/gorm"
 )
 
 func (b *pinService) Update(req dto.PinUpdateRequest) (dto.PinUpdateResponse, error) {
-	var merchantDetail entity.MerchantDetail
-	err := b.Repo.CheckMerchantDetail(req.MerchantID, &merchantDetail)
-	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return dto.PinUpdateResponse{}, fmt.Errorf("merchant detail not found for merchant_id: %s", req.MerchantID)
-		}
-		return dto.PinUpdateResponse{}, err
-	}
 	request := dto.PinUpdateRequest{
 		Pin:         req.Pin,
 		UserID:      req.UserID,
