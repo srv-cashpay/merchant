@@ -4,7 +4,7 @@ type PinRequest struct {
 	ID          string `json:"id"`
 	UserID      string `json:"user_id"`
 	MerchantID  string `json:"merchant_id"`
-	Pin         int    `json:"pin"`
+	Pin         string `json:"pin"`
 	CreatedBy   string `json:"created_by"`
 	Description string `json:"description"`
 	Status      int    `json:"status"`
@@ -14,7 +14,7 @@ type PinResponse struct {
 	ID          string `json:"id"`
 	UserID      string `json:"user_id"`
 	MerchantID  string `json:"merchant_id"`
-	Pin         int    `json:"pin"`
+	Pin         string `json:"pin"`
 	CreatedBy   string `json:"created_by"`
 	Description string `json:"description"`
 	Status      int    `json:"status"`
@@ -38,7 +38,7 @@ type PinUpdateRequest struct {
 	ID          string `json:"id"`
 	UserID      string `json:"user_id"`
 	MerchantID  string `json:"merchant_id"`
-	Pin         int    `json:"pin"`
+	Pin         string `json:"pin"`
 	UpdatedBy   string `json:"updated_by"`
 	Description string `json:"description"`
 	Status      int    `json:"status"`
@@ -48,7 +48,7 @@ type PinUpdateResponse struct {
 	ID          string `json:"id"`
 	UserID      string `json:"user_id"`
 	MerchantID  string `json:"merchant_id"`
-	Pin         int    `json:"pin"`
+	Pin         string `json:"pin"`
 	UpdatedBy   string `json:"updated_by"`
 	Description string `json:"description"`
 	Status      int    `json:"status"`
