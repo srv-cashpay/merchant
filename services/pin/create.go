@@ -1,25 +1,11 @@
 package pin
 
 import (
-	"errors"
-	"fmt"
-
 	dto "github.com/srv-cashpay/merchant/dto"
-	"github.com/srv-cashpay/merchant/entity"
 	util "github.com/srv-cashpay/util/s"
-	"gorm.io/gorm"
 )
 
 func (s *pinService) Create(req dto.PinRequest) (dto.PinResponse, error) {
-	// Validasi MerchantDetail
-	var merchantDetail entity.MerchantDetail
-	err := s.Repo.CheckMerchantDetail(req.MerchantID, &merchantDetail)
-	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return dto.PinResponse{}, fmt.Errorf("merchant detail not found for merchant_id: %s", req.MerchantID)
-		}
-		return dto.PinResponse{}, err
-	}
 
 	// Proses pembuatan data Pin
 	create := dto.PinRequest{
