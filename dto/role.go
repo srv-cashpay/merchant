@@ -4,7 +4,7 @@ import "time"
 
 type RoleRequest struct {
 	ID         string `json:"id"`
-	Role       string `json:"role_id"`
+	Role       string `json:"role`
 	UserID     string `json:"user_id"`
 	MerchantID string `json:"merchant_id"`
 	CreatedBy  string `json:"created_by"`
@@ -12,7 +12,7 @@ type RoleRequest struct {
 
 type RoleResponse struct {
 	ID         string `json:"id"`
-	Role       string `json:"role_id"`
+	Role       string `json:"role`
 	UserID     string `json:"user_id"`
 	MerchantID string `json:"merchant_id"`
 	CreatedBy  string `json:"created_by"`
@@ -20,7 +20,7 @@ type RoleResponse struct {
 
 type RoleUpdateRequest struct {
 	ID         string `json:"id"`
-	Role       string `json:"role_id"`
+	Role       string `json:"role"`
 	UserID     string `json:"user_id"`
 	MerchantID string `json:"merchant_id"`
 	CreatedBy  string `json:"created_by"`
@@ -29,7 +29,7 @@ type RoleUpdateRequest struct {
 
 type RoleUpdateResponse struct {
 	ID         string `json:"id"`
-	Role       string `json:"role_id"`
+	Role       string `json:"role"`
 	UserID     string `json:"user_id"`
 	MerchantID string `json:"merchant_id"`
 	CreatedBy  string `json:"created_by"`
@@ -54,7 +54,7 @@ type GetRoleByIdRequest struct {
 	ID         string    `json:"id"`
 	UserID     string    `json:"user_id"`
 	MerchantID string    `json:"merchant_id"`
-	Role       string    `json:"role_id"`
+	Role       string    `json:"role"`
 	CreatedBy  string    `json:"created_by"`
 	UpdatedBy  string    `json:"updated_by"`
 	DeletedBy  string    `json:"deleted_by"`
