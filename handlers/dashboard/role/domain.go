@@ -13,6 +13,7 @@ type DomainHandler interface {
 	BulkDelete(c echo.Context) error
 	GetById(c echo.Context) error
 	Update(c echo.Context) error
+	Pagination(c echo.Context) error
 }
 
 type domainHandler struct {
