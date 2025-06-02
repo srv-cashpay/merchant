@@ -25,7 +25,8 @@ type GetDashboardResponse struct {
 	WaitingPayment        int64               `json:"total_waiting_payment"`
 	TotalWaiting          int                 `json:"total_waiting"`
 	PaymentCancel         int64               `json:"payment_cancel"`
-	ProductPercentages    []ProductPercentage `json:"product_percentages"` // Persentase per produk
+	ProductPercentages    []ProductPercentage `json:"product_percentages"`
+	IsSubscribed          bool                `json:"is_subscribed"`
 }
 
 type ProductPercentage struct {

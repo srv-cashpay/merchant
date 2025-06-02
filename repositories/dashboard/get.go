@@ -1,16 +1,30 @@
 package dashboard
 
 import (
+	"time"
+
 	"github.com/srv-cashpay/merchant/dto"
+	"github.com/srv-cashpay/merchant/entity"
 	entityPos "github.com/srv-cashpay/pos/entity"
-	"github.com/srv-cashpay/product/entity"
+	entityProduct "github.com/srv-cashpay/product/entity"
 )
 
 func (r *dashboardRepository) Get(req dto.GetDashboardRequest) (dto.GetDashboardResponse, error) {
 	var response dto.GetDashboardResponse
 
+	var isSubscribed bool
+	var count int64
+	err := r.DB.Model(&entity.Subscribe{}).
+		Where("merchant_id = ? AND status = ? AND expiry_time > ?", req.MerchantID, "paid", time.Now()).
+		Count(&count).Error
+	if err != nil {
+		return response, err
+	}
+	isSubscribed = count > 0
+	response.IsSubscribed = isSubscribed
+
 	// Hitung total produk aktif
-	if err := r.DB.Model(&entity.Product{}).
+	if err := r.DB.Model(&entityProduct.Product{}).
 		Where("merchant_id = ? AND status = ?", req.MerchantID, 1).
 		Count(&req.TotalProductsActive).Error; err != nil {
 		return dto.GetDashboardResponse{}, err
@@ -18,7 +32,7 @@ func (r *dashboardRepository) Get(req dto.GetDashboardRequest) (dto.GetDashboard
 	response.TotalProductsActive = req.TotalProductsActive
 
 	// Hitung total produk tidak aktif
-	if err := r.DB.Model(&entity.Product{}).
+	if err := r.DB.Model(&entityProduct.Product{}).
 		Where("merchant_id = ? AND status = ?", req.MerchantID, 2).
 		Count(&req.TotalProductsInactive).Error; err != nil {
 		return dto.GetDashboardResponse{}, err
