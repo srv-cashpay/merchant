@@ -1,4 +1,4 @@
-package discount
+package role
 
 import (
 	"github.com/labstack/echo/v4"
@@ -7,7 +7,7 @@ import (
 )
 
 func (b *domainHandler) Delete(c echo.Context) error {
-	var req dto.DeleteRequest
+	var req dto.DeleteRoleRequest
 	deletedBy, ok := c.Get("DeletedBy").(string)
 	if !ok {
 		return res.ErrorBuilder(&res.ErrorConstant.InternalServerError, nil).Send(c)
@@ -21,7 +21,7 @@ func (b *domainHandler) Delete(c echo.Context) error {
 
 	req.ID = idUint
 
-	data, err := b.serviceDiscount.Delete(req)
+	data, err := b.serviceRole.Delete(req)
 	if err != nil {
 		return res.ErrorBuilder(&res.ErrorConstant.NotFound, err).Send(c)
 	}

@@ -1,4 +1,4 @@
-package discount
+package role
 
 import (
 	"errors"
@@ -28,7 +28,7 @@ func (b *domainHandler) BulkDelete(c echo.Context) error {
 	}
 
 	// Panggil service untuk menghapus produk
-	data, err := b.serviceDiscount.BulkDelete(req)
+	data, err := b.serviceRole.BulkDelete(req)
 	if err != nil {
 		return res.ErrorBuilder(&res.ErrorConstant.NotFound, err).Send(c)
 	}

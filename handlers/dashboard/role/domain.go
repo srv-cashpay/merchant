@@ -1,7 +1,7 @@
-package discount
+package role
 
 import (
-	s "github.com/srv-cashpay/merchant/services/discount"
+	s "github.com/srv-cashpay/merchant/services/dashboard/role"
 
 	"github.com/labstack/echo/v4"
 )
@@ -16,11 +16,11 @@ type DomainHandler interface {
 }
 
 type domainHandler struct {
-	serviceDiscount s.DiscountService
+	serviceRole s.RoleService
 }
 
-func NewDiscountHandler(service s.DiscountService) DomainHandler {
+func NewRoleHandler(service s.RoleService) DomainHandler {
 	return &domainHandler{
-		serviceDiscount: service,
+		serviceRole: service,
 	}
 }

@@ -1,4 +1,4 @@
-package discount
+package role
 
 import (
 	"github.com/labstack/echo/v4"
@@ -7,7 +7,7 @@ import (
 )
 
 func (b *domainHandler) GetById(c echo.Context) error {
-	var req dto.GetByIdRequest
+	var req dto.GetRoleByIdRequest
 
 	// idStr := c.Param("id")
 
@@ -18,7 +18,7 @@ func (b *domainHandler) GetById(c echo.Context) error {
 
 	req.ID = idUint
 
-	transaction, err := b.serviceDiscount.GetById(req)
+	transaction, err := b.serviceRole.GetById(req)
 	if err != nil {
 		return res.ErrorBuilder(&res.ErrorConstant.NotFound, err).Send(c)
 

@@ -1,4 +1,4 @@
-package discount
+package role
 
 import (
 	"github.com/labstack/echo/v4"
@@ -7,8 +7,8 @@ import (
 )
 
 func (b *domainHandler) Update(c echo.Context) error {
-	var req dto.DiscountUpdateRequest
-	var resp dto.DiscountUpdateResponse
+	var req dto.RoleUpdateRequest
+	var resp dto.RoleUpdateResponse
 
 	userid, ok := c.Get("UserId").(string)
 	if !ok {
@@ -34,7 +34,7 @@ func (b *domainHandler) Update(c echo.Context) error {
 		return res.ErrorBuilder(&res.ErrorConstant.BadRequest, err).Send(c)
 	}
 
-	resp, err = b.serviceDiscount.Update(req)
+	resp, err = b.serviceRole.Update(req)
 	if err != nil {
 		return res.ErrorResponse(err).Send(c)
 	}

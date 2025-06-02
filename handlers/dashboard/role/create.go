@@ -1,4 +1,4 @@
-package discount
+package role
 
 import (
 	"github.com/labstack/echo/v4"
@@ -7,8 +7,8 @@ import (
 )
 
 func (h *domainHandler) Create(c echo.Context) error {
-	var req dto.DiscountRequest
-	var resp dto.DiscountResponse
+	var req dto.RoleRequest
+	var resp dto.RoleResponse
 
 	userid, ok := c.Get("UserId").(string)
 	if !ok {
@@ -34,7 +34,7 @@ func (h *domainHandler) Create(c echo.Context) error {
 		return res.ErrorBuilder(&res.ErrorConstant.BadRequest, err).Send(c)
 	}
 
-	resp, err = h.serviceDiscount.Create(req)
+	resp, err = h.serviceRole.Create(req)
 	if err != nil {
 		return res.ErrorResponse(err).Send(c)
 	}
