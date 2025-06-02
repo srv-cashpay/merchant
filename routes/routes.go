@@ -258,7 +258,8 @@ func New() *echo.Echo {
 	role := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
 	{
 		role.POST("/role/create", roleH.Create)
-		role.GET("/role/pagination", roleH.Get)
+		permission.GET("/role", permissionH.Get)
+		role.GET("/role/pagination", roleH.Pagination)
 		role.PUT("/role/update/:id", roleH.Update)
 		role.DELETE("/role/:id", roleH.Delete)
 		role.DELETE("/role/bulk-delete", roleH.BulkDelete)

@@ -10,9 +10,8 @@ import (
 
 func (r *RoleRepository) Create(req dto.RoleRequest) (dto.RoleResponse, error) {
 	prefix := "r="
-	var autoIncrement int
 
-	secureID, err := generateDiscountID(prefix, autoIncrement)
+	secureID, err := generateRoleID(prefix)
 	if err != nil {
 		return dto.RoleResponse{}, err
 	}
@@ -36,9 +35,9 @@ func (r *RoleRepository) Create(req dto.RoleRequest) (dto.RoleResponse, error) {
 	return response, nil
 }
 
-func generateDiscountID(prefix string, autoIncrement int) (string, error) {
+func generateRoleID(prefix string) (string, error) {
 	// Format auto-increment value as a 5-digit string
-	autoIncStr := fmt.Sprintf("%05d", autoIncrement)
+	autoIncStr := fmt.Sprintf("%05d")
 
 	// Generate a secure random part of the discount ID
 	securePart, err := generateSecurePart()
