@@ -1,7 +1,6 @@
 package paymentmethod
 
 import (
-	"github.com/labstack/echo/v4"
 	dto "github.com/srv-cashpay/merchant/dto"
 	m "github.com/srv-cashpay/middlewares/middlewares"
 
@@ -10,7 +9,7 @@ import (
 
 type PaymentService interface {
 	Create(req dto.PaymentRequest) (dto.PaymentResponse, error)
-	Get(context echo.Context, req *dto.Pagination) dto.Response
+	Get(req dto.PaymentMethodRequest) (dto.PaymentMethodResponse, error)
 	GetById(req dto.GetByIdRequest) (*dto.PaymentResponse, error)
 	Delete(req dto.DeleteRequest) (dto.DeleteResponse, error)
 	BulkDelete(req dto.BulkDeleteRequest) (dto.BulkDeleteResponse, error)

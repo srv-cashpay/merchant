@@ -9,7 +9,7 @@ import (
 
 type DomainRepository interface {
 	Create(req dto.PaymentRequest) (dto.PaymentResponse, error)
-	Get(req *dto.Pagination) (RepositoryResult, int)
+	Get(req dto.PaymentMethodRequest) (dto.PaymentMethodResponse, error)
 	GetById(req dto.GetByIdRequest) (*dto.PaymentResponse, error)
 	Delete(req dto.DeleteRequest) (dto.DeleteResponse, error)
 	BulkDelete(req dto.BulkDeleteRequest) (int, error)
