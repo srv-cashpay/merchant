@@ -11,7 +11,7 @@ type PaymentMethod struct {
 	UserID      string           `gorm:"type:varchar(36);index" json:"user_id"`
 	MerchantID  string           `gorm:"type:varchar(36);index" json:"merchant_id"`
 	PaymentName string           `gorm:"discount_name,omitempty" json:"discount_name"`
-	Image       *UploadedPayment `gorm:"foreignKey:ProductID" json:"image"`
+	Image       *UploadedPayment `gorm:"foreignKey:PaymentMethodID;references:ID" json:"image"`
 	Status      int              `gorm:"status,omitempty" json:"status"`
 	CreatedBy   string           `gorm:"created_by" json:"created_by"`
 	UpdatedBy   string           `gorm:"updated_by" json:"updated_by"`
