@@ -16,7 +16,7 @@ func (r *paymentmethodRepository) Create(req dto.PaymentMethodRequest) (dto.Paym
 		return dto.PaymentMethodResponse{}, err
 	}
 
-	create := dto.PaymentMethodResponse{
+	create := entity.PaymentMethod{
 		ID:            id,
 		PaymentMethod: req.PaymentMethod,
 		Status:        req.Status,
@@ -29,7 +29,16 @@ func (r *paymentmethodRepository) Create(req dto.PaymentMethodRequest) (dto.Paym
 		return dto.PaymentMethodResponse{}, err
 	}
 
-	return create, nil
+	response := dto.PaymentMethodResponse{
+		ID:            create.ID,
+		PaymentMethod: create.PaymentMethod,
+		Status:        create.Status,
+		UserID:        create.UserID,
+		MerchantID:    create.MerchantID,
+		CreatedBy:     create.CreatedBy,
+	}
+
+	return response, nil
 }
 
 func (r *paymentmethodRepository) SaveImage(img entity.UploadedPayment) error {
