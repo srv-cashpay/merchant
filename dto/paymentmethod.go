@@ -10,6 +10,8 @@ type PaymentMethodRequest struct {
 	MerchantID    string    `json:"merchant_id"`
 	PaymentMethod string    `json:"payment_method"`
 	Status        int       `json:"status"`
+	FileName      string    `json:"file_name"`
+	FilePath      string    `json:"file_path"`
 	CreatedBy     string    `json:"created_by"`
 	UpdatedBy     string    `json:"updated_by"`
 	DeletedBy     string    `json:"deleted_by"`
@@ -21,7 +23,7 @@ type PaymentMethodResponse struct {
 	UserID        string    `json:"user_id"`
 	MerchantID    string    `json:"merchant_id"`
 	PaymentMethod string    `json:"payment_method"`
-	Status        string    `json:"status"`
+	Status        int       `json:"status"`
 	CreatedBy     string    `json:"created_by"`
 	UpdatedBy     string    `json:"updated_by"`
 	DeletedBy     string    `json:"deleted_by"`

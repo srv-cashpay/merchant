@@ -2,63 +2,43 @@ package paymentmethod
 
 import (
 	"crypto/rand"
-	"errors"
 	"fmt"
 	"time"
 
 	dto "github.com/srv-cashpay/merchant/dto"
 	"github.com/srv-cashpay/merchant/entity"
 	"golang.org/x/crypto/blake2b"
-	"gorm.io/gorm"
 )
 
 func (s *paymentmethodService) Create(req dto.PaymentMethodRequest) (dto.PaymentMethodResponse, error) {
-	var merchantDetail entity.MerchantDetail
-	err := s.Repo.CheckMerchantDetail(req.MerchantID, &merchantDetail)
+	created, err := s.Repo.Create(req)
 	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return dto.PaymentMethodResponse{}, fmt.Errorf("merchant detail not found for merchant_id: %s", req.MerchantID)
+		return dto.PaymentMethodResponse{}, err
+	}
+
+	if req.FilePath != "" && req.FileName != "" {
+		image := entity.UploadedPayment{
+			UserID:     req.UserID,
+			MerchantID: req.MerchantID,
+			PaymentID:  created.ID,
+			FileName:   req.FileName,
+			FilePath:   req.FilePath,
+			CreatedBy:  req.CreatedBy,
 		}
-		return dto.PaymentMethodResponse{}, err
-	}
-	if req.Status != 1 && req.Status != 2 {
-		return dto.PaymentMethodResponse{}, fmt.Errorf("invalid status: must be 1 (active) or 2 (inactive)")
-	}
-
-	create := dto.PaymentMethodRequest{
-		PaymentMethod: req.PaymentMethod,
-		Status:        req.Status,
-		UserID:        req.UserID,
-		MerchantID:    req.MerchantID,
-		CreatedBy:     req.CreatedBy,
+		if err := s.Repo.SaveImage(image); err != nil {
+			return dto.PaymentMethodResponse{}, err
+		}
 	}
 
-	created, err := s.Repo.Create(create)
-	if err != nil {
-		return dto.PaymentMethodResponse{}, err
-	}
-
-	statusMap := map[int]string{
-		1: "active",
-		2: "inactive",
-	}
-
-	// Dapatkan string status berdasarkan nilai integer
-	statusString, ok := statusMap[create.Status]
-	if !ok {
-		return dto.PaymentMethodResponse{}, fmt.Errorf("invalid status value in database")
-	}
-
-	response := dto.PaymentMethodResponse{
+	resp := dto.PaymentMethodResponse{
 		ID:            created.ID,
 		UserID:        created.UserID,
-		PaymentMethod: created.PaymentMethod,
-		Status:        statusString,
 		MerchantID:    created.MerchantID,
+		PaymentMethod: created.PaymentMethod,
+		Status:        created.Status,
 		CreatedBy:     created.CreatedBy,
 	}
-
-	return response, nil
+	return resp, nil
 }
 
 func GenerateSecureID() (string, error) {

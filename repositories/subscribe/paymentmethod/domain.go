@@ -14,7 +14,7 @@ type DomainRepository interface {
 	Delete(req dto.DeleteRequest) (dto.DeleteResponse, error)
 	BulkDelete(req dto.BulkDeleteRequest) (int, error)
 	Update(req dto.PaymentMethodUpdateRequest) (dto.PaymentMethodUpdateResponse, error)
-	CheckMerchantDetail(merchantID string, merchantDetail *entity.MerchantDetail) error
+	SaveImage(img entity.UploadedPayment) error
 }
 
 type paymentmethodRepository struct {

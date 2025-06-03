@@ -3,7 +3,6 @@ package paymentmethod
 import (
 	"crypto/rand"
 	"fmt"
-	"strconv"
 
 	dto "github.com/srv-cashpay/merchant/dto"
 	"github.com/srv-cashpay/merchant/entity"
@@ -11,30 +10,14 @@ import (
 )
 
 func (r *paymentmethodRepository) Create(req dto.PaymentMethodRequest) (dto.PaymentMethodResponse, error) {
-	// Insert or update the auto_increment value based on merchant_id
-	var autoIncrement int
-	err := r.DB.Raw(`
-		INSERT INTO merchant_auto_increments (merchant_id, next_increment)
-		VALUES (?, 1)
-		ON CONFLICT (merchant_id) DO UPDATE
-		SET next_increment = merchant_auto_increments.next_increment + 1
-		RETURNING next_increment - 1;
-	`, req.MerchantID).Scan(&autoIncrement).Error
-
-	if err != nil {
-		return dto.PaymentMethodResponse{}, err
-	}
-
-	// Generate Payment ID with prefix and auto increment value
 	prefix := "p="
-	secureID, err := generatePaymentID(prefix, autoIncrement)
+	id, err := generatePaymentID(prefix)
 	if err != nil {
 		return dto.PaymentMethodResponse{}, err
 	}
 
-	// Create the new paymentmethod entry
-	create := entity.PaymentMethod{
-		ID:            secureID,
+	create := dto.PaymentMethodResponse{
+		ID:            id,
 		PaymentMethod: req.PaymentMethod,
 		Status:        req.Status,
 		UserID:        req.UserID,
@@ -42,43 +25,21 @@ func (r *paymentmethodRepository) Create(req dto.PaymentMethodRequest) (dto.Paym
 		CreatedBy:     req.CreatedBy,
 	}
 
-	// Save the new paymentmethod to the database
-	if err := r.DB.Save(&create).Error; err != nil {
+	if err := r.DB.Create(&create).Error; err != nil {
 		return dto.PaymentMethodResponse{}, err
 	}
 
-	// Map the status from integer to string
-	statusMap := map[int]string{
-		1: "active",
-		2: "inactive",
-	}
+	return create, nil
+}
 
-	createdStatus, err := strconv.Atoi(fmt.Sprintf("%v", create.Status))
-	if err != nil {
-		return dto.PaymentMethodResponse{}, fmt.Errorf("invalid status value: %v", create.Status)
-	}
-
-	statusString, ok := statusMap[createdStatus]
-	if !ok {
-		return dto.PaymentMethodResponse{}, fmt.Errorf("invalid status value in database")
-	}
-
-	// Build the response for the created paymentmethod
-	response := dto.PaymentMethodResponse{
-		ID:         create.ID,
-		UserID:     create.UserID,
-		MerchantID: create.MerchantID,
-		Status:     statusString,
-		CreatedBy:  create.CreatedBy,
-	}
-
-	return response, nil
+func (r *paymentmethodRepository) SaveImage(img entity.UploadedPayment) error {
+	return r.DB.Create(&img).Error
 }
 
 // Function to generate the paymentmethod ID
-func generatePaymentID(prefix string, autoIncrement int) (string, error) {
+func generatePaymentID(prefix string) (string, error) {
 	// Format auto-increment value as a 5-digit string
-	autoIncStr := fmt.Sprintf("%05d", autoIncrement)
+	autoIncStr := fmt.Sprintf("%05d")
 
 	// Generate a secure random part of the paymentmethod ID
 	securePart, err := generateSecurePart()
