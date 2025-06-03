@@ -5,7 +5,7 @@ import (
 )
 
 type PaymentMethodRequest struct {
-	ID            string    `json:"id"`
+	ID            uint      `json:"id"`
 	UserID        string    `json:"user_id"`
 	MerchantID    string    `json:"merchant_id"`
 	PaymentMethod string    `json:"payment_method"`

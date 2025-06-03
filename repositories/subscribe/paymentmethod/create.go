@@ -8,6 +8,7 @@ import (
 func (r *paymentmethodRepository) Create(req dto.PaymentMethodRequest) (dto.PaymentMethodResponse, error) {
 
 	create := entity.PaymentMethod{
+		ID:            req.ID,
 		PaymentMethod: req.PaymentMethod,
 		Status:        req.Status,
 		UserID:        req.UserID,
