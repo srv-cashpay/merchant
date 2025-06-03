@@ -21,6 +21,7 @@ func (r *paymentmethodRepository) Create(req dto.PaymentMethodRequest) (dto.Paym
 	}
 
 	response := dto.PaymentMethodResponse{
+		ID:            create.ID,
 		PaymentMethod: create.PaymentMethod,
 		Status:        create.Status,
 		UserID:        create.UserID,
