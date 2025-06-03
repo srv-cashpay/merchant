@@ -300,7 +300,7 @@ func New() *echo.Echo {
 	paymentmethod := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
 	{
 		paymentmethod.POST("/payment-method/create", paymentmethodH.Create)
-		paymentmethod.GET("/payment-method/pagination", paymentmethodH.Get)
+		paymentmethod.GET("/payment-method", paymentmethodH.Get)
 		paymentmethod.PUT("/payment-method/update/:id", paymentmethodH.Update)
 		paymentmethod.DELETE("/payment-method/:id", paymentmethodH.Delete)
 		paymentmethod.DELETE("/payment-method/bulk-delete", paymentmethodH.BulkDelete)
