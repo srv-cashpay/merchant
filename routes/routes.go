@@ -47,6 +47,10 @@ import (
 	r_discount "github.com/srv-cashpay/merchant/repositories/discount"
 	s_discount "github.com/srv-cashpay/merchant/services/discount"
 
+	h_paymentmethod "github.com/srv-cashpay/merchant/handlers/subscribe/paymentmethod"
+	r_paymentmethod "github.com/srv-cashpay/merchant/repositories/subscribe/paymentmethod"
+	s_paymentmethod "github.com/srv-cashpay/merchant/services/subscribe/paymentmethod"
+
 	h_payment "github.com/srv-cashpay/merchant/handlers/payment"
 	r_payment "github.com/srv-cashpay/merchant/repositories/payment"
 	s_payment "github.com/srv-cashpay/merchant/services/payment"
@@ -155,6 +159,10 @@ var (
 	paymentS = s_payment.NewPaymentService(paymentR, JWT)
 	paymentH = h_payment.NewPaymentHandler(paymentS)
 
+	paymentmethodR = r_paymentmethod.NewPaymentRepository(DB)
+	paymentmethodS = s_paymentmethod.NewPaymentService(paymentmethodR, JWT)
+	paymentmethodH = h_paymentmethod.NewPaymentHandler(paymentmethodS)
+
 	historyR = r_history.NewHistoryRepository(DB)
 	historyS = s_history.NewHistoryService(historyR, JWT)
 	historyH = h_history.NewHistoryHandler(historyS)
@@ -201,7 +209,6 @@ func New() *echo.Echo {
 		sub.GET("/tokenize", subscribeH.TokenizeCardHandler)
 		sub.POST("/charge-card", subscribeH.CardPayment)
 		sub.POST("/cancel/:order_id", subscribeH.CancelPay)
-
 	}
 	pos := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
 	{
@@ -289,6 +296,14 @@ func New() *echo.Echo {
 		payment.PUT("/payment/update/:id", paymentH.Update)
 		payment.DELETE("/payment/:id", paymentH.Delete)
 		payment.DELETE("/payment/bulk-delete", paymentH.BulkDelete)
+	}
+	paymentmethod := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
+	{
+		paymentmethod.POST("/payment-method/create", paymentmethodH.Create)
+		paymentmethod.GET("/payment-method/pagination", paymentmethodH.Get)
+		paymentmethod.PUT("/payment-method/update/:id", paymentmethodH.Update)
+		paymentmethod.DELETE("/payment-method/:id", paymentmethodH.Delete)
+		paymentmethod.DELETE("/payment-method/bulk-delete", paymentmethodH.BulkDelete)
 	}
 	history := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
 	{

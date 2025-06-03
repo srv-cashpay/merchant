@@ -15,7 +15,7 @@ func (r *dashboardRepository) Get(req dto.GetDashboardRequest) (dto.GetDashboard
 	var isSubscribed bool
 	var count int64
 	err := r.DB.Model(&entity.Subscribe{}).
-		Where("merchant_id = ? AND status = ? AND expiry_time > ?", req.MerchantID, "paid", time.Now()).
+		Where("merchant_id = ? AND status = ? AND expiry_time > ?", req.MerchantID, "settlement", time.Now()).
 		Count(&count).Error
 	if err != nil {
 		return response, err
