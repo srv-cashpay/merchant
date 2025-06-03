@@ -10,7 +10,7 @@ type UploadedPayment struct {
 	ID         uint           `gorm:"primaryKey;autoIncrement" json:"id"`
 	UserID     string         `gorm:"type:varchar(36);index" json:"user_id"`
 	MerchantID string         `gorm:"type:varchar(36);index" json:"merchant_id"`
-	PaymentID  string         `gorm:"payment_id,omitempty" json:"payment_id"`
+	PaymentID  uint           `gorm:"payment_id,omitempty" json:"payment_id"`
 	FileName   string         `gorm:"size:255;not null" json:"file_name"`
 	FilePath   string         `gorm:"file_path,omitempty" json:"file_path"`
 	CreatedBy  string         `gorm:"created_by" json:"created_by"`

@@ -5,7 +5,7 @@ import (
 	"github.com/srv-cashpay/merchant/entity"
 )
 
-func (b *paymentmethodRepository) GetById(req dto.GetByIdRequest) (*dto.PaymentMethodResponse, error) {
+func (b *paymentmethodRepository) GetById(req dto.GetByIdPaymentRequest) (*dto.PaymentMethodResponse, error) {
 	tr := entity.PaymentMethod{
 		ID: req.ID,
 	}

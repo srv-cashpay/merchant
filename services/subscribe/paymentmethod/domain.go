@@ -10,8 +10,8 @@ import (
 type PaymentMethodService interface {
 	Create(req dto.PaymentMethodRequest) (dto.PaymentMethodResponse, error)
 	Get(req dto.PaymentMethodRequest) (dto.PaymentMethodResponse, error)
-	GetById(req dto.GetByIdRequest) (dto.PaymentMethodResponse, error)
-	Delete(req dto.DeleteRequest) (dto.DeleteResponse, error)
+	GetById(req dto.GetByIdPaymentRequest) (dto.PaymentMethodResponse, error)
+	Delete(req dto.DeletePaymentRequest) (dto.DeletePaymentResponse, error)
 	BulkDelete(req dto.BulkDeleteRequest) (dto.BulkDeleteResponse, error)
 	Update(req dto.PaymentMethodUpdateRequest) (dto.PaymentMethodUpdateResponse, error)
 }
