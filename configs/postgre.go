@@ -57,7 +57,6 @@ func InitDB() *gorm.DB {
 	db.AutoMigrate(
 		&entity.Pin{},
 		&entity.Subscribe{},
-		&entity.UploadedPayment{},
 		&entity.Package{},
 		&entity.CreditCard{},
 		&entity.Merk{},
@@ -75,6 +74,7 @@ func InitDB() *gorm.DB {
 		&entity.Printer{},
 		&entity.PrinterAutoIncrement{},
 		&entity.PaymentMethod{},
+		&entity.UploadedPayment{},
 	)
 
 	return db
