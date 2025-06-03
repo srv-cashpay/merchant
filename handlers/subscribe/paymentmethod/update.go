@@ -7,8 +7,8 @@ import (
 )
 
 func (b *domainHandler) Update(c echo.Context) error {
-	var req dto.PaymentUpdateRequest
-	var resp dto.PaymentUpdateResponse
+	var req dto.PaymentMethodUpdateRequest
+	var resp dto.PaymentMethodUpdateResponse
 
 	userid, ok := c.Get("UserId").(string)
 	if !ok {

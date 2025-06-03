@@ -16,7 +16,7 @@ func (b *paymentmethodRepository) Delete(req dto.DeleteRequest) (dto.DeleteRespo
 	}
 
 	// Use GORM BeforeDelete hook to set DeletedBy
-	if err := b.DB.Where("id = ?", req.ID).Delete(&entity.Payment{}).Error; err != nil {
+	if err := b.DB.Where("id = ?", req.ID).Delete(&entity.PaymentMethod{}).Error; err != nil {
 		return dto.DeleteResponse{}, err
 	}
 

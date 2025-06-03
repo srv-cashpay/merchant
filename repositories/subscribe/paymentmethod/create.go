@@ -10,7 +10,7 @@ import (
 	res "github.com/srv-cashpay/util/s/response"
 )
 
-func (r *paymentmethodRepository) Create(req dto.PaymentRequest) (dto.PaymentResponse, error) {
+func (r *paymentmethodRepository) Create(req dto.PaymentMethodRequest) (dto.PaymentMethodResponse, error) {
 	// Insert or update the auto_increment value based on merchant_id
 	var autoIncrement int
 	err := r.DB.Raw(`
@@ -22,29 +22,29 @@ func (r *paymentmethodRepository) Create(req dto.PaymentRequest) (dto.PaymentRes
 	`, req.MerchantID).Scan(&autoIncrement).Error
 
 	if err != nil {
-		return dto.PaymentResponse{}, err
+		return dto.PaymentMethodResponse{}, err
 	}
 
 	// Generate Payment ID with prefix and auto increment value
 	prefix := "p="
 	secureID, err := generatePaymentID(prefix, autoIncrement)
 	if err != nil {
-		return dto.PaymentResponse{}, err
+		return dto.PaymentMethodResponse{}, err
 	}
 
 	// Create the new paymentmethod entry
-	create := entity.Payment{
-		ID:          secureID,
-		PaymentName: req.PaymentName,
-		Status:      req.Status,
-		UserID:      req.UserID,
-		MerchantID:  req.MerchantID,
-		CreatedBy:   req.CreatedBy,
+	create := entity.PaymentMethod{
+		ID:            secureID,
+		PaymentMethod: req.PaymentMethod,
+		Status:        req.Status,
+		UserID:        req.UserID,
+		MerchantID:    req.MerchantID,
+		CreatedBy:     req.CreatedBy,
 	}
 
 	// Save the new paymentmethod to the database
 	if err := r.DB.Save(&create).Error; err != nil {
-		return dto.PaymentResponse{}, err
+		return dto.PaymentMethodResponse{}, err
 	}
 
 	// Map the status from integer to string
@@ -55,16 +55,16 @@ func (r *paymentmethodRepository) Create(req dto.PaymentRequest) (dto.PaymentRes
 
 	createdStatus, err := strconv.Atoi(fmt.Sprintf("%v", create.Status))
 	if err != nil {
-		return dto.PaymentResponse{}, fmt.Errorf("invalid status value: %v", create.Status)
+		return dto.PaymentMethodResponse{}, fmt.Errorf("invalid status value: %v", create.Status)
 	}
 
 	statusString, ok := statusMap[createdStatus]
 	if !ok {
-		return dto.PaymentResponse{}, fmt.Errorf("invalid status value in database")
+		return dto.PaymentMethodResponse{}, fmt.Errorf("invalid status value in database")
 	}
 
 	// Build the response for the created paymentmethod
-	response := dto.PaymentResponse{
+	response := dto.PaymentMethodResponse{
 		ID:         create.ID,
 		UserID:     create.UserID,
 		MerchantID: create.MerchantID,

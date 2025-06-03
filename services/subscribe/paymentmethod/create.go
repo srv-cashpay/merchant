@@ -12,30 +12,30 @@ import (
 	"gorm.io/gorm"
 )
 
-func (s *paymentmethodService) Create(req dto.PaymentRequest) (dto.PaymentResponse, error) {
+func (s *paymentmethodService) Create(req dto.PaymentMethodRequest) (dto.PaymentMethodResponse, error) {
 	var merchantDetail entity.MerchantDetail
 	err := s.Repo.CheckMerchantDetail(req.MerchantID, &merchantDetail)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return dto.PaymentResponse{}, fmt.Errorf("merchant detail not found for merchant_id: %s", req.MerchantID)
+			return dto.PaymentMethodResponse{}, fmt.Errorf("merchant detail not found for merchant_id: %s", req.MerchantID)
 		}
-		return dto.PaymentResponse{}, err
+		return dto.PaymentMethodResponse{}, err
 	}
 	if req.Status != 1 && req.Status != 2 {
-		return dto.PaymentResponse{}, fmt.Errorf("invalid status: must be 1 (active) or 2 (inactive)")
+		return dto.PaymentMethodResponse{}, fmt.Errorf("invalid status: must be 1 (active) or 2 (inactive)")
 	}
 
-	create := dto.PaymentRequest{
-		PaymentName: req.PaymentName,
-		Status:      req.Status,
-		UserID:      req.UserID,
-		MerchantID:  req.MerchantID,
-		CreatedBy:   req.CreatedBy,
+	create := dto.PaymentMethodRequest{
+		PaymentMethod: req.PaymentMethod,
+		Status:        req.Status,
+		UserID:        req.UserID,
+		MerchantID:    req.MerchantID,
+		CreatedBy:     req.CreatedBy,
 	}
 
 	created, err := s.Repo.Create(create)
 	if err != nil {
-		return dto.PaymentResponse{}, err
+		return dto.PaymentMethodResponse{}, err
 	}
 
 	statusMap := map[int]string{
@@ -46,16 +46,16 @@ func (s *paymentmethodService) Create(req dto.PaymentRequest) (dto.PaymentRespon
 	// Dapatkan string status berdasarkan nilai integer
 	statusString, ok := statusMap[create.Status]
 	if !ok {
-		return dto.PaymentResponse{}, fmt.Errorf("invalid status value in database")
+		return dto.PaymentMethodResponse{}, fmt.Errorf("invalid status value in database")
 	}
 
-	response := dto.PaymentResponse{
-		ID:          created.ID,
-		UserID:      created.UserID,
-		PaymentName: created.PaymentName,
-		Status:      statusString,
-		MerchantID:  created.MerchantID,
-		CreatedBy:   created.CreatedBy,
+	response := dto.PaymentMethodResponse{
+		ID:            created.ID,
+		UserID:        created.UserID,
+		PaymentMethod: created.PaymentMethod,
+		Status:        statusString,
+		MerchantID:    created.MerchantID,
+		CreatedBy:     created.CreatedBy,
 	}
 
 	return response, nil

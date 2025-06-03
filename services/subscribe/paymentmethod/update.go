@@ -2,11 +2,11 @@ package paymentmethod
 
 import "github.com/srv-cashpay/merchant/dto"
 
-func (b *paymentmethodService) Update(req dto.PaymentUpdateRequest) (dto.PaymentUpdateResponse, error) {
-	request := dto.PaymentUpdateRequest{
-		PaymentName: req.PaymentName,
-		Status:      req.Status,
-		UpdatedBy:   req.UpdatedBy,
+func (b *paymentmethodService) Update(req dto.PaymentMethodUpdateRequest) (dto.PaymentMethodUpdateResponse, error) {
+	request := dto.PaymentMethodUpdateRequest{
+		PaymentMethod: req.PaymentMethod,
+		Status:        req.Status,
+		UpdatedBy:     req.UpdatedBy,
 
 		UserID: req.UserID,
 	}
@@ -16,11 +16,11 @@ func (b *paymentmethodService) Update(req dto.PaymentUpdateRequest) (dto.Payment
 		return paymentmethod, err
 	}
 
-	response := dto.PaymentUpdateResponse{
-		PaymentName: request.PaymentName,
-		Status:      request.Status,
-		UpdatedBy:   request.UpdatedBy,
-		UserID:      request.UserID,
+	response := dto.PaymentMethodUpdateResponse{
+		PaymentMethod: request.PaymentMethod,
+		Status:        request.Status,
+		UpdatedBy:     request.UpdatedBy,
+		UserID:        request.UserID,
 	}
 
 	return response, nil

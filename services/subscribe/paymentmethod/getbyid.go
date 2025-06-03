@@ -4,11 +4,14 @@ import (
 	dto "github.com/srv-cashpay/merchant/dto"
 )
 
-func (b *paymentmethodService) GetById(req dto.GetByIdRequest) (*dto.PaymentResponse, error) {
-	transaction, err := b.Repo.GetById(req)
+func (b *paymentmethodService) GetById(req dto.GetByIdRequest) (dto.PaymentMethodResponse, error) {
+	pay, err := b.Repo.GetById(req)
 	if err != nil {
-		return nil, err
+		return dto.PaymentMethodResponse{}, err
+	}
+	res := dto.PaymentMethodResponse{
+		PaymentMethod: pay.PaymentMethod,
 	}
 
-	return transaction, nil
+	return res, nil
 }

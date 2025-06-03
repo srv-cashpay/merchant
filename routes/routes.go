@@ -51,10 +51,6 @@ import (
 	r_paymentmethod "github.com/srv-cashpay/merchant/repositories/subscribe/paymentmethod"
 	s_paymentmethod "github.com/srv-cashpay/merchant/services/subscribe/paymentmethod"
 
-	h_payment "github.com/srv-cashpay/merchant/handlers/payment"
-	r_payment "github.com/srv-cashpay/merchant/repositories/payment"
-	s_payment "github.com/srv-cashpay/merchant/services/payment"
-
 	h_history "github.com/srv-cashpay/merchant/handlers/subscribe/history"
 	r_history "github.com/srv-cashpay/merchant/repositories/subscribe/history"
 	s_history "github.com/srv-cashpay/merchant/services/subscribe/history"
@@ -155,12 +151,8 @@ var (
 	discountS = s_discount.NewDiscountService(discountR, JWT)
 	discountH = h_discount.NewDiscountHandler(discountS)
 
-	paymentR = r_payment.NewPaymentRepository(DB)
-	paymentS = s_payment.NewPaymentService(paymentR, JWT)
-	paymentH = h_payment.NewPaymentHandler(paymentS)
-
 	paymentmethodR = r_paymentmethod.NewPaymentRepository(DB)
-	paymentmethodS = s_paymentmethod.NewPaymentService(paymentmethodR, JWT)
+	paymentmethodS = s_paymentmethod.NewPaymentMethodService(paymentmethodR, JWT)
 	paymentmethodH = h_paymentmethod.NewPaymentHandler(paymentmethodS)
 
 	historyR = r_history.NewHistoryRepository(DB)
@@ -289,14 +281,6 @@ func New() *echo.Echo {
 		table.DELETE("/table/bulk-delete", tableH.BulkDelete)
 	}
 
-	payment := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
-	{
-		payment.POST("/payment/create", paymentH.Create)
-		payment.GET("/payment/pagination", paymentH.Get)
-		payment.PUT("/payment/update/:id", paymentH.Update)
-		payment.DELETE("/payment/:id", paymentH.Delete)
-		payment.DELETE("/payment/bulk-delete", paymentH.BulkDelete)
-	}
 	paymentmethod := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
 	{
 		paymentmethod.POST("/payment-method/create", paymentmethodH.Create)

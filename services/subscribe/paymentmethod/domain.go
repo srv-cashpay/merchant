@@ -7,13 +7,13 @@ import (
 	r "github.com/srv-cashpay/merchant/repositories/subscribe/paymentmethod"
 )
 
-type PaymentService interface {
-	Create(req dto.PaymentRequest) (dto.PaymentResponse, error)
+type PaymentMethodService interface {
+	Create(req dto.PaymentMethodRequest) (dto.PaymentMethodResponse, error)
 	Get(req dto.PaymentMethodRequest) (dto.PaymentMethodResponse, error)
-	GetById(req dto.GetByIdRequest) (*dto.PaymentResponse, error)
+	GetById(req dto.GetByIdRequest) (dto.PaymentMethodResponse, error)
 	Delete(req dto.DeleteRequest) (dto.DeleteResponse, error)
 	BulkDelete(req dto.BulkDeleteRequest) (dto.BulkDeleteResponse, error)
-	Update(req dto.PaymentUpdateRequest) (dto.PaymentUpdateResponse, error)
+	Update(req dto.PaymentMethodUpdateRequest) (dto.PaymentMethodUpdateResponse, error)
 }
 
 type paymentmethodService struct {
@@ -21,7 +21,7 @@ type paymentmethodService struct {
 	jwt  m.JWTService
 }
 
-func NewPaymentService(Repo r.DomainRepository, jwtS m.JWTService) PaymentService {
+func NewPaymentMethodService(Repo r.DomainRepository, jwtS m.JWTService) PaymentMethodService {
 	return &paymentmethodService{
 		Repo: Repo,
 		jwt:  jwtS,

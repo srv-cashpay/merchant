@@ -7,8 +7,8 @@ import (
 )
 
 func (h *domainHandler) Create(c echo.Context) error {
-	var req dto.PaymentRequest
-	var resp dto.PaymentResponse
+	var req dto.PaymentMethodRequest
+	var resp dto.PaymentMethodResponse
 
 	userid, ok := c.Get("UserId").(string)
 	if !ok {

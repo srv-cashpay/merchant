@@ -16,10 +16,10 @@ type DomainHandler interface {
 }
 
 type domainHandler struct {
-	servicePayment s.PaymentService
+	servicePayment s.PaymentMethodService
 }
 
-func NewPaymentHandler(service s.PaymentService) DomainHandler {
+func NewPaymentHandler(service s.PaymentMethodService) DomainHandler {
 	return &domainHandler{
 		servicePayment: service,
 	}

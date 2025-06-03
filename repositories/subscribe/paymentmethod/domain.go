@@ -8,12 +8,12 @@ import (
 )
 
 type DomainRepository interface {
-	Create(req dto.PaymentRequest) (dto.PaymentResponse, error)
+	Create(req dto.PaymentMethodRequest) (dto.PaymentMethodResponse, error)
 	Get(req dto.PaymentMethodRequest) (dto.PaymentMethodResponse, error)
-	GetById(req dto.GetByIdRequest) (*dto.PaymentResponse, error)
+	GetById(req dto.GetByIdRequest) (*dto.PaymentMethodResponse, error)
 	Delete(req dto.DeleteRequest) (dto.DeleteResponse, error)
 	BulkDelete(req dto.BulkDeleteRequest) (int, error)
-	Update(req dto.PaymentUpdateRequest) (dto.PaymentUpdateResponse, error)
+	Update(req dto.PaymentMethodUpdateRequest) (dto.PaymentMethodUpdateResponse, error)
 	CheckMerchantDetail(merchantID string, merchantDetail *entity.MerchantDetail) error
 }
 
