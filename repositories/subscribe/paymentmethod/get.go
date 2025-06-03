@@ -7,7 +7,7 @@ import (
 
 func (r *paymentmethodRepository) Get(req dto.PaymentMethodRequest) (dto.PaymentMethodResponse, error) {
 	var paymentmethods []entity.PaymentMethod
-	if err := r.DB.Preload("Image").Find(&paymentmethods).Error; err != nil {
+	if err := r.DB.Find(&paymentmethods).Error; err != nil {
 		return dto.PaymentMethodResponse{}, err
 	}
 
