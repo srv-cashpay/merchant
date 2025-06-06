@@ -19,16 +19,25 @@ type PaymentMethodRequest struct {
 }
 
 type PaymentMethodResponse struct {
-	ID            uint      `json:"id"`
-	UserID        string    `json:"user_id"`
-	MerchantID    string    `json:"merchant_id"`
-	PaymentMethod string    `json:"payment_method"`
-	Status        int       `json:"status"`
-	CreatedBy     string    `json:"created_by"`
-	UpdatedBy     string    `json:"updated_by"`
-	DeletedBy     string    `json:"deleted_by"`
-	CreatedAt     time.Time `json:"created_at"`
+	ID            uint             `json:"id"`
+	UserID        string           `json:"user_id"`
+	MerchantID    string           `json:"merchant_id"`
+	PaymentMethod string           `json:"payment_method"`
+	Image         *UploadedPayment `json:"image"` // tambahkan ini
+	Status        int              `json:"status"`
+	CreatedBy     string           `json:"created_by"`
+	UpdatedBy     string           `json:"updated_by"`
+	DeletedBy     string           `json:"deleted_by"`
+	CreatedAt     time.Time        `json:"created_at"`
 }
+
+type UploadedPayment struct {
+	ID        uint   `json:"id"`
+	PaymentID uint   `json:"payment_id"` // relasi ke PaymentMethod.ID
+	FileName  string `json:"file_name"`
+	FilePath  string `json:"file_path"`
+}
+
 type PaymentMethodUpdateRequest struct {
 	ID            string    `json:"id"`
 	UserID        string    `json:"user_id"`
