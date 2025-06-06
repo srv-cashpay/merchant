@@ -5,14 +5,26 @@ import (
 	"github.com/srv-cashpay/merchant/entity"
 )
 
-func (r *paymentmethodRepository) Get(req dto.PaymentMethodRequest) (dto.PaymentMethodResponse, error) {
+func (r *paymentmethodRepository) Get(req dto.PaymentMethodRequest) ([]dto.PaymentMethodResponse, error) {
 	var paymentmethods []entity.PaymentMethod
 	if err := r.DB.Find(&paymentmethods).Error; err != nil {
-		return dto.PaymentMethodResponse{}, err
+		return nil, err
 	}
 
-	// Bungkus izin dalam field 'items' seperti yang diharapkan
-	return dto.PaymentMethodResponse{
-		PaymentMethod: req.PaymentMethod,
-	}, nil
+	var result []dto.PaymentMethodResponse
+	for _, pm := range paymentmethods {
+		result = append(result, dto.PaymentMethodResponse{
+			ID:            pm.ID,
+			UserID:        pm.UserID,
+			MerchantID:    pm.MerchantID,
+			PaymentMethod: pm.PaymentMethod,
+			Status:        pm.Status,
+			CreatedBy:     pm.CreatedBy,
+			UpdatedBy:     pm.UpdatedBy,
+			DeletedBy:     pm.DeletedBy,
+			CreatedAt:     pm.CreatedAt,
+		})
+	}
+
+	return result, nil
 }
