@@ -14,6 +14,7 @@ type PaymentMethodService interface {
 	Delete(req dto.DeletePaymentRequest) (dto.DeletePaymentResponse, error)
 	BulkDelete(req dto.BulkDeleteRequest) (dto.BulkDeleteResponse, error)
 	Update(req dto.PaymentMethodUpdateRequest) (dto.PaymentMethodUpdateResponse, error)
+	GetPicture(req dto.GetPaymentploadRequest) (*dto.GetPaymentUploadResponse, error)
 }
 
 type paymentmethodService struct {

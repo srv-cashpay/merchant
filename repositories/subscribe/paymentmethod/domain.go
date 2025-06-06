@@ -15,6 +15,7 @@ type DomainRepository interface {
 	BulkDelete(req dto.BulkDeleteRequest) (int, error)
 	Update(req dto.PaymentMethodUpdateRequest) (dto.PaymentMethodUpdateResponse, error)
 	SaveImage(img entity.UploadedPayment) error
+	GetPicture(req dto.GetPaymentploadRequest) (*dto.GetPaymentUploadResponse, error)
 }
 
 type paymentmethodRepository struct {

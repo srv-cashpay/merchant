@@ -288,7 +288,11 @@ func New() *echo.Echo {
 		paymentmethod.PUT("/payment-method/update/:id", paymentmethodH.Update)
 		paymentmethod.DELETE("/payment-method/:id", paymentmethodH.Delete)
 		paymentmethod.DELETE("/payment-method/bulk-delete", paymentmethodH.BulkDelete)
+		paymentmethod.GET("/payment-method/uploads/:file_name", paymentmethodH.GetPicture)
+
 	}
+	e.GET("/uploads/:file_name", productH.GetPicture)
+
 	history := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
 	{
 		history.GET("/history/pagination", historyH.Get)
@@ -351,7 +355,6 @@ func New() *echo.Echo {
 		product.GET("/product/category", getcategoryH.Get)
 		product.PUT("/product/upload/:id", productH.UploadImage)
 	}
-	e.GET("/uploads/:file_name", productH.GetPicture)
 
 	return e
 }

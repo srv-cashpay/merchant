@@ -75,3 +75,12 @@ type DeletePaymentResponse struct {
 	ID        uint   `param:"id" validate:"required"`
 	DeletedBy string `json:"deleted_by"`
 }
+
+type GetPaymentploadRequest struct {
+	FileName string `param:"file_name" validate:"required"`
+}
+
+type GetPaymentUploadResponse struct {
+	FileName string `json:"file_name"`
+	FilePath string `json:"file_path"`
+}
