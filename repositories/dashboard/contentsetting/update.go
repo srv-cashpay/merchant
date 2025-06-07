@@ -10,6 +10,15 @@ func (b *contentsettingRepository) Update(req dto.UpdateContentSettingRequest) (
 		ID: req.ID,
 	}
 
+	request := entity.ContentSetting{
+		ID:          data.ID,
+		Logo:        req.Logo,
+		Title:       req.Title,
+		LinkAndroid: req.LinkAndroid,
+		LinkApple:   req.LinkApple,
+		Description: req.Description,
+	}
+
 	mer, err := b.GetById(data)
 	if err != nil {
 		return dto.UpdateContentSettingResponse{}, err
@@ -17,12 +26,12 @@ func (b *contentsettingRepository) Update(req dto.UpdateContentSettingRequest) (
 
 	err = b.DB.Where("ID = ?", req.ID).Updates(entity.ContentSetting{
 		ID:          data.ID,
-		UserID:      mer.UserID,
-		Logo:        mer.Logo,
-		Title:       mer.Title,
-		LinkAndroid: mer.LinkAndroid,
-		LinkApple:   mer.LinkApple,
-		Description: mer.Description,
+		UserID:      request.UserID,
+		Logo:        request.Logo,
+		Title:       request.Title,
+		LinkAndroid: request.LinkAndroid,
+		LinkApple:   request.LinkApple,
+		Description: request.Description,
 	}).Error
 	if err != nil {
 		return dto.UpdateContentSettingResponse{}, err
@@ -30,12 +39,12 @@ func (b *contentsettingRepository) Update(req dto.UpdateContentSettingRequest) (
 
 	response := dto.UpdateContentSettingResponse{
 		ID:          mer.ID,
-		UserID:      mer.UserID,
-		Logo:        mer.Logo,
-		Title:       mer.Title,
-		LinkAndroid: mer.LinkAndroid,
-		LinkApple:   mer.LinkApple,
-		Description: mer.Description,
+		UserID:      request.UserID,
+		Logo:        request.Logo,
+		Title:       request.Title,
+		LinkAndroid: request.LinkAndroid,
+		LinkApple:   request.LinkApple,
+		Description: request.Description,
 	}
 
 	return response, nil
