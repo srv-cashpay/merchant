@@ -87,6 +87,10 @@ import (
 	r_merchant "github.com/srv-cashpay/merchant/repositories/merchant"
 	s_merchant "github.com/srv-cashpay/merchant/services/merchant"
 
+	h_contentsetting "github.com/srv-cashpay/merchant/handlers/dashboard/contentsetting"
+	r_contentsetting "github.com/srv-cashpay/merchant/repositories/dashboard/contentsetting"
+	s_contentsetting "github.com/srv-cashpay/merchant/services/dashboard/contentsetting"
+
 	h_table "github.com/srv-cashpay/merchant/handlers/table"
 	r_table "github.com/srv-cashpay/merchant/repositories/table"
 	s_table "github.com/srv-cashpay/merchant/services/table"
@@ -110,6 +114,10 @@ var (
 	merchantR = r_merchant.NewMerchantRepository(DB)
 	merchantS = s_merchant.NewMerchantService(merchantR, JWT)
 	merchantH = h_merchant.NewMerchantHandler(merchantS)
+
+	contentsettingR = r_contentsetting.NewContentSettingRepository(DB)
+	contentsettingS = s_contentsetting.NewContentSettingService(contentsettingR, JWT)
+	contentsettingH = h_contentsetting.NewContentSettingHandler(contentsettingS)
 
 	printerR = r_printer.NewPrinterRepository(DB)
 	printerS = s_printer.NewPrinterService(printerR, JWT)
@@ -231,6 +239,11 @@ func New() *echo.Echo {
 		merchant.PUT("/update", merchantH.Update)
 		merchant.GET("/get", merchantH.Get)
 	}
+	contentsetting := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
+	{
+		contentsetting.PUT("/update", contentsettingH.Update)
+		contentsetting.GET("/get", contentsettingH.Get)
+	}
 	printer := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
 	{
 		printer.PUT("/printer/update", printerH.Update)
@@ -297,6 +310,7 @@ func New() *echo.Echo {
 		roleuserpermission.DELETE("/roleuserpermission/:id", roleuserpermissionH.Delete)
 		roleuserpermission.DELETE("/roleuserpermission/bulk-delete", roleuserpermissionH.BulkDelete)
 	}
+
 	tax := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
 	{
 		tax.POST("/tax/create", taxH.Create)
