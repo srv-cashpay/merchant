@@ -35,6 +35,10 @@ import (
 	r_role_user "github.com/srv-cashpay/merchant/repositories/dashboard/roleuser"
 	s_role_user "github.com/srv-cashpay/merchant/services/dashboard/roleuser"
 
+	h_role_user_permission "github.com/srv-cashpay/merchant/handlers/dashboard/roleuserpermission"
+	r_role_user_permission "github.com/srv-cashpay/merchant/repositories/dashboard/roleuserpermission"
+	s_role_user_permission "github.com/srv-cashpay/merchant/services/dashboard/roleuserpermission"
+
 	h_subscribe "github.com/srv-cashpay/merchant/handlers/subscribe"
 	r_subscribe "github.com/srv-cashpay/merchant/repositories/subscribe"
 	s_subscribe "github.com/srv-cashpay/merchant/services/subscribe"
@@ -134,6 +138,10 @@ var (
 	roleuserR = r_role_user.NewRoleUserRepository(DB)
 	roleuserS = s_role_user.NewRoleUserService(roleuserR, JWT)
 	roleuserH = h_role_user.NewRoleUserHandler(roleuserS)
+
+	roleuserpermissionR = r_role_user_permission.NewRoleUserPermissionRepository(DB)
+	roleuserpermissionS = s_role_user_permission.NewRoleUserPermissionService(roleuserpermissionR, JWT)
+	roleuserpermissionH = h_role_user_permission.NewRoleUserPermissionHandler(roleuserpermissionS)
 
 	categoryR = r_category.NewCategoryRepository(DB)
 	categoryS = s_category.NewCategoryService(categoryR, JWT)
@@ -279,6 +287,15 @@ func New() *echo.Echo {
 		roleuser.PUT("/roleuser/update/:id", roleuserH.Update)
 		roleuser.DELETE("/roleuser/:id", roleuserH.Delete)
 		roleuser.DELETE("/roleuser/bulk-delete", roleuserH.BulkDelete)
+	}
+	roleuserpermission := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
+	{
+		roleuserpermission.POST("/roleuserpermission/create", roleuserpermissionH.Create)
+		roleuserpermission.GET("/roleuserpermission", roleuserpermissionH.Get)
+		roleuserpermission.GET("/roleuserpermission/pagination", roleuserpermissionH.Pagination)
+		roleuserpermission.PUT("/roleuserpermission/update/:id", roleuserpermissionH.Update)
+		roleuserpermission.DELETE("/roleuserpermission/:id", roleuserpermissionH.Delete)
+		roleuserpermission.DELETE("/roleuserpermission/bulk-delete", roleuserpermissionH.BulkDelete)
 	}
 	tax := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
 	{
