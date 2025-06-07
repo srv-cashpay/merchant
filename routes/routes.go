@@ -242,7 +242,7 @@ func New() *echo.Echo {
 	contentsetting := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
 	{
 		contentsetting.PUT("/update", contentsettingH.Update)
-		contentsetting.GET("/get", contentsettingH.Get)
+		contentsetting.GET("/contentsetting/get", contentsettingH.Get)
 	}
 	printer := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
 	{
