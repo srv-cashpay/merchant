@@ -12,6 +12,8 @@ func (b *contentsettingRepository) Update(req dto.UpdateContentSettingRequest) (
 
 	request := entity.ContentSetting{
 		ID:          data.ID,
+		UserID:      req.UserID,
+		MerchantID:  req.MerchantID,
 		Logo:        req.Logo,
 		Title:       req.Title,
 		LinkAndroid: req.LinkAndroid,
@@ -27,6 +29,7 @@ func (b *contentsettingRepository) Update(req dto.UpdateContentSettingRequest) (
 	err = b.DB.Where("ID = ?", req.ID).Updates(entity.ContentSetting{
 		ID:          data.ID,
 		UserID:      request.UserID,
+		MerchantID:  request.MerchantID,
 		Logo:        request.Logo,
 		Title:       request.Title,
 		LinkAndroid: request.LinkAndroid,
@@ -40,6 +43,7 @@ func (b *contentsettingRepository) Update(req dto.UpdateContentSettingRequest) (
 	response := dto.UpdateContentSettingResponse{
 		ID:          mer.ID,
 		UserID:      request.UserID,
+		MerchantID:  request.MerchantID,
 		Logo:        request.Logo,
 		Title:       request.Title,
 		LinkAndroid: request.LinkAndroid,

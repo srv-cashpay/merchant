@@ -13,6 +13,8 @@ func (b *contentsettingService) Update(req dto.UpdateContentSettingRequest) (dto
 		LinkAndroid: req.LinkAndroid,
 		LinkApple:   req.LinkApple,
 		UpdatedBy:   req.UpdatedBy,
+		UserID:      req.UserID,
+		MerchantID:  req.MerchantID,
 	}
 
 	contentsetting, err := b.Repo.Update(req)
@@ -28,6 +30,8 @@ func (b *contentsettingService) Update(req dto.UpdateContentSettingRequest) (dto
 		LinkAndroid: request.LinkAndroid,
 		LinkApple:   request.LinkApple,
 		UpdatedBy:   request.UpdatedBy,
+		UserID:      request.UserID,
+		MerchantID:  request.MerchantID,
 	}
 
 	return response, nil
