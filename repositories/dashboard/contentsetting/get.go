@@ -9,7 +9,7 @@ func (r *contentsettingRepository) Get(req dto.ContentSettingRequest) (dto.Conte
 
 	var data entity.ContentSetting
 
-	if err := r.DB.Where("user_id = ?", req.UserID).Find(&data).Error; err != nil {
+	if err := r.DB.Find(&data).Error; err != nil {
 		return dto.ContentSettingResponse{}, err
 	}
 
