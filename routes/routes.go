@@ -271,6 +271,15 @@ func New() *echo.Echo {
 		role.DELETE("/role/:id", roleH.Delete)
 		role.DELETE("/role/bulk-delete", roleH.BulkDelete)
 	}
+	roleuser := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
+	{
+		roleuser.POST("/roleuser/create", roleuserH.Create)
+		roleuser.GET("/roleuser", roleuserH.Get)
+		roleuser.GET("/roleuser/pagination", roleuserH.Pagination)
+		roleuser.PUT("/roleuser/update/:id", roleuserH.Update)
+		roleuser.DELETE("/roleuser/:id", roleuserH.Delete)
+		roleuser.DELETE("/roleuser/bulk-delete", roleuserH.BulkDelete)
+	}
 	tax := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
 	{
 		tax.POST("/tax/create", taxH.Create)
