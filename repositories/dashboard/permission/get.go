@@ -4,7 +4,7 @@ import (
 	dto "github.com/srv-cashpay/merchant/dto"
 )
 
-func (r *PermissionRepository) Get(req dto.RoleUser) (dto.GetPermissionResponse, error) {
+func (r *PermissionRepository) Get(req dto.RoleUserRequest) (dto.GetPermissionResponse, error) {
 	var permissions []dto.PermissionResponse
 
 	// Query untuk memvalidasi RoleUser dan Permission

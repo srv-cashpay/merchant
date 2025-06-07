@@ -31,6 +31,10 @@ import (
 	r_role "github.com/srv-cashpay/merchant/repositories/dashboard/role"
 	s_role "github.com/srv-cashpay/merchant/services/dashboard/role"
 
+	h_role_user "github.com/srv-cashpay/merchant/handlers/dashboard/roleuser"
+	r_role_user "github.com/srv-cashpay/merchant/repositories/dashboard/roleuser"
+	s_role_user "github.com/srv-cashpay/merchant/services/dashboard/roleuser"
+
 	h_subscribe "github.com/srv-cashpay/merchant/handlers/subscribe"
 	r_subscribe "github.com/srv-cashpay/merchant/repositories/subscribe"
 	s_subscribe "github.com/srv-cashpay/merchant/services/subscribe"
@@ -126,6 +130,10 @@ var (
 	roleR = r_role.NewRoleRepository(DB)
 	roleS = s_role.NewRoleService(roleR, JWT)
 	roleH = h_role.NewRoleHandler(roleS)
+
+	roleuserR = r_role_user.NewRoleUserRepository(DB)
+	roleuserS = s_role_user.NewRoleUserService(roleuserR, JWT)
+	roleuserH = h_role_user.NewRoleUserHandler(roleuserS)
 
 	categoryR = r_category.NewCategoryRepository(DB)
 	categoryS = s_category.NewCategoryService(categoryR, JWT)

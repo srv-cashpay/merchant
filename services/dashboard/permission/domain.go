@@ -10,7 +10,7 @@ import (
 
 type PermissionService interface {
 	Create(req dto.PermissionRequest) (dto.PermissionResponse, error)
-	Get(req dto.RoleUser) (dto.GetPermissionResponse, error)
+	Get(req dto.RoleUserRequest) (dto.GetPermissionResponse, error)
 	Pagination(context echo.Context, req *dto.Pagination) dto.Response
 	GetById(req dto.GetPermissionByIdRequest) (*dto.PermissionResponse, error)
 	Delete(req dto.DeletePermissionRequest) (dto.DeletePermissionResponse, error)

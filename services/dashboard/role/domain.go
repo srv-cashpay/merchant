@@ -10,7 +10,7 @@ import (
 
 type RoleService interface {
 	Create(req dto.RoleRequest) (dto.RoleResponse, error)
-	Get(req dto.RoleUser) (dto.GetRoleResponse, error)
+	Get(req dto.RoleUserRequest) (dto.GetRoleResponse, error)
 	Pagination(context echo.Context, req *dto.Pagination) dto.Response
 	GetById(req dto.GetRoleByIdRequest) (*dto.RoleResponse, error)
 	Delete(req dto.DeleteRoleRequest) (dto.DeleteRoleResponse, error)

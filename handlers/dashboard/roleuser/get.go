@@ -1,4 +1,4 @@
-package role
+package roleuser
 
 import (
 	"net/http"
@@ -30,7 +30,7 @@ func (b *domainHandler) Get(c echo.Context) error {
 		return c.JSON(400, "Invalid request")
 	}
 
-	products, err := b.serviceRole.Get(req)
+	products, err := b.serviceRoleUser.Get(req)
 	if err != nil {
 		return res.ErrorResponse(err).Send(c)
 	}

@@ -1,11 +1,11 @@
-package role
+package roleuser
 
 import (
 	dto "github.com/srv-cashpay/merchant/dto"
 )
 
-func (r *RoleRepository) Get(req dto.RoleUserRequest) (dto.GetRoleResponse, error) {
-	var roles []dto.RoleResponse
+func (r *RoleUserRepository) Get(req dto.RoleUserRequest) (dto.GetRoleUserResponse, error) {
+	var roles []dto.RoleUserResponse
 
 	// Query untuk memvalidasi RoleUser dan Role
 	err := r.DB.Table("role_user_roles").
@@ -16,11 +16,11 @@ func (r *RoleRepository) Get(req dto.RoleUserRequest) (dto.GetRoleResponse, erro
 		Scan(&roles).Error
 
 	if err != nil {
-		return dto.GetRoleResponse{}, err
+		return dto.GetRoleUserResponse{}, err
 	}
 
 	// Bungkus izin dalam field 'items' seperti yang diharapkan
-	return dto.GetRoleResponse{
+	return dto.GetRoleUserResponse{
 		Items: roles,
 	}, nil
 }

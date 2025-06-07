@@ -1,10 +1,10 @@
-package role
+package roleuser
 
 import (
 	dto "github.com/srv-cashpay/merchant/dto"
 )
 
-func (s *roleService) Get(req dto.RoleUserRequest) (dto.GetRoleResponse, error) {
+func (s *roleuserService) Get(req dto.RoleUserRequest) (dto.GetRoleUserResponse, error) {
 	products, _ := s.Repo.Get(req)
 
 	return products, nil

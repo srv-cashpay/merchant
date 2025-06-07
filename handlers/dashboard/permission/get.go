@@ -9,7 +9,7 @@ import (
 )
 
 func (b *domainHandler) Get(c echo.Context) error {
-	var req dto.RoleUser
+	var req dto.RoleUserRequest
 
 	userid, ok := c.Get("UserId").(string)
 	if !ok {

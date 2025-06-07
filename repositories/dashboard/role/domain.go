@@ -8,7 +8,7 @@ import (
 
 type DomainRepository interface {
 	Create(req dto.RoleRequest) (dto.RoleResponse, error)
-	Get(req dto.RoleUser) (dto.GetRoleResponse, error)
+	Get(req dto.RoleUserRequest) (dto.GetRoleResponse, error)
 	Pagination(req *dto.Pagination) (RepositoryResult, int)
 	GetById(req dto.GetRoleByIdRequest) (*dto.RoleResponse, error)
 	Delete(req dto.DeleteRoleRequest) (dto.DeleteResponse, error)
