@@ -7,10 +7,11 @@ import (
 func (s *roleuserpermissionService) Create(req dto.RoleUserPermissionRequest) (dto.RoleUserPermissionResponse, error) {
 
 	create := dto.RoleUserPermissionRequest{
-		RoleUserID: req.RoleUserID,
-		UserID:     req.UserID,
-		MerchantID: req.MerchantID,
-		CreatedBy:  req.CreatedBy,
+		PermissionID: req.PermissionID,
+		RoleUserID:   req.RoleUserID,
+		UserID:       req.UserID,
+		MerchantID:   req.MerchantID,
+		CreatedBy:    req.CreatedBy,
 	}
 
 	created, err := s.Repo.Create(create)
@@ -19,10 +20,11 @@ func (s *roleuserpermissionService) Create(req dto.RoleUserPermissionRequest) (d
 	}
 
 	response := dto.RoleUserPermissionResponse{
-		RoleUserID: created.RoleUserID,
-		UserID:     created.UserID,
-		MerchantID: created.MerchantID,
-		CreatedBy:  created.CreatedBy,
+		PermissionID: created.PermissionID,
+		RoleUserID:   created.RoleUserID,
+		UserID:       created.UserID,
+		MerchantID:   created.MerchantID,
+		CreatedBy:    created.CreatedBy,
 	}
 
 	return response, nil
