@@ -3,24 +3,24 @@ package dto
 import "time"
 
 type RoleUserRequest struct {
-	ID         string `json:"id"`
-	Role       string `json:"role_id"`
+	ID         uint   `json:"id"`
+	RoleID     string `json:"role_id"`
 	UserID     string `json:"user_id"`
 	MerchantID string `json:"merchant_id"`
 	CreatedBy  string `json:"created_by"`
 }
 
 type RoleUserResponse struct {
-	ID         string `json:"id"`
-	Role       string `json:"role`
+	ID         uint   `json:"id"`
+	RoleID     string `json:"role_id`
 	UserID     string `json:"user_id"`
 	MerchantID string `json:"merchant_id"`
 	CreatedBy  string `json:"created_by"`
 }
 
 type RoleUserUpdateRequest struct {
-	ID         string `json:"id"`
-	Role       string `json:"role"`
+	ID         uint   `json:"id"`
+	RoleID     string `json:"role_id`
 	UserID     string `json:"user_id"`
 	MerchantID string `json:"merchant_id"`
 	CreatedBy  string `json:"created_by"`
@@ -28,8 +28,8 @@ type RoleUserUpdateRequest struct {
 }
 
 type RoleUserUpdateResponse struct {
-	ID         string `json:"id"`
-	Role       string `json:"role"`
+	ID         uint   `json:"id"`
+	RoleID     string `json:"role_id`
 	UserID     string `json:"user_id"`
 	MerchantID string `json:"merchant_id"`
 	CreatedBy  string `json:"created_by"`
@@ -37,12 +37,12 @@ type RoleUserUpdateResponse struct {
 }
 
 type DeleteRoleUserRequest struct {
-	ID        string `param:"id" validate:"required"`
+	ID        uint   `param:"id" validate:"required"`
 	DeletedBy string `json:"deleted_by"`
 }
 
 type DeleteRoleUserResponse struct {
-	ID        string `param:"id" validate:"required"`
+	ID        uint   `param:"id" validate:"required"`
 	DeletedBy string `json:"deleted_by"`
 }
 
@@ -51,10 +51,10 @@ type GetRoleUserResponse struct {
 }
 
 type GetRoleUserByIdRequest struct {
-	ID         string    `json:"id"`
+	ID         uint      `json:"id"`
 	UserID     string    `json:"user_id"`
 	MerchantID string    `json:"merchant_id"`
-	Role       string    `json:"role"`
+	RoleID     string    `json:"role_id"`
 	CreatedBy  string    `json:"created_by"`
 	UpdatedBy  string    `json:"updated_by"`
 	DeletedBy  string    `json:"deleted_by"`

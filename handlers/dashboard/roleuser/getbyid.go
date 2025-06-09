@@ -11,7 +11,7 @@ func (b *domainHandler) GetById(c echo.Context) error {
 
 	// idStr := c.Param("id")
 
-	idUint, err := res.IsNumber(c, "id")
+	idUint, err := IsUint(c, "id")
 	if err != nil {
 		return res.ErrorBuilder(&res.ErrorConstant.BadRequest, err).Send(c)
 	}

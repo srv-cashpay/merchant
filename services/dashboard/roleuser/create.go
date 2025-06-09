@@ -7,7 +7,7 @@ import (
 func (s *roleuserService) Create(req dto.RoleUserRequest) (dto.RoleUserResponse, error) {
 
 	create := dto.RoleUserRequest{
-		Role:       req.Role,
+		RoleID:     req.RoleID,
 		UserID:     req.UserID,
 		MerchantID: req.MerchantID,
 		CreatedBy:  req.CreatedBy,
@@ -19,7 +19,7 @@ func (s *roleuserService) Create(req dto.RoleUserRequest) (dto.RoleUserResponse,
 	}
 
 	response := dto.RoleUserResponse{
-		Role: created.Role,
+		RoleID: created.RoleID,
 	}
 
 	return response, nil

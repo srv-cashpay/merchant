@@ -1,6 +1,9 @@
 package roleuser
 
 import (
+	"fmt"
+	"strconv"
+
 	"github.com/labstack/echo/v4"
 	dto "github.com/srv-cashpay/merchant/dto"
 	res "github.com/srv-cashpay/util/s/response"
@@ -14,7 +17,7 @@ func (b *domainHandler) Delete(c echo.Context) error {
 	}
 	req.DeletedBy = deletedBy
 
-	idUint, err := res.IsNumber(c, "id")
+	idUint, err := IsUint(c, "id")
 	if err != nil {
 		return res.ErrorBuilder(&res.ErrorConstant.BadRequest, err).Send(c)
 	}
@@ -27,4 +30,13 @@ func (b *domainHandler) Delete(c echo.Context) error {
 	}
 
 	return res.SuccessResponse(data).Send(c)
+}
+
+func IsUint(c echo.Context, param string) (uint, error) {
+	idParam := c.Param(param)
+	idUint64, err := strconv.ParseUint(idParam, 10, 32)
+	if err != nil {
+		return 0, fmt.Errorf("invalid number: %v", err)
+	}
+	return uint(idUint64), nil
 }

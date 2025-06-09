@@ -20,7 +20,7 @@ func (b *domainHandler) Update(c echo.Context) error {
 		return res.ErrorBuilder(&res.ErrorConstant.InternalServerError, nil).Send(c)
 	}
 
-	idUint, err := res.IsNumber(c, "id")
+	idUint, err := IsUint(c, "id")
 	if err != nil {
 		return res.ErrorBuilder(&res.ErrorConstant.BadRequest, err).Send(c)
 	}

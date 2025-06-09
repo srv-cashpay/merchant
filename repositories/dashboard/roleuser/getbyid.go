@@ -6,7 +6,7 @@ import (
 )
 
 func (b *RoleUserRepository) GetById(req dto.GetRoleUserByIdRequest) (*dto.RoleUserResponse, error) {
-	tr := entity.Role{
+	tr := entity.RoleUser{
 		ID: req.ID,
 	}
 
@@ -15,7 +15,7 @@ func (b *RoleUserRepository) GetById(req dto.GetRoleUserByIdRequest) (*dto.RoleU
 	}
 
 	response := &dto.RoleUserResponse{
-		Role: tr.Role,
+		RoleID: tr.RoleID,
 	}
 
 	return response, nil

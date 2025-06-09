@@ -8,7 +8,7 @@ import (
 func (b *RoleUserRepository) Update(req dto.RoleUserUpdateRequest) (dto.RoleUserUpdateResponse, error) {
 	// Menyiapkan struktur update untuk produk
 	updateRole := entity.RoleUser{
-		RoleID: req.Role,
+		RoleID: req.RoleID,
 	}
 
 	// Cek apakah produk ada terlebih dahulu
@@ -26,7 +26,7 @@ func (b *RoleUserRepository) Update(req dto.RoleUserUpdateRequest) (dto.RoleUser
 
 	// Menyiapkan response setelah pembaruan berhasil
 	response := dto.RoleUserUpdateResponse{
-		Role: updateRole.RoleID,
+		RoleID: updateRole.RoleID,
 	}
 
 	return response, nil

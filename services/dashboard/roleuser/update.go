@@ -3,8 +3,8 @@ package roleuser
 import "github.com/srv-cashpay/merchant/dto"
 
 func (b *roleuserService) Update(req dto.RoleUserUpdateRequest) (dto.RoleUserUpdateResponse, error) {
-	request := dto.RoleUpdateRequest{
-		Role:      req.Role,
+	request := dto.RoleUserUpdateRequest{
+		RoleID:    req.RoleID,
 		UpdatedBy: req.UpdatedBy,
 		UserID:    req.UserID,
 	}
@@ -15,7 +15,7 @@ func (b *roleuserService) Update(req dto.RoleUserUpdateRequest) (dto.RoleUserUpd
 	}
 
 	response := dto.RoleUserUpdateResponse{
-		Role:      req.Role,
+		RoleID:    req.RoleID,
 		UpdatedBy: request.UpdatedBy,
 		UserID:    request.UserID,
 	}
