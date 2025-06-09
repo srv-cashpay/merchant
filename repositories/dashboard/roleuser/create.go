@@ -2,16 +2,13 @@ package roleuser
 
 import (
 	"crypto/rand"
-	"fmt"
 
 	dto "github.com/srv-cashpay/merchant/dto"
 	"github.com/srv-cashpay/merchant/entity"
 )
 
 func (r *RoleUserRepository) Create(req dto.RoleUserRequest) (dto.RoleUserResponse, error) {
-	prefix := "r="
-
-	secureID, err := generateRoleID(prefix)
+	secureID, err := generateSecurePart()
 	if err != nil {
 		return dto.RoleUserResponse{}, err
 	}
@@ -33,20 +30,6 @@ func (r *RoleUserRepository) Create(req dto.RoleUserRequest) (dto.RoleUserRespon
 	}
 
 	return response, nil
-}
-
-func generateRoleID(prefix string) (string, error) {
-	// Format auto-increment value as a 5-digit string
-	autoIncStr := fmt.Sprintf("%05d")
-
-	// Generate a secure random part of the discount ID
-	securePart, err := generateSecurePart()
-	if err != nil {
-		return "", err
-	}
-
-	// Combine the prefix, secure random part, and auto-increment value to form the final discount ID
-	return fmt.Sprintf("%s%s%s", prefix, securePart, autoIncStr), nil
 }
 
 // Function to generate a secure random part for the discount ID
