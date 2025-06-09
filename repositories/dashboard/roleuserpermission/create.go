@@ -9,7 +9,8 @@ func (r *RoleUserPermissionRepository) Create(req dto.RoleUserPermissionRequest)
 
 	// Create the new Role entry
 	create := entity.RoleUserPermission{
-		ID: req.ID,
+		RoleUserID:   req.RoleUserID,
+		PermissionID: req.PermissionID,
 	}
 
 	// Save the new Role to the database
@@ -19,7 +20,8 @@ func (r *RoleUserPermissionRepository) Create(req dto.RoleUserPermissionRequest)
 
 	// Build the response for the created Role
 	response := dto.RoleUserPermissionResponse{
-		ID: create.ID,
+		RoleUserID:   create.RoleUserID,
+		PermissionID: create.PermissionID,
 	}
 
 	return response, nil

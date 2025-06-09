@@ -20,6 +20,9 @@ func (s *roleuserpermissionService) Create(req dto.RoleUserPermissionRequest) (d
 
 	response := dto.RoleUserPermissionResponse{
 		RoleUserID: created.RoleUserID,
+		UserID:     created.UserID,
+		MerchantID: created.MerchantID,
+		CreatedBy:  created.CreatedBy,
 	}
 
 	return response, nil
