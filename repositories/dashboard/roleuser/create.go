@@ -8,7 +8,9 @@ import (
 func (r *RoleUserRepository) Create(req dto.RoleUserRequest) (dto.RoleUserResponse, error) {
 	// Create the new Role entry
 	create := entity.RoleUser{
-		RoleID: req.RoleID,
+		RoleID:       req.RoleID,
+		UserID:       req.UserID,
+		PermissionID: req.PermissionID,
 	}
 
 	// Save the new Role to the database
@@ -18,7 +20,9 @@ func (r *RoleUserRepository) Create(req dto.RoleUserRequest) (dto.RoleUserRespon
 
 	// Build the response for the created Role
 	response := dto.RoleUserResponse{
-		RoleID: req.RoleID,
+		RoleID:       create.RoleID,
+		UserID:       req.UserID,
+		PermissionID: req.PermissionID,
 	}
 
 	return response, nil
