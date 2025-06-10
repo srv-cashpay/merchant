@@ -9,6 +9,7 @@ type PaymentMethodRequest struct {
 	UserID        string    `json:"user_id"`
 	MerchantID    string    `json:"merchant_id"`
 	PaymentMethod string    `json:"payment_method"`
+	PaymentLabel  string    `json:"payment_label"`
 	Status        int       `json:"status"`
 	FileName      string    `json:"file_name"`
 	FilePath      string    `json:"file_path"`
@@ -23,6 +24,7 @@ type PaymentMethodResponse struct {
 	UserID        string           `json:"user_id"`
 	MerchantID    string           `json:"merchant_id"`
 	PaymentMethod string           `json:"payment_method"`
+	PaymentLabel  string           `json:"payment_label"`
 	Image         *UploadedPayment `json:"image"` // tambahkan ini
 	Status        int              `json:"status"`
 	CreatedBy     string           `json:"created_by"`
@@ -33,7 +35,7 @@ type PaymentMethodResponse struct {
 
 type UploadedPayment struct {
 	ID        uint   `json:"id"`
-	PaymentID uint   `json:"payment_id"` // relasi ke PaymentMethod.ID
+	PaymentID uint   `json:"payment_id"`
 	FileName  string `json:"file_name"`
 	FilePath  string `json:"file_path"`
 }
@@ -43,6 +45,7 @@ type PaymentMethodUpdateRequest struct {
 	UserID        string    `json:"user_id"`
 	MerchantID    string    `json:"merchant_id"`
 	PaymentMethod string    `json:"payment_method"`
+	PaymentLabel  string    `json:"payment_label"`
 	Status        int       `json:"status"`
 	CreatedBy     string    `json:"created_by"`
 	UpdatedBy     string    `json:"updated_by"`
@@ -55,6 +58,7 @@ type PaymentMethodUpdateResponse struct {
 	UserID        string    `json:"user_id"`
 	MerchantID    string    `json:"merchant_id"`
 	PaymentMethod string    `json:"payment_method"`
+	PaymentLabel  string    `json:"payment_label"`
 	Status        int       `json:"status"`
 	CreatedBy     string    `json:"created_by"`
 	UpdatedBy     string    `json:"updated_by"`
