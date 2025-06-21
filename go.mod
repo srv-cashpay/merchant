@@ -11,7 +11,7 @@ require (
 	github.com/srv-cashpay/auth v0.0.0-20250420081851-2a728276c864
 	github.com/srv-cashpay/middlewares v0.0.0-20250120090519-4aa5ca3d5cac
 	github.com/srv-cashpay/pos v0.0.0-20250317074838-1b049d295205
-	github.com/srv-cashpay/product v0.0.0-20250222060502-e322c7544bae
+	github.com/srv-cashpay/product v0.0.0-20250621021344-3c8065889ffe
 	github.com/srv-cashpay/util v0.0.0-20250421062020-671f81a9b5f4
 	gorm.io/driver/postgres v1.5.9
 )
