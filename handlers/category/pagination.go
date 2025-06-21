@@ -6,7 +6,7 @@ import (
 	res "github.com/srv-cashpay/util/s/response"
 )
 
-func (b *domainHandler) Get(c echo.Context) error {
+func (b *domainHandler) Pagination(c echo.Context) error {
 	paginationDTO := helpers.GeneratePaginationRequest(c)
 
 	userid, ok := c.Get("UserId").(string)
@@ -25,7 +25,7 @@ func (b *domainHandler) Get(c echo.Context) error {
 		return c.JSON(400, "Invalid request")
 	}
 
-	users := b.serviceCategory.Get(c, paginationDTO)
+	users := b.serviceCategory.Pagination(c, paginationDTO)
 
 	return c.JSON(200, users)
 }

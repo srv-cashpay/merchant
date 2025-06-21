@@ -374,7 +374,7 @@ func New() *echo.Echo {
 	category := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
 	{
 		category.POST("/category/create", categoryH.Create)
-		category.GET("/category/pagination", categoryH.Get)
+		category.GET("/category/pagination", categoryH.Pagination)
 		category.GET("/category/:id", categoryH.GetById)
 		category.PUT("/category/update/:id", categoryH.Update)
 		category.DELETE("/category/:id", categoryH.Delete)

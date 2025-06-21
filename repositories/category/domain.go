@@ -11,7 +11,7 @@ type DomainRepository interface {
 	Create(req dto.CategoryRequest) (dto.CategoryResponse, error)
 	Delete(req dto.DeleteRequest) (dto.DeleteResponse, error)
 	BulkDelete(req dto.BulkDeleteRequest) (int, error)
-	Get(req *dto.Pagination) (RepositoryResult, int)
+	Pagination(req *dto.Pagination) (RepositoryResult, int)
 	GetById(req dto.GetByIdRequest) (*dto.CategoryResponse, error)
 	Update(req dto.CategoryUpdateRequest) (dto.CategoryUpdateResponse, error)
 	CheckMerchantDetail(merchantID string, merchantDetail *entity.MerchantDetail) error

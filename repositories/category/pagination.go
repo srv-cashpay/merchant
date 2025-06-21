@@ -10,7 +10,7 @@ import (
 	"github.com/srv-cashpay/merchant/helpers"
 )
 
-func (r *categoryRepository) Get(req *dto.Pagination) (RepositoryResult, int) {
+func (r *categoryRepository) Pagination(req *dto.Pagination) (RepositoryResult, int) {
 	var products []entity.Category
 
 	var totalRows int64

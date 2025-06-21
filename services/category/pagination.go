@@ -7,12 +7,12 @@ import (
 	dto "github.com/srv-cashpay/merchant/dto"
 )
 
-func (s *categoryService) Get(context echo.Context, req *dto.Pagination) dto.Response {
+func (s *categoryService) Pagination(context echo.Context, req *dto.Pagination) dto.Response {
 	if req.Page < 1 {
 		req.Page = 1
 	}
 
-	operationResult, totalPages := s.Repo.Get(req)
+	operationResult, totalPages := s.Repo.Pagination(req)
 
 	// Set page 1-based untuk pagination link
 	urlPath := context.Request().URL.Path
