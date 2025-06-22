@@ -12,7 +12,7 @@ func (b *productRepository) Update(req dto.ProductUpdateRequest) (dto.ProductUpd
 		Stock:        req.Stock,
 		MinimalStock: req.MinimalStock,
 		Price:        req.Price,
-		Status:       req.Status, // Pastikan status boolean diterima dengan benar
+		Status:       req.Status,
 		UpdatedBy:    req.UpdatedBy,
 		UserID:       req.UserID,
 		Description:  req.Description,

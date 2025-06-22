@@ -33,20 +33,6 @@ func (r *productRepository) Get(req *dto.Pagination) (RepositoryResult, int) {
 			action := value.Action
 			query := value.Query
 
-			// khusus pencarian berdasarkan category_name
-			if column == "category.category_name" {
-				find = find.Joins("JOIN categories ON categories.id = products.category_id")
-				switch action {
-				case "equals":
-					find = find.Where("categories.category_name = ?", query)
-				case "contains":
-					find = find.Where("categories.category_name LIKE ?", "%"+query+"%")
-				case "in":
-					find = find.Where("categories.category_name IN (?)", strings.Split(query, ","))
-				}
-				continue
-			}
-
 			switch action {
 			case "equals":
 				find = find.Where(fmt.Sprintf("%s = ?", column), query)

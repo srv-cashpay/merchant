@@ -8,6 +8,7 @@ import (
 type ProductRequest struct {
 	ID           string `json:"id"`
 	UserID       string `json:"user_id"`
+	Barcode      string `json:"barcode"`
 	MerchantID   string `json:"merchant_id"`
 	MerkID       string `json:"merk_id"`
 	CategoryID   string `json:"category_id"`
@@ -24,6 +25,7 @@ type ProductResponse struct {
 	ID           string    `json:"id"`
 	UserID       string    `json:"user_id"`
 	MerchantID   string    `json:"merchant_id"`
+	Barcode      string    `json:"barcode"`
 	MerkID       string    `json:"merk_id"`
 	CategoryID   string    `json:"category_id"`
 	ProductName  string    `json:"product_name"`
@@ -63,6 +65,7 @@ type ProductBulkDeleteResponse struct {
 
 type ProductUpdateRequest struct {
 	ID           string `json:"id"`
+	Barcode      string `json:"barcode"`
 	ProductName  string `json:"product_name"`
 	Stock        int    `json:"stock"`
 	MinimalStock int    `json:"minimal_stock"`
@@ -100,6 +103,7 @@ type GetProductUploadResponse struct {
 
 type ProductUpdateResponse struct {
 	ID           string `json:"id"`
+	Barcode      string `json:"barcode"`
 	ProductName  string `json:"product_name"`
 	Stock        int    `json:"stock"`
 	MinimalStock int    `json:"minimal_stock"`
