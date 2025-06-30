@@ -10,6 +10,7 @@ type GetDashboardRequest struct {
 	ID                    string `param:"id" validate:"required"`
 	MerchantID            string `json:"merchant_id"`
 	CreatedBy             string `json:"created_by"`
+	TotalWebOrder         int64  `json:"total_order_web"`
 	TotalProductsActive   int64  `json:"total_products_active"`
 	TotalProductsInactive int64  `json:"total_products_inactive"`
 	TotalPrice            int    `json:"total_price"`
@@ -18,6 +19,7 @@ type GetDashboardRequest struct {
 }
 
 type GetDashboardResponse struct {
+	TotalWebOrder         int64               `json:"total_web_order"`
 	TotalProductsActive   int64               `json:"total_products_active"`
 	TotalProductsInactive int64               `json:"total_products_inactive"`
 	TotalSales            int64               `json:"total_sales"`
