@@ -24,11 +24,13 @@ func (r *dashboardRepository) Get(req dto.GetDashboardRequest) (dto.GetDashboard
 	response.IsSubscribed = isSubscribed
 
 	// Hitung total produk aktif
+	var totalWebOrder int64
 	if err := r.DB.Model(&entity.Order{}).
 		Where("merchant_id = ? ", req.MerchantID).
-		Count(&req.TotalWebOrder).Error; err != nil {
+		Count(&totalWebOrder).Error; err != nil {
 		return dto.GetDashboardResponse{}, err
 	}
+	response.TotalWebOrder = totalWebOrder
 	// Hitung total produk aktif
 	if err := r.DB.Model(&entityProduct.Product{}).
 		Where("merchant_id = ? AND status = ?", req.MerchantID, 1).
