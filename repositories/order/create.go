@@ -18,6 +18,7 @@ func (r *orderRepository) Create(req dto.OrderRequest) (dto.OrderResponse, error
 		MerchantID: req.MerchantID,
 		UserID:     req.UserID,
 		CreatedBy:  req.CreatedBy,
+		Product:    req.ProductJSON, // simpan JSON string
 	}
 
 	if err := r.DB.Save(&create).Error; err != nil {
@@ -30,6 +31,7 @@ func (r *orderRepository) Create(req dto.OrderRequest) (dto.OrderResponse, error
 		MerchantID: req.MerchantID,
 		UserID:     req.UserID,
 		CreatedBy:  req.CreatedBy,
+		Product:    req.Product, // simpan JSON string
 	}
 
 	return response, nil
