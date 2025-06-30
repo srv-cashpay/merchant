@@ -7,6 +7,10 @@ import (
 	r_pos "github.com/srv-cashpay/merchant/repositories/pos"
 	s_pos "github.com/srv-cashpay/merchant/services/pos"
 
+	h_order "github.com/srv-cashpay/merchant/handlers/order"
+	r_order "github.com/srv-cashpay/merchant/repositories/order"
+	s_order "github.com/srv-cashpay/merchant/services/order"
+
 	h_merk "github.com/srv-cashpay/merchant/handlers/merk"
 	r_merk "github.com/srv-cashpay/merchant/repositories/merk"
 	s_merk "github.com/srv-cashpay/merchant/services/merk"
@@ -134,6 +138,10 @@ var (
 	merkR = r_merk.NewMerkRepository(DB)
 	merkS = s_merk.NewMerkService(merkR, JWT)
 	merkH = h_merk.NewMerkHandler(merkS)
+
+	orderR = r_order.NewOrderRepository(DB)
+	orderS = s_order.NewOrderService(orderR, JWT)
+	orderH = h_order.NewOrderHandler(orderS)
 
 	permissionR = r_permission.NewPermissionRepository(DB)
 	permissionS = s_permission.NewPermissionService(permissionR, JWT)
@@ -265,6 +273,16 @@ func New() *echo.Echo {
 		merk.PUT("/merk/update/:id", merkH.Update)
 		merk.DELETE("/merk/:id", merkH.Delete)
 		merk.DELETE("/merk/bulk-delete", merkH.BulkDelete)
+	}
+
+	order := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
+	{
+		order.POST("/order/create", orderH.Create)
+		order.GET("/order/pagination", orderH.Get)
+		order.GET("/order/:id", orderH.GetById)
+		order.PUT("/order/update/:id", orderH.Update)
+		order.DELETE("/order/:id", orderH.Delete)
+		order.DELETE("/order/bulk-delete", orderH.BulkDelete)
 	}
 
 	pin := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
