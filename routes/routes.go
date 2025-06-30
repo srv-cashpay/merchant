@@ -215,6 +215,7 @@ var (
 func New() *echo.Echo {
 
 	e := echo.New()
+	e.POST("/menu/order", orderH.Order)
 	sub := e.Group("sub", middlewares.AuthorizeJWT(JWT))
 	{
 		sub.GET("/transaction/:order_id/status", subscribeH.CheckTransactionStatus)

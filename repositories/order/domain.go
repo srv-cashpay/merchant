@@ -9,6 +9,7 @@ import (
 
 type DomainRepository interface {
 	Create(req dto.OrderRequest) (dto.OrderResponse, error)
+	Order(req dto.OrderRequest) (dto.OrderResponse, error)
 	Delete(req dto.DeleteOrderRequest) (dto.DeleteResponse, error)
 	BulkDelete(req dto.BulkDeleteRequest) (int, error)
 	Get(req *dto.Pagination) (RepositoryResult, int)

@@ -10,6 +10,7 @@ import (
 
 type OrderService interface {
 	Create(req dto.OrderRequest) (dto.OrderResponse, error)
+	Order(req dto.OrderRequest) (dto.OrderResponse, error)
 	BulkDelete(req dto.BulkDeleteRequest) (dto.BulkDeleteResponse, error)
 	Delete(req dto.DeleteOrderRequest) (dto.DeleteOrderResponse, error)
 	Get(context echo.Context, req *dto.Pagination) dto.Response
