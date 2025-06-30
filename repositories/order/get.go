@@ -1,6 +1,7 @@
 package order
 
 import (
+	"encoding/json"
 	"fmt"
 	"math"
 	"strings"
@@ -11,7 +12,7 @@ import (
 )
 
 func (r *orderRepository) Get(req *dto.Pagination) (RepositoryResult, int) {
-	var products []entity.Order
+	var orders []entity.Order
 
 	var totalRows int64
 	totalPages, fromRow, toRow := 0, 0, 0
@@ -40,22 +41,22 @@ func (r *orderRepository) Get(req *dto.Pagination) (RepositoryResult, int) {
 		}
 	}
 
-	find = find.Find(&products)
+	find = find.Find(&orders)
 
 	// Periksa jika ada error saat pengambilan data
 	if errFind := find.Error; errFind != nil {
 		return RepositoryResult{Error: errFind}, totalPages
 	}
 
-	req.Rows = products
+	req.Rows = orders
 
 	// Hitung total data
 	if errCount := r.DB.Model(&entity.Order{}).Where("merchant_id = ?", req.MerchantID).Count(&totalRows).Error; errCount != nil {
 		return RepositoryResult{Error: errCount}, totalPages
 	}
 
-	for i := range products {
-		products[i].OrderName = helpers.TruncateString(products[i].OrderName, 47)
+	for i := range orders {
+		orders[i].OrderName = helpers.TruncateString(orders[i].OrderName, 47)
 	}
 
 	req.TotalRows = int(totalRows)
@@ -78,6 +79,18 @@ func (r *orderRepository) Get(req *dto.Pagination) (RepositoryResult, int) {
 	// Pastikan `toRow` tidak melebihi `totalRows`
 	if toRow > int(totalRows) {
 		toRow = int(totalRows)
+	}
+
+	// Enrich data: truncate dan parse product
+	for i := range orders {
+		orders[i].OrderName = helpers.TruncateString(orders[i].OrderName, 47)
+
+		var productParsed []entity.ProductItem
+		if err := json.Unmarshal([]byte(orders[i].Product), &productParsed); err == nil {
+			orders[i].ProductParsed = productParsed
+		} else {
+			orders[i].ProductParsed = []entity.ProductItem{}
+		}
 	}
 
 	// Set hasil akhir
