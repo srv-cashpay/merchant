@@ -26,7 +26,7 @@ func (r *discountRepository) Create(req dto.DiscountRequest) (dto.DiscountRespon
 	}
 
 	// Generate Discount ID with prefix and auto increment value
-	prefix := "p="
+	prefix := "d="
 	secureID, err := generateDiscountID(prefix, autoIncrement)
 	if err != nil {
 		return dto.DiscountResponse{}, err
