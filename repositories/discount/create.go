@@ -67,12 +67,14 @@ func (r *discountRepository) Create(req dto.DiscountRequest) (dto.DiscountRespon
 
 	// Build the response for the created discount
 	response := dto.DiscountResponse{
-		ID:          create.ID,
-		UserID:      create.UserID,
-		MerchantID:  create.MerchantID,
-		Description: create.Description,
-		Status:      statusString,
-		CreatedBy:   create.CreatedBy,
+		ID:                 create.ID,
+		UserID:             create.UserID,
+		DiscountName:       create.DiscountName,
+		DiscountPercentage: create.DiscountPercentage,
+		MerchantID:         create.MerchantID,
+		Description:        create.Description,
+		Status:             statusString,
+		CreatedBy:          create.CreatedBy,
 	}
 
 	return response, nil
