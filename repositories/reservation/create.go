@@ -9,20 +9,8 @@ import (
 	"github.com/srv-cashpay/merchant/entity"
 )
 
-func (r *reservationRepository) Create(req dto.ReservationRequest) (dto.ReservationResponse, error) {
-	// Insert or update the auto_increment value based on merchant_id
-	var autoIncrement int
-	err := r.DB.Raw(`
-		INSERT INTO merchant_auto_increments (merchant_id, next_increment)
-		VALUES (?, 1)
-		ON CONFLICT (merchant_id) DO UPDATE
-		SET next_increment = merchant_auto_increments.next_increment + 1
-		RETURNING next_increment - 1;
-	`, req.MerchantID).Scan(&autoIncrement).Error
+func (r *reservationRepository) Create(req entity.Reservation) (dto.ReservationResponse, error) {
 
-	if err != nil {
-		return dto.ReservationResponse{}, err
-	}
 	productsJSON, err := json.Marshal(req.Table)
 	if err != nil {
 		return dto.ReservationResponse{}, fmt.Errorf("gagal mengonversi produk ke JSON: %w", err)

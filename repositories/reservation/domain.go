@@ -2,12 +2,13 @@ package reservation
 
 import (
 	dto "github.com/srv-cashpay/merchant/dto"
+	"github.com/srv-cashpay/merchant/entity"
 
 	"gorm.io/gorm"
 )
 
 type DomainRepository interface {
-	Create(req dto.ReservationRequest) (dto.ReservationResponse, error)
+	Create(req entity.Reservation) (dto.ReservationResponse, error)
 	Get(req *dto.Pagination) (RepositoryResult, int)
 	GetById(req dto.GetReservationByIdRequest) (*dto.ReservationResponse, error)
 	Delete(req dto.DeleteReservationRequest) (dto.DeleteResponse, error)
