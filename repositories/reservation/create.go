@@ -44,7 +44,7 @@ func (r *reservationRepository) Create(req dto.ReservationRequest) (dto.Reservat
 	if err := r.DB.Save(&create).Error; err != nil {
 		return dto.ReservationResponse{}, err
 	}
-	var responseReservation []dto.TableResponse
+	var responseReservation []dto.Table
 	if err := json.Unmarshal(productsJSON, &responseReservation); err != nil {
 		return dto.ReservationResponse{}, fmt.Errorf("gagal mengurai JSON produk untuk response: %w", err)
 	}
