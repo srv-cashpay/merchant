@@ -55,7 +55,9 @@ func (r *reservationRepository) Get(req *dto.Pagination) (RepositoryResult, int)
 	}
 
 	for i := range reservations {
-		reservations[i].Table = helpers.TruncateString(reservations[i].Table, 47)
+		tableStr := string(reservations[i].Table)
+		truncated := helpers.TruncateString(tableStr, 47)
+		reservations[i].Table = []byte(truncated)
 	}
 
 	req.TotalRows = int(totalRows)
