@@ -11,16 +11,11 @@ import (
 
 func (r *reservationRepository) Create(req entity.Reservation) (dto.ReservationResponse, error) {
 
-	productsJSON, err := json.Marshal(req.Table)
-	if err != nil {
-		return dto.ReservationResponse{}, fmt.Errorf("gagal mengonversi produk ke JSON: %w", err)
-	}
-	// Create the new reservation entry
 	create := entity.Reservation{
 		ID:         req.ID,
 		UserID:     req.UserID,
 		MerchantID: req.MerchantID,
-		Table:      productsJSON,
+		Table:      req.Table,
 		CreatedBy:  req.CreatedBy,
 		Name:       req.Name,
 		Whatsapp:   req.Whatsapp,
@@ -32,8 +27,9 @@ func (r *reservationRepository) Create(req entity.Reservation) (dto.ReservationR
 	if err := r.DB.Save(&create).Error; err != nil {
 		return dto.ReservationResponse{}, err
 	}
+	// Unmarshal dari create.Table (bukan dari hasil marshal ulang)
 	var responseReservation []dto.Table
-	if err := json.Unmarshal(productsJSON, &responseReservation); err != nil {
+	if err := json.Unmarshal(create.Table, &responseReservation); err != nil {
 		return dto.ReservationResponse{}, fmt.Errorf("gagal mengurai JSON produk untuk response: %w", err)
 	}
 	// Build the response for the created reservation

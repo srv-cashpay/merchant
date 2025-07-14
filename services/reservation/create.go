@@ -24,33 +24,12 @@ func (s *reservationService) Create(req dto.ReservationRequest) (dto.Reservation
 		Time:        req.Time,
 		Description: req.Description,
 		UserID:      req.UserID,
-		Table:       tableJSON,
 		MerchantID:  req.MerchantID,
 		CreatedBy:   req.CreatedBy,
+		Table:       tableJSON, // ✅ langsung kirim []byte ke repo
 	}
 
-	created, err := s.Repo.Create(create)
-	if err != nil {
-		return dto.ReservationResponse{}, err
-	}
-	var responseReservation []dto.Table
-	if err := json.Unmarshal(tableJSON, &responseReservation); err != nil {
-		return dto.ReservationResponse{}, fmt.Errorf("gagal mengurai JSON produk untuk response: %w", err)
-	}
-	response := dto.ReservationResponse{
-		ID:          created.ID,
-		UserID:      created.UserID,
-		Name:        created.Name,
-		Whatsapp:    created.Whatsapp,
-		Date:        created.Date,
-		Time:        created.Time,
-		Description: created.Description,
-		MerchantID:  created.MerchantID,
-		CreatedBy:   created.CreatedBy,
-		Table:       responseReservation,
-	}
-
-	return response, nil
+	return s.Repo.Create(create) // ✅ biar repo tangani response
 }
 
 func GenerateSecureID() (string, error) {
