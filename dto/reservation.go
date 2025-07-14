@@ -5,8 +5,9 @@ import (
 )
 
 type ReservationRequest struct {
-	ID          string `json:"id"`
+	ID          uint   `json:"id"`
 	UserID      string `json:"user_id"`
+	MerchantID  string `json:"merchant_id"`
 	Reservation string `json:"resevation"`
 	Name        string
 	Whatsapp    string
@@ -21,12 +22,53 @@ type ReservationRequest struct {
 }
 
 type ReservationResponse struct {
-	ID          string    `json:"id"`
+	ID          uint      `json:"id"`
 	UserID      string    `json:"user_id"`
+	MerchantID  string    `json:"merchant_id"`
 	Reservation string    `json:"resevation"`
 	Description string    `json:"description"`
 	CreatedBy   string    `json:"created_by"`
 	UpdatedBy   string    `json:"updated_by"`
 	DeletedBy   string    `json:"deleted_by"`
 	CreatedAt   time.Time `json:"created_at"`
+}
+
+type UpdateReservationRequest struct {
+	ID          uint      `json:"id"`
+	UserID      string    `json:"user_id"`
+	MerchantID  string    `json:"merchant_id"`
+	Table       string    `json:"table"`
+	Floor       string    `json:"floor"`
+	Description string    `json:"description"`
+	CreatedBy   string    `json:"created_by"`
+	UpdatedBy   string    `json:"updated_by"`
+	DeletedBy   string    `json:"deleted_by"`
+	CreatedAt   time.Time `json:"created_at"`
+}
+
+type UpdateReservationResponse struct {
+	ID          uint      `json:"id"`
+	UserID      string    `json:"user_id"`
+	MerchantID  string    `json:"merchant_id"`
+	Table       string    `json:"table"`
+	Floor       string    `json:"floor"`
+	Description string    `json:"description"`
+	CreatedBy   string    `json:"created_by"`
+	UpdatedBy   string    `json:"updated_by"`
+	DeletedBy   string    `json:"deleted_by"`
+	CreatedAt   time.Time `json:"created_at"`
+}
+
+type DeleteReservationRequest struct {
+	ID        uint   `param:"id" validate:"required"`
+	DeletedBy string `json:"deleted_by"`
+}
+
+type DeleteReservationResponse struct {
+	ID        uint   `param:"id" validate:"required"`
+	DeletedBy string `json:"deleted_by"`
+}
+
+type GetReservationByIdRequest struct {
+	ID uint `param:"id" validate:"required"`
 }

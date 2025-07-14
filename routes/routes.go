@@ -99,6 +99,10 @@ import (
 	r_table "github.com/srv-cashpay/merchant/repositories/table"
 	s_table "github.com/srv-cashpay/merchant/services/table"
 
+	h_reservation "github.com/srv-cashpay/merchant/handlers/reservation"
+	r_reservation "github.com/srv-cashpay/merchant/repositories/reservation"
+	s_reservation "github.com/srv-cashpay/merchant/services/reservation"
+
 	h_pin "github.com/srv-cashpay/merchant/handlers/pin"
 	r_pin "github.com/srv-cashpay/merchant/repositories/pin"
 	s_pin "github.com/srv-cashpay/merchant/services/pin"
@@ -194,6 +198,10 @@ var (
 	tableR = r_table.NewTableRepository(DB)
 	tableS = s_table.NewTableService(tableR, JWT)
 	tableH = h_table.NewTableHandler(tableS)
+
+	reservationR = r_reservation.NewReservationRepository(DB)
+	reservationS = s_reservation.NewReservationService(reservationR, JWT)
+	reservationH = h_reservation.NewReservationHandler(reservationS)
 
 	userR = r_user.NewUserRepository(DB)
 	userS = s_user.NewUserService(userR, JWT)
@@ -351,6 +359,14 @@ func New() *echo.Echo {
 		table.PUT("/table/update/:id", tableH.Update)
 		table.DELETE("/table/:id", tableH.Delete)
 		table.DELETE("/table/bulk-delete", tableH.BulkDelete)
+	}
+	reservation := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
+	{
+		reservation.POST("/reservation/create", reservationH.Create)
+		reservation.GET("/reservation/pagination", reservationH.Get)
+		reservation.PUT("/reservation/update/:id", reservationH.Update)
+		reservation.DELETE("/reservation/:id", reservationH.Delete)
+		reservation.DELETE("/reservation/bulk-delete", reservationH.BulkDelete)
 	}
 
 	paymentmethod := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
