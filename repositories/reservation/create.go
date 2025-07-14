@@ -2,6 +2,7 @@ package reservation
 
 import (
 	"crypto/rand"
+	"encoding/json"
 	"fmt"
 
 	dto "github.com/srv-cashpay/merchant/dto"
@@ -22,12 +23,16 @@ func (r *reservationRepository) Create(req dto.ReservationRequest) (dto.Reservat
 	if err != nil {
 		return dto.ReservationResponse{}, err
 	}
-
+	productsJSON, err := json.Marshal(req.Table)
+	if err != nil {
+		return dto.ReservationResponse{}, fmt.Errorf("gagal mengonversi produk ke JSON: %w", err)
+	}
 	// Create the new reservation entry
 	create := entity.Reservation{
 		ID:         req.ID,
 		UserID:     req.UserID,
 		MerchantID: req.MerchantID,
+		Table:      productsJSON,
 		CreatedBy:  req.CreatedBy,
 		Name:       req.Name,
 		Whatsapp:   req.Whatsapp,
@@ -39,7 +44,10 @@ func (r *reservationRepository) Create(req dto.ReservationRequest) (dto.Reservat
 	if err := r.DB.Save(&create).Error; err != nil {
 		return dto.ReservationResponse{}, err
 	}
-
+	var responseReservation []dto.TableResponse
+	if err := json.Unmarshal(productsJSON, &responseReservation); err != nil {
+		return dto.ReservationResponse{}, fmt.Errorf("gagal mengurai JSON produk untuk response: %w", err)
+	}
 	// Build the response for the created reservation
 	response := dto.ReservationResponse{
 		ID:         create.ID,
@@ -50,6 +58,7 @@ func (r *reservationRepository) Create(req dto.ReservationRequest) (dto.Reservat
 		Whatsapp:   create.Whatsapp,
 		Date:       create.Date,
 		Time:       create.Time,
+		Table:      responseReservation,
 	}
 
 	return response, nil
