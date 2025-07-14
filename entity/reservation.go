@@ -11,6 +11,10 @@ type Reservation struct {
 	UserID     string         `gorm:"type:varchar(36);index" json:"user_id"`
 	MerchantID string         `gorm:"type:varchar(36);index" json:"merchant_id"`
 	Table      string         `gorm:"order_id,omitempty" json:"order_id"`
+	Name       string         `gorm:"name,omitempty" json:"name"`
+	Whatsapp   string         `gorm:"whatsapp,omitempty" json:"whatsapp"`
+	Date       string         `gorm:"date,omitempty" json:"date"`
+	Time       string         `gorm:"time,omitempty" json:"time"`
 	Status     string         `gorm:"status" json:"status"`
 	CreatedBy  string         `gorm:"created_by" json:"created_by"`
 	DeletedBy  string         `gorm:"deleted_by" json:"deleted_by"`
