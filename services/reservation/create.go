@@ -47,6 +47,7 @@ func (s *reservationService) Create(req dto.ReservationRequest) (dto.Reservation
 		Description: created.Description,
 		MerchantID:  created.MerchantID,
 		CreatedBy:   created.CreatedBy,
+		Table:       responseReservation,
 	}
 
 	return response, nil
