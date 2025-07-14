@@ -15,7 +15,10 @@ func (b *reservationRepository) GetById(req dto.GetReservationByIdRequest) (*dto
 	}
 
 	response := &dto.ReservationResponse{
-		Reservation: tr.Table,
+		Name:     tr.Name,
+		Whatsapp: tr.Whatsapp,
+		Date:     tr.Date,
+		Time:     tr.Time,
 	}
 
 	return response, nil

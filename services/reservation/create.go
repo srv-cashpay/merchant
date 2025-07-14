@@ -12,7 +12,10 @@ import (
 func (s *reservationService) Create(req dto.ReservationRequest) (dto.ReservationResponse, error) {
 
 	create := dto.ReservationRequest{
-		Reservation: req.Reservation,
+		Name:        req.Name,
+		Whatsapp:    req.Whatsapp,
+		Date:        req.Date,
+		Time:        req.Time,
 		Description: req.Description,
 		UserID:      req.UserID,
 		MerchantID:  req.MerchantID,
@@ -27,7 +30,10 @@ func (s *reservationService) Create(req dto.ReservationRequest) (dto.Reservation
 	response := dto.ReservationResponse{
 		ID:          created.ID,
 		UserID:      created.UserID,
-		Reservation: created.Reservation,
+		Name:        created.Name,
+		Whatsapp:    created.Whatsapp,
+		Date:        created.Date,
+		Time:        created.Time,
 		Description: created.Description,
 		MerchantID:  created.MerchantID,
 		CreatedBy:   created.CreatedBy,
