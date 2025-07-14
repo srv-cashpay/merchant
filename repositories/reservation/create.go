@@ -29,6 +29,10 @@ func (r *reservationRepository) Create(req dto.ReservationRequest) (dto.Reservat
 		UserID:     req.UserID,
 		MerchantID: req.MerchantID,
 		CreatedBy:  req.CreatedBy,
+		Name:       req.Name,
+		Whatsapp:   req.Whatsapp,
+		Date:       req.Date,
+		Time:       req.Time,
 	}
 
 	// Save the new reservation to the database
@@ -42,6 +46,10 @@ func (r *reservationRepository) Create(req dto.ReservationRequest) (dto.Reservat
 		UserID:     create.UserID,
 		MerchantID: create.MerchantID,
 		CreatedBy:  create.CreatedBy,
+		Name:       create.Name,
+		Whatsapp:   create.Whatsapp,
+		Date:       create.Date,
+		Time:       create.Time,
 	}
 
 	return response, nil
