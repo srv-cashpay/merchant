@@ -14,6 +14,7 @@ func (s *tableService) Create(req dto.TableRequest) (dto.TableResponse, error) {
 	create := dto.TableRequest{
 		Table:       req.Table,
 		Floor:       req.Floor,
+		Status:      req.Status,
 		Description: req.Description,
 		UserID:      req.UserID,
 		MerchantID:  req.MerchantID,

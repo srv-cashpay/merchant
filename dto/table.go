@@ -10,6 +10,7 @@ type TableRequest struct {
 	MerchantID  string    `json:"merchant_id"`
 	Table       string    `json:"table"`
 	Floor       string    `json:"floor"`
+	Status      int       `json:"status"`
 	Description string    `json:"description"`
 	CreatedBy   string    `json:"created_by"`
 	UpdatedBy   string    `json:"updated_by"`
@@ -23,6 +24,7 @@ type TableResponse struct {
 	MerchantID  string    `json:"merchant_id"`
 	Table       string    `json:"table"`
 	Floor       string    `json:"floor"`
+	Status      int       `json:"status"`
 	Description string    `json:"description"`
 	CreatedBy   string    `json:"created_by"`
 	UpdatedBy   string    `json:"updated_by"`
@@ -36,6 +38,7 @@ type TableUpdateRequest struct {
 	MerchantID  string    `json:"merchant_id"`
 	Table       string    `json:"table"`
 	Floor       string    `json:"floor"`
+	Status      int       `json:"status"`
 	Description string    `json:"description"`
 	CreatedBy   string    `json:"created_by"`
 	UpdatedBy   string    `json:"updated_by"`
@@ -49,6 +52,7 @@ type TableUpdateResponse struct {
 	MerchantID  string    `json:"merchant_id"`
 	Table       string    `json:"table"`
 	Floor       string    `json:"floor"`
+	Status      int       `json:"status"`
 	Description string    `json:"description"`
 	CreatedBy   string    `json:"created_by"`
 	UpdatedBy   string    `json:"updated_by"`

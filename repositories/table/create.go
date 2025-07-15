@@ -29,6 +29,7 @@ func (r *tableRepository) Create(req dto.TableRequest) (dto.TableResponse, error
 		Table:      req.Table,
 		Floor:      req.Floor,
 		UserID:     req.UserID,
+		Status:     req.Status,
 		MerchantID: req.MerchantID,
 		CreatedBy:  req.CreatedBy,
 	}
@@ -43,6 +44,9 @@ func (r *tableRepository) Create(req dto.TableRequest) (dto.TableResponse, error
 		ID:         create.ID,
 		UserID:     create.UserID,
 		MerchantID: create.MerchantID,
+		Table:      create.Table,
+		Floor:      create.Floor,
+		Status:     create.Status,
 		CreatedBy:  create.CreatedBy,
 	}
 
