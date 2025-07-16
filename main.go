@@ -3,13 +3,25 @@ package main
 import (
 	"log"
 
+	"github.com/olivere/elastic/v7"
 	"github.com/srv-cashpay/merchant/routes"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
 
+var Client *elastic.Client
+
 func main() {
+	var error error
+
+	Client, error = elastic.NewClient(
+		elastic.SetURL("http://elasticsearch:9200"), // jika pakai docker service
+		elastic.SetSniff(false),
+	)
+	if error != nil {
+		log.Fatalf("Failed to create Elastic client: %v", error)
+	}
 
 	e := routes.New()
 
