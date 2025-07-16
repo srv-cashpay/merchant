@@ -18,6 +18,22 @@ services:
       - shared_network
     env_file:
       - .env
+    depends_on:
+      - elasticsearch
+
+  elasticsearch:
+    container_name: elasticsearch
+    image: 'docker.elastic.co/elasticsearch/elasticsearch:7.13.3'
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    ports:
+      - 9400:9200
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    networks:
+      - shared_network
 
 networks:
   shared_network:
