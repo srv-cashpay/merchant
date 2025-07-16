@@ -22,7 +22,7 @@ services:
       - elasticsearch
 
   elasticsearch:
-    container_name: elasticsearch
+    container_name: elasticsearchmerchant
     image: 'docker.elastic.co/elasticsearch/elasticsearch:7.13.3'
     environment:
       - discovery.type=single-node
