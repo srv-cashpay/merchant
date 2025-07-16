@@ -12,6 +12,7 @@ require (
 	github.com/srv-cashpay/middlewares v0.0.0-20250120090519-4aa5ca3d5cac
 	github.com/srv-cashpay/pos v0.0.0-20250317074838-1b049d295205
 	github.com/srv-cashpay/product v0.0.0-20250621091318-99f7db572a89
+	github.com/srv-cashpay/util v0.0.0-20250716045142-e2a4d4e90c00
 	gorm.io/driver/postgres v1.5.9
 )
 
@@ -32,7 +33,6 @@ require (
 	github.com/olivere/elastic/v7 v7.0.32 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
-	github.com/srv-cashpay/util v0.0.0-20250716035628-26935cfe41f7 // indirect
 	github.com/streadway/amqp v1.1.0 // indirect
 	github.com/teris-io/shortid v0.0.0-20220617161101-71ec9f2aa569 // indirect
 	golang.org/x/sync v0.13.0 // indirect
