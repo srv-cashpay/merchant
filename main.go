@@ -12,7 +12,9 @@ import (
 
 func main() {
 	elasticsearch.Init()
-
+	if elasticsearch.Client == nil {
+		log.Fatal("Elasticsearch client is nil after Init()")
+	}
 	e := routes.New()
 
 	e.Use(middleware.CORS())
