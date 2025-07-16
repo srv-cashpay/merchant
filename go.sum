@@ -60,8 +60,8 @@ github.com/srv-cashpay/pos v0.0.0-20250317074838-1b049d295205 h1:qcUqlF3WYFwE+wx
 github.com/srv-cashpay/pos v0.0.0-20250317074838-1b049d295205/go.mod h1:MxxrcEMoa+jvdhzyHi4ae6boOq54qwyDeMA30E3ulUo=
 github.com/srv-cashpay/product v0.0.0-20250621091318-99f7db572a89 h1:B3Oa6DrKxcEE1+p8EZ9YAfMkxj8DZUk7/plHP0V9ob8=
 github.com/srv-cashpay/product v0.0.0-20250621091318-99f7db572a89/go.mod h1:PZv6D+Cwo2Hx8n5K+0O4k7zUGE/OB8hz0cLqkzcUaSQ=
-github.com/srv-cashpay/util v0.0.0-20250716045142-e2a4d4e90c00 h1:8itHCGKZVIBhA4NUi8VTEjOamgEoKuCv9UcPMpQP8eY=
-github.com/srv-cashpay/util v0.0.0-20250716045142-e2a4d4e90c00/go.mod h1:h4CTY9IihKNOx8RPh5EfTI+XZO1Fe5verKaOtIAvjX0=
+github.com/srv-cashpay/util v0.0.0-20250716050249-5aa90fd47e21 h1:gb+9PkHKWS/cD7VyU8k7HzKPegJzBd5KUdH6fcM01M8=
+github.com/srv-cashpay/util v0.0.0-20250716050249-5aa90fd47e21/go.mod h1:h4CTY9IihKNOx8RPh5EfTI+XZO1Fe5verKaOtIAvjX0=
 github.com/streadway/amqp v1.1.0 h1:py12iX8XSyI7aN/3dUT8DFIDJazNJsVJdxNVEpnQTZM=
 github.com/streadway/amqp v1.1.0/go.mod h1:WYSrTEYHOXHd0nwFeUXAe2G2hRnQT+deZJJf88uS9Bg=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=

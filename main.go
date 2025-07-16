@@ -2,35 +2,42 @@ package main
 
 import (
 	"log"
-
-	"github.com/srv-cashpay/merchant/routes"
+	"os"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"github.com/srv-cashpay/merchant/routes"
 	"github.com/srv-cashpay/util/s/elasticsearch"
 )
 
 func main() {
+	// Init Elasticsearch
 	elasticsearch.Init()
 	if elasticsearch.Client == nil {
-		log.Fatal("Elasticsearch client is nil after Init()")
+		log.Println("[ERROR] Elasticsearch client is nil after Init()")
+		os.Exit(1)
 	}
+	log.Println("[INFO] Elasticsearch initialized successfully")
+
+	// Inisialisasi Echo
 	e := routes.New()
 
-	e.Use(middleware.CORS())
+	// Middleware
+	e.Use(middleware.Logger())
+	e.Use(middleware.Recover())
+	e.Use(CORSMiddleware())
 
 	// Sertifikat Let's Encrypt
 	certFile := "/certs/fullchain.pem"
 	keyFile := "/certs/privkey.pem"
 
-	// Jalankan HTTPS langsung dari Echo
-	err := e.StartTLS(":2345", certFile, keyFile)
-	if err != nil {
+	// Jalankan HTTPS
+	if err := e.StartTLS(":2345", certFile, keyFile); err != nil {
 		log.Fatal("StartTLS error: ", err)
 	}
 }
 
-// CORSMiddleware ..
+// CORSMiddleware custom
 func CORSMiddleware() echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
@@ -42,7 +49,6 @@ func CORSMiddleware() echo.MiddlewareFunc {
 			if c.Request().Method == "OPTIONS" {
 				return c.NoContent(204)
 			}
-
 			return next(c)
 		}
 	}
