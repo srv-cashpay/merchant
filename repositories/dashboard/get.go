@@ -23,6 +23,12 @@ func (r *dashboardRepository) Get(req dto.GetDashboardRequest) (dto.GetDashboard
 	isSubscribed = count > 0
 	response.IsSubscribed = isSubscribed
 
+	var merchant entity.MerchantDetail
+	if err := r.DB.Where("id = ?", req.MerchantID).First(&merchant).Error; err != nil {
+		return response, err
+	}
+	response.MerchantName = merchant.MerchantName
+
 	// Hitung total produk aktif
 	var totalWebOrder int64
 	if err := r.DB.Model(&entity.Order{}).

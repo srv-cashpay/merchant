@@ -19,6 +19,7 @@ type GetDashboardRequest struct {
 }
 
 type GetDashboardResponse struct {
+	MerchantName          string              `json:"merchant_name"`
 	TotalWebOrder         int64               `json:"total_web_order"`
 	TotalProductsActive   int64               `json:"total_products_active"`
 	TotalProductsInactive int64               `json:"total_products_inactive"`
