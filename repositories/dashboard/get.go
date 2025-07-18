@@ -27,8 +27,12 @@ func (r *dashboardRepository) Get(req dto.GetDashboardRequest) (dto.GetDashboard
 	if err := r.DB.Where("id = ?", req.MerchantID).First(&merchant).Error; err != nil {
 		return response, err
 	}
-	response.MerchantName = merchant.MerchantName
 
+	merchantName := merchant.MerchantName
+	if len(merchantName) > 25 {
+		merchantName = merchantName[:25] + "..."
+	}
+	response.MerchantName = merchantName
 	// Hitung total produk aktif
 	var totalWebOrder int64
 	if err := r.DB.Model(&entity.Order{}).
