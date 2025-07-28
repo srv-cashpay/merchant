@@ -39,6 +39,6 @@ func (h *domainHandler) Create(c echo.Context) error {
 		return res.ErrorResponse(err).Send(c)
 	}
 
-	return res.SuccessResponse(resp).Send(c)
+	return res.SuccessResponseDeleteAccount(resp).Send(c)
 
 }
