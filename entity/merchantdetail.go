@@ -10,6 +10,7 @@ type MerchantDetail struct {
 	ID           string         `gorm:"primary_key" json:"id"`
 	UserID       string         `gorm:"type:varchar(36);index" json:"user_id"`
 	MerchantName string         `gorm:"type:varchar(50)" json:"merchant_name"`
+	IDNumber     string         `gorm:"type:varchar(16)" json:"id_number"`
 	Address      string         `gorm:"address" json:"address"`
 	Country      string         `gorm:"country" json:"country"`
 	City         string         `gorm:"city" json:"city"`

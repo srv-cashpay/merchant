@@ -13,6 +13,7 @@ func (b *merchantRepository) Update(req dto.UpdateMerchantRequest) (dto.UpdateMe
 	request := entity.MerchantDetail{
 		ID:           tr.ID,
 		MerchantName: req.MerchantName,
+		IDNumber:     req.IDNumber,
 		Description:  req.Description,
 		Address:      req.Address,
 		Country:      req.Country,
@@ -30,6 +31,7 @@ func (b *merchantRepository) Update(req dto.UpdateMerchantRequest) (dto.UpdateMe
 
 	err = b.DB.Where("ID = ?", req.ID).Updates(entity.MerchantDetail{
 		MerchantName: request.MerchantName,
+		IDNumber:     request.IDNumber,
 		Description:  request.Description,
 		Address:      request.Address,
 		Country:      request.Country,

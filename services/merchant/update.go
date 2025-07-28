@@ -8,6 +8,7 @@ func (b *merchantService) Update(req dto.UpdateMerchantRequest) (dto.UpdateMerch
 	request := dto.UpdateMerchantRequest{
 		ID:           req.ID,
 		MerchantName: req.MerchantName,
+		IDNumber:     req.IDNumber,
 		Description:  req.Description,
 		Address:      req.Address,
 		Country:      req.Country,
@@ -26,6 +27,7 @@ func (b *merchantService) Update(req dto.UpdateMerchantRequest) (dto.UpdateMerch
 	response := dto.UpdateMerchantResponse{
 		ID:           req.ID,
 		MerchantName: request.MerchantName,
+		IDNumber:     request.IDNumber,
 		Description:  request.Description,
 		Address:      request.Address,
 		Country:      request.Country,

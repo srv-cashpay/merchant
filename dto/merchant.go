@@ -13,6 +13,7 @@ type GetMerchantByIdRequest struct {
 type GetMerchantRequest struct {
 	ID           string         `json:"id"`
 	UserID       string         `json:"user_id"`
+	IDNumber     string         `json:"id_number"`
 	MerchantID   string         `json:"merchant_id"`
 	MerchantName string         `json:"merchant_name"`
 	Address      string         `json:"address"`
@@ -32,6 +33,7 @@ type GetMerchantResponse struct {
 	ID           string         `json:"id"`
 	UserID       string         `json:"user_id"`
 	MerchantID   string         `json:"merchant_id"`
+	IDNumber     string         `json:"id_number"`
 	MerchantName string         `json:"merchant_name"`
 	Address      string         `json:"address"`
 	Country      string         `json:"country"`
@@ -50,6 +52,7 @@ type UpdateMerchantRequest struct {
 	ID           string    `query:"id" validate:"required, id"`
 	UserID       string    `json:"user_id"`
 	MerchantName string    `json:"merchant_name"`
+	IDNumber     string    `json:"id_number"`
 	Address      string    `json:"address"`
 	Country      string    `json:"country"`
 	City         string    `json:"city"`
@@ -65,6 +68,7 @@ type UpdateMerchantResponse struct {
 	ID           string    `json:"id"`
 	UserID       string    `json:"user_id"`
 	MerchantName string    `json:"merchant_name"`
+	IDNumber     string    `json:"id_number"`
 	Address      string    `json:"address"`
 	Country      string    `json:"country"`
 	City         string    `json:"city"`
