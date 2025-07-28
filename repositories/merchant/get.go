@@ -17,6 +17,7 @@ func (r *merchantRepository) Get(req dto.GetMerchantRequest) (dto.GetMerchantRes
 		ID:           data.ID,
 		UserID:       data.UserID,
 		MerchantName: data.MerchantName,
+		IDNumber:     data.IDNumber,
 		Address:      data.Address,
 		City:         data.City,
 		Zip:          data.Zip,

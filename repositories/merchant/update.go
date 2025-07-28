@@ -47,6 +47,7 @@ func (b *merchantRepository) Update(req dto.UpdateMerchantRequest) (dto.UpdateMe
 
 	response := dto.UpdateMerchantResponse{
 		MerchantName: request.MerchantName,
+		IDNumber:     request.IDNumber,
 		Description:  request.Description,
 		Address:      request.Address,
 		Country:      request.Country,
