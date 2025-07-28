@@ -433,7 +433,7 @@ func New() *echo.Echo {
 	}
 	deleteAccount := e.Group("api/account", middlewares.AuthorizeJWT(JWT))
 	{
-		deleteAccount.POST("/request-delete", discountH.Create)
+		deleteAccount.POST("/request-delete", deleteaccountH.Create)
 		// deleteAccount.GET("/unit/pagination", unitH.Get)
 		// deleteAccount.PUT("/unit/:id", unitH.Update)
 		// deleteAccount.DELETE("/unit/:id", unitH.Delete)
