@@ -99,6 +99,10 @@ import (
 	r_table "github.com/srv-cashpay/merchant/repositories/table"
 	s_table "github.com/srv-cashpay/merchant/services/table"
 
+	h_deleteaccount "github.com/srv-cashpay/merchant/handlers/deleteaccount"
+	r_deleteaccount "github.com/srv-cashpay/merchant/repositories/deleteaccount"
+	s_deleteaccount "github.com/srv-cashpay/merchant/services/deleteaccount"
+
 	h_reservation "github.com/srv-cashpay/merchant/handlers/reservation"
 	r_reservation "github.com/srv-cashpay/merchant/repositories/reservation"
 	s_reservation "github.com/srv-cashpay/merchant/services/reservation"
@@ -198,6 +202,10 @@ var (
 	tableR = r_table.NewTableRepository(DB)
 	tableS = s_table.NewTableService(tableR, JWT)
 	tableH = h_table.NewTableHandler(tableS)
+
+	deleteaccountR = r_deleteaccount.NewDeleteAccountRepository(DB)
+	deleteaccountS = s_deleteaccount.NewDeleteAccountService(deleteaccountR, JWT)
+	deleteaccountH = h_deleteaccount.NewRequestDeleteHandler(deleteaccountS)
 
 	reservationR = r_reservation.NewReservationRepository(DB)
 	reservationS = s_reservation.NewReservationService(reservationR, JWT)
@@ -422,6 +430,14 @@ func New() *echo.Echo {
 		unit.PUT("/unit/:id", unitH.Update)
 		unit.DELETE("/unit/:id", unitH.Delete)
 		unit.DELETE("/unit/bulk-delete", unitH.BulkDelete)
+	}
+	deleteAccount := e.Group("api/account", middlewares.AuthorizeJWT(JWT))
+	{
+		deleteAccount.POST("/request-delete", discountH.Create)
+		// deleteAccount.GET("/unit/pagination", unitH.Get)
+		// deleteAccount.PUT("/unit/:id", unitH.Update)
+		// deleteAccount.DELETE("/unit/:id", unitH.Delete)
+		// deleteAccount.DELETE("/unit/bulk-delete", unitH.BulkDelete)
 	}
 	authenticator := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
 	{

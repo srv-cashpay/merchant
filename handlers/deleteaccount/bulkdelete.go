@@ -1,4 +1,4 @@
-package table
+package deleteaccount
 
 import (
 	"errors"
@@ -13,7 +13,7 @@ func (b *domainHandler) BulkDelete(c echo.Context) error {
 
 	// Bind data dari body JSON
 	if err := c.Bind(&req); err != nil {
-		return res.ErrorBuilder(&res.ErrorConstant.InternalServerError, err).Send(c)
+		return res.ErrorBuilder(&res.ErrorConstant.BadRequest, err).Send(c)
 	}
 
 	deletedBy, ok := c.Get("DeletedBy").(string)
@@ -28,7 +28,7 @@ func (b *domainHandler) BulkDelete(c echo.Context) error {
 	}
 
 	// Panggil service untuk menghapus produk
-	data, err := b.serviceTable.BulkDelete(req)
+	data, err := b.serviceDeleteAccount.BulkDelete(req)
 	if err != nil {
 		return res.ErrorBuilder(&res.ErrorConstant.NotFound, err).Send(c)
 	}
