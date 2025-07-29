@@ -255,7 +255,7 @@ func New() *echo.Echo {
 		sub.POST("/cancel/:order_id", subscribeH.CancelPay)
 
 		sub.POST("/paypal", subscribeH.PayPal)
-		sub.GET("/paypal/capture", subscribeH.CapturePaypalOrder)
+		sub.GET("/paypal/capture/:order_id", subscribeH.CapturePaypalOrder)
 
 	}
 	pos := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
