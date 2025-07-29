@@ -253,7 +253,7 @@ func New() *echo.Echo {
 		sub.POST("/charge-card", subscribeH.CardPayment)
 		sub.POST("/cancel/:order_id", subscribeH.CancelPay)
 
-		sub.POST("/cancel/:order_id", subscribeH.PayPal)
+		sub.POST("/paypal", subscribeH.PayPal)
 
 	}
 	pos := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
