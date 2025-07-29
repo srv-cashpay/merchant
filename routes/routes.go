@@ -117,6 +117,8 @@ import (
 var (
 	DB = configs.InitDB()
 
+	pp = configs.InitApp()
+
 	JWT = middlewares.NewJWTService()
 
 	authenticatorR = r_authenticator.NewAuthenticatorRepository(DB)
@@ -135,7 +137,7 @@ var (
 	printerS = s_printer.NewPrinterService(printerR, JWT)
 	printerH = h_printer.NewPrinterHandler(printerS)
 
-	subscribeR = r_subscribe.NewSubscribeRepository(DB)
+	subscribeR = r_subscribe.NewSubscribeRepository(DB, pp)
 	subscribeS = s_subscribe.NewSubscribeService(subscribeR, JWT)
 	subscribeH = h_subscribe.NewSubscribeHandler(subscribeS)
 

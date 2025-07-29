@@ -1,8 +1,8 @@
 package subscribe
 
 import (
+	"github.com/plutov/paypal/v4"
 	dto "github.com/srv-cashpay/merchant/dto"
-
 	"gorm.io/gorm"
 )
 
@@ -20,14 +20,32 @@ type DomainRepository interface {
 	ChargeGopay(req dto.ChargeRequest) (*dto.GopayResponse, error)
 	CancelPay(req dto.GetorderID) ([]byte, int, error)
 	UpdateSubscribeByOrderID(data dto.MidtransCancelResponse) error
+
+	// Tambahan untuk PayPal
+	CreatePaypalOrder(amount, currency string) (*paypal.Order, error)
+	CapturePaypalOrder(orderID string) (*paypal.CaptureOrderResponse, error)
 }
+
+// type subscribeRepository struct {
+// 	DB           *gorm.DB
+// 	paypalClient *paypal.Client
+// }
+
+// func NewSubscribeRepository(DB *gorm.DB, paypalClient *paypal.Client) DomainRepository {
+// 	return &subscribeRepository{
+// 		DB:           DB,
+// 		paypalClient: paypalClient,
+// 	}
+// }
 
 type subscribeRepository struct {
-	DB *gorm.DB
+	DB           *gorm.DB
+	paypalClient *paypal.Client
 }
 
-func NewSubscribeRepository(DB *gorm.DB) DomainRepository {
+func NewSubscribeRepository(DB *gorm.DB, paypalClient *paypal.Client) DomainRepository {
 	return &subscribeRepository{
-		DB: DB,
+		DB:           DB,
+		paypalClient: paypalClient,
 	}
 }

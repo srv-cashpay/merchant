@@ -19,6 +19,8 @@ type SubscribeService interface {
 	CardPayment(cardData dto.CreditCardChargeRequest) (*dto.TokenizeResponse, error)
 	ChargeGopay(req dto.ChargeRequest) (*dto.GopayResponse, error)
 	CancelPay(req dto.GetorderID) (map[string]interface{}, int, error)
+	CreatePaypalOrder(req dto.PaypalCreateRequest) (*dto.PaypalOrderResponse, error)
+	CapturePaypalOrder(orderID string) (*dto.PaypalCaptureResponse, error)
 }
 
 type subscribeService struct {

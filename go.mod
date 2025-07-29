@@ -1,17 +1,19 @@
 module github.com/srv-cashpay/merchant
 
-go 1.23.0
+go 1.24.4
 
-toolchain go1.23.8
+toolchain go1.24.5
 
 require (
 	github.com/joho/godotenv v1.5.1
 	github.com/labstack/echo/v4 v4.12.0
 	github.com/midtrans/midtrans-go v1.3.8
+	github.com/plutov/paypal/v4 v4.15.0
 	github.com/srv-cashpay/auth v0.0.0-20250420081851-2a728276c864
 	github.com/srv-cashpay/middlewares v0.0.0-20250120090519-4aa5ca3d5cac
 	github.com/srv-cashpay/pos v0.0.0-20250317074838-1b049d295205
 	github.com/srv-cashpay/product v0.0.0-20250621091318-99f7db572a89
+	github.com/srv-cashpay/util v0.0.0-20250728073605-f710558a1115
 	gorm.io/driver/postgres v1.5.9
 )
 
@@ -32,7 +34,6 @@ require (
 	github.com/olivere/elastic/v7 v7.0.32 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
-	github.com/srv-cashpay/util v0.0.0-20250728073605-f710558a1115 // indirect
 	github.com/streadway/amqp v1.1.0 // indirect
 	github.com/teris-io/shortid v0.0.0-20220617161101-71ec9f2aa569 // indirect
 	golang.org/x/sync v0.13.0 // indirect
@@ -43,7 +44,7 @@ require (
 
 require (
 	github.com/labstack/gommon v0.4.2 // indirect
-	github.com/mattn/go-colorable v0.1.13 // indirect
+	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect

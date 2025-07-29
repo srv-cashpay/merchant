@@ -1,11 +1,13 @@
 package configs
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"os"
 	"time"
 
+	"github.com/plutov/paypal/v4"
 	"github.com/srv-cashpay/merchant/entity"
 
 	"github.com/joho/godotenv"
@@ -92,4 +94,21 @@ func InitialMigration(db *gorm.DB) {
 		log.Fatal(err)
 	}
 	dbSQL.Close() // Close the database connection
+}
+
+func InitApp() *paypal.Client {
+	clientID := os.Getenv("PAYPAL_CLIENT_ID")
+	secret := os.Getenv("PAYPAL_SECRET")
+
+	paypalClient, err := paypal.NewClient(clientID, secret, paypal.APIBaseLive)
+	if err != nil {
+		log.Fatal("Failed to create PayPal client:", err)
+	}
+
+	_, err = paypalClient.GetAccessToken(context.Background())
+	if err != nil {
+		log.Fatal("Failed to get PayPal token:", err)
+	}
+
+	return paypalClient
 }
