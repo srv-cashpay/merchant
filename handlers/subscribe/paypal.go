@@ -7,7 +7,7 @@ import (
 	dto "github.com/srv-cashpay/merchant/dto"
 )
 
-func (h *domainHandler) CreatePaypalOrder(c echo.Context) error {
+func (h *domainHandler) PayPal(c echo.Context) error {
 	var req dto.PaypalCreateRequest
 	if err := c.Bind(&req); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid request")
