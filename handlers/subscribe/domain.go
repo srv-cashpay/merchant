@@ -28,6 +28,7 @@ type DomainHandler interface {
 	CancelPay(c echo.Context) error
 
 	PayPal(c echo.Context) error
+	CapturePaypalOrder(c echo.Context) error
 }
 
 type domainHandler struct {

@@ -234,6 +234,7 @@ func New() *echo.Echo {
 
 	e := echo.New()
 	e.POST("/menu/order", orderH.Order)
+
 	sub := e.Group("sub", middlewares.AuthorizeJWT(JWT))
 	{
 		sub.GET("/transaction/:order_id/status", subscribeH.CheckTransactionStatus)
@@ -254,6 +255,7 @@ func New() *echo.Echo {
 		sub.POST("/cancel/:order_id", subscribeH.CancelPay)
 
 		sub.POST("/paypal", subscribeH.PayPal)
+		sub.POST("/paypal/capture", subscribeH.CapturePaypalOrder)
 
 	}
 	pos := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
