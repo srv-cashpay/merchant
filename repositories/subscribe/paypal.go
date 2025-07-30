@@ -2,6 +2,8 @@ package subscribe
 
 import (
 	"context"
+	"fmt"
+	"strconv"
 	"time"
 
 	paypal "github.com/plutov/paypal/v4"
@@ -45,6 +47,10 @@ func (r *subscribeRepository) CreatePaypalOrder(req dto.PaypalCreateRequest) (*p
 			break
 		}
 	}
+	amountInt, err := strconv.ParseInt(req.Amount, 10, 64)
+	if err != nil {
+		return nil, fmt.Errorf("invalid amount: %v", err)
+	}
 
 	// 3. Simpan order ke DB
 	tx := entity.Subscribe{
@@ -53,6 +59,7 @@ func (r *subscribeRepository) CreatePaypalOrder(req dto.PaypalCreateRequest) (*p
 		MerchantID:      req.MerchantID,
 		CreatedBy:       req.CreatedBy,
 		OrderID:         order.ID,
+		GrossAmount:     amountInt,
 		PaymentType:     "paypal",
 		Status:          "PENDING",
 		TransactionTime: time.Now(),
