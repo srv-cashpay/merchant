@@ -17,7 +17,7 @@ func (r *subscribeRepository) CreatePaypalOrder(amount, currency string) (*paypa
 	}
 
 	appContext := &paypal.ApplicationContext{
-		ReturnURL: "https://cashpay.my.id/return",
+		ReturnURL: "https://cashpay.my.id/paypal-success",
 		CancelURL: "https://cashpay.my.id/cancel",
 	}
 
