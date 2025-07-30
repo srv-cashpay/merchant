@@ -1,18 +1,45 @@
 package subscribe
 
 import (
+	"errors"
+
 	"github.com/srv-cashpay/merchant/dto"
 )
 
+// func (s *subscribeService) CreatePaypalOrder(req dto.PaypalCreateRequest) (*dto.PaypalOrderResponse, error) {
+// 	order, err := s.Repo.CreatePaypalOrder(req.Amount, req.Currency)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+
+// 	// Ambil approval URL dari links
+// 	var approvalLink string
+// 	for _, link := range order.Links {
+// 		if link.Rel == "approve" {
+// 			approvalLink = link.Href
+// 			break
+// 		}
+// 	}
+
+// 	return &dto.PaypalOrderResponse{
+// 		ID:     order.ID,
+// 		Status: order.Status,
+// 		Link:   approvalLink,
+// 	}, nil
+// }
+
 func (s *subscribeService) CreatePaypalOrder(req dto.PaypalCreateRequest) (*dto.PaypalOrderResponse, error) {
-	order, err := s.Repo.CreatePaypalOrder(req.Amount, req.Currency)
+	if req.Amount == "" {
+		return nil, errors.New("missing required fields: amount")
+	}
+
+	result, err := s.Repo.CreatePaypalOrder(req) // *paypal.Order
 	if err != nil {
 		return nil, err
 	}
 
-	// Ambil approval URL dari links
 	var approvalLink string
-	for _, link := range order.Links {
+	for _, link := range result.Links {
 		if link.Rel == "approve" {
 			approvalLink = link.Href
 			break
@@ -20,8 +47,8 @@ func (s *subscribeService) CreatePaypalOrder(req dto.PaypalCreateRequest) (*dto.
 	}
 
 	return &dto.PaypalOrderResponse{
-		ID:     order.ID,
-		Status: order.Status,
+		ID:     result.ID,
+		Status: result.Status,
 		Link:   approvalLink,
 	}, nil
 }

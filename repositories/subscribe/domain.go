@@ -22,7 +22,7 @@ type DomainRepository interface {
 	UpdateSubscribeByOrderID(data dto.MidtransCancelResponse) error
 
 	// Tambahan untuk PayPal
-	CreatePaypalOrder(amount, currency string) (*paypal.Order, error)
+	CreatePaypalOrder(req dto.PaypalCreateRequest) (*paypal.Order, error)
 	CapturePaypalOrder(orderID string) (*paypal.CaptureOrderResponse, error)
 }
 

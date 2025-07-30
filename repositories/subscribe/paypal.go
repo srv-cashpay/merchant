@@ -2,17 +2,21 @@ package subscribe
 
 import (
 	"context"
+	"time"
 
 	paypal "github.com/plutov/paypal/v4"
+	"github.com/srv-cashpay/merchant/dto"
+	"github.com/srv-cashpay/merchant/entity"
+	util "github.com/srv-cashpay/util/s"
 )
 
-func (r *subscribeRepository) CreatePaypalOrder(amount, currency string) (*paypal.Order, error) {
+func (r *subscribeRepository) CreatePaypalOrder(req dto.PaypalCreateRequest) (*paypal.Order, error) {
 	orderIntent := paypal.OrderIntentCapture
 
 	purchaseUnit := paypal.PurchaseUnitRequest{
 		Amount: &paypal.PurchaseUnitAmount{
-			Currency: currency,
-			Value:    amount,
+			Currency: req.Currency,
+			Value:    req.Amount,
 		},
 	}
 
@@ -21,13 +25,45 @@ func (r *subscribeRepository) CreatePaypalOrder(amount, currency string) (*paypa
 		CancelURL: "https://cashpay.my.id/cancel",
 	}
 
-	return r.paypalClient.CreateOrder(
+	// 1. Buat order PayPal
+	order, err := r.paypalClient.CreateOrder(
 		context.Background(),
 		orderIntent,
 		[]paypal.PurchaseUnitRequest{purchaseUnit},
-		nil,        // payment source (gunakan nil jika tidak spesifik)
-		appContext, // context aplikasi (return/cancel URL))
+		nil,
+		appContext,
 	)
+	if err != nil {
+		return nil, err
+	}
+
+	// 2. Ambil approval URL untuk disimpan ke DB
+	var approvalUrl string
+	for _, link := range order.Links {
+		if link.Rel == "approve" {
+			approvalUrl = link.Href
+			break
+		}
+	}
+
+	// 3. Simpan order ke DB
+	tx := entity.Subscribe{
+		ID:              util.GenerateRandomString(),
+		UserID:          req.UserID,
+		MerchantID:      req.MerchantID,
+		CreatedBy:       req.CreatedBy,
+		OrderID:         order.ID,
+		PaymentType:     "paypal",
+		Status:          "PENDING",
+		TransactionTime: time.Now(),
+		Url:             approvalUrl,
+	}
+
+	if err := r.DB.Create(&tx).Error; err != nil {
+		return nil, err
+	}
+
+	return order, nil
 }
 
 func (r *subscribeRepository) CapturePaypalOrder(orderID string) (*paypal.CaptureOrderResponse, error) {
