@@ -67,6 +67,11 @@ func (s *subscribeService) CapturePaypalOrder(orderID string) (*dto.PaypalCaptur
 		}
 	}
 
+	// 2. Update akun user (perpanjang 30 hari)
+	if err := s.Repo.UpdateUserVerified(orderID); err != nil {
+		return nil, err
+	}
+
 	return &dto.PaypalCaptureResponse{
 		Status: capture.Status,
 	}, nil
