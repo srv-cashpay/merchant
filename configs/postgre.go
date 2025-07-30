@@ -99,8 +99,9 @@ func InitialMigration(db *gorm.DB) {
 func InitApp() *paypal.Client {
 	clientID := os.Getenv("PAYPAL_CLIENT_ID")
 	secret := os.Getenv("PAYPAL_SECRET")
+	// paypalClient, err := paypal.NewClient(clientID, secret, paypal.APIBaseLive)
 
-	paypalClient, err := paypal.NewClient(clientID, secret, paypal.APIBaseLive)
+	paypalClient, err := paypal.NewClient(clientID, secret, paypal.APIBaseSandBox)
 	if err != nil {
 		log.Fatal("Failed to create PayPal client:", err)
 	}
