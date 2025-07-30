@@ -73,8 +73,5 @@ func (r *subscribeRepository) CapturePaypalOrder(orderID string) (*paypal.Captur
 func (r *subscribeRepository) UpdateSubscribeStatus(orderID string, status string) error {
 	return r.DB.Model(&entity.Subscribe{}).
 		Where("order_id = ?", orderID).
-		Updates(map[string]interface{}{
-			"status":            status,
-			"transaction_time ": time.Now(),
-		}).Error
+		Update("status", status).Error
 }
