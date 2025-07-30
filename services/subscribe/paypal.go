@@ -2,6 +2,7 @@ package subscribe
 
 import (
 	"errors"
+	"strings"
 
 	"github.com/srv-cashpay/merchant/dto"
 )
@@ -57,6 +58,13 @@ func (s *subscribeService) CapturePaypalOrder(orderID string) (*dto.PaypalCaptur
 	capture, err := s.Repo.CapturePaypalOrder(orderID)
 	if err != nil {
 		return nil, err
+	}
+
+	// Jika berhasil dan statusnya COMPLETED, update status di DB
+	if strings.ToUpper(capture.Status) == "COMPLETED" {
+		if err := s.Repo.UpdateSubscribeStatus(orderID, "settlement"); err != nil {
+			return nil, err
+		}
 	}
 
 	return &dto.PaypalCaptureResponse{

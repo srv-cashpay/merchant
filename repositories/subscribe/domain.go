@@ -24,6 +24,7 @@ type DomainRepository interface {
 	// Tambahan untuk PayPal
 	CreatePaypalOrder(req dto.PaypalCreateRequest) (*paypal.Order, error)
 	CapturePaypalOrder(orderID string) (*paypal.CaptureOrderResponse, error)
+	UpdateSubscribeStatus(orderID string, status string) error
 }
 
 // type subscribeRepository struct {

@@ -69,3 +69,12 @@ func (r *subscribeRepository) CreatePaypalOrder(req dto.PaypalCreateRequest) (*p
 func (r *subscribeRepository) CapturePaypalOrder(orderID string) (*paypal.CaptureOrderResponse, error) {
 	return r.paypalClient.CaptureOrder(context.Background(), orderID, paypal.CaptureOrderRequest{})
 }
+
+func (r *subscribeRepository) UpdateSubscribeStatus(orderID string, status string) error {
+	return r.DB.Model(&entity.Subscribe{}).
+		Where("order_id = ?", orderID).
+		Updates(map[string]interface{}{
+			"status":            status,
+			"transaction_time ": time.Now(),
+		}).Error
+}
