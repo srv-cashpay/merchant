@@ -434,6 +434,7 @@ func New() *echo.Echo {
 	{
 		unit.POST("/unit/create", unitH.Create)
 		unit.GET("/unit/pagination", unitH.Get)
+		unit.GET("/unit/:id", unitH.GetById)
 		unit.PUT("/unit/:id", unitH.Update)
 		unit.DELETE("/unit/:id", unitH.Delete)
 		unit.DELETE("/unit/bulk-delete", unitH.BulkDelete)
