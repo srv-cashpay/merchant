@@ -362,6 +362,7 @@ func New() *echo.Echo {
 	{
 		tax.POST("/tax/create", taxH.Create)
 		tax.GET("/tax/pagination", taxH.Get)
+		tax.GET("/tax/:id", taxH.GetById)
 		tax.PUT("/tax/update/:id", taxH.Update)
 		tax.DELETE("/tax/:id", taxH.Delete)
 		tax.DELETE("/tax/bulk-delete", taxH.BulkDelete)
@@ -407,6 +408,7 @@ func New() *echo.Echo {
 	{
 		discount.POST("/discount/create", discountH.Create)
 		discount.GET("/discount/pagination", discountH.Get)
+		discount.GET("/discount/:id", discountH.GetById)
 		discount.PUT("/discount/update/:id", discountH.Update)
 		discount.DELETE("/discount/:id", discountH.Delete)
 		discount.DELETE("/discount/bulk-delete", discountH.BulkDelete)
