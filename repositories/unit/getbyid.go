@@ -16,6 +16,7 @@ func (b *unitRepository) GetById(req dto.GetByIdRequest) (*dto.UnitResponse, err
 
 	response := &dto.UnitResponse{
 		UnitName: tr.UnitName,
+		Status:   tr.Status,
 	}
 
 	return response, nil

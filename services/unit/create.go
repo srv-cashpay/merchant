@@ -11,6 +11,7 @@ func (s *unitService) Create(req dto.UnitRequest) (dto.UnitResponse, error) {
 		UserID:     req.UserID,
 		MerchantID: req.MerchantID,
 		UnitName:   req.UnitName,
+		Status:     req.Status,
 		CreatedBy:  req.CreatedBy,
 	}
 
@@ -23,6 +24,7 @@ func (s *unitService) Create(req dto.UnitRequest) (dto.UnitResponse, error) {
 		ID:         created.ID,
 		MerchantID: created.MerchantID,
 		UnitName:   created.UnitName,
+		Status:     created.Status,
 		UserID:     created.UserID,
 		CreatedBy:  created.CreatedBy,
 	}

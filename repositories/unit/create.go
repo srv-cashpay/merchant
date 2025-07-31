@@ -10,6 +10,7 @@ func (r *unitRepository) Create(req dto.UnitRequest) (dto.UnitResponse, error) {
 	create := entity.Unit{
 		ID:         req.ID,
 		UnitName:   req.UnitName,
+		Status:     req.Status,
 		MerchantID: req.MerchantID,
 		UserID:     req.UserID,
 		CreatedBy:  req.CreatedBy,
@@ -22,6 +23,7 @@ func (r *unitRepository) Create(req dto.UnitRequest) (dto.UnitResponse, error) {
 	response := dto.UnitResponse{
 		ID:         req.ID,
 		UnitName:   create.UnitName,
+		Status:     create.Status,
 		MerchantID: req.MerchantID,
 		UserID:     req.UserID,
 		CreatedBy:  req.CreatedBy,

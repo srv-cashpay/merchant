@@ -11,6 +11,7 @@ func (b *unitRepository) Update(req dto.UnitUpdateRequest) (dto.UnitUpdateRespon
 		UnitName:  req.UnitName,
 		UpdatedBy: req.UpdatedBy,
 		UserID:    req.UserID,
+		Status:    req.Status,
 	}
 
 	var existingProduct entity.Unit
@@ -30,6 +31,7 @@ func (b *unitRepository) Update(req dto.UnitUpdateRequest) (dto.UnitUpdateRespon
 		UnitName:  updateUnit.UnitName,
 		UpdatedBy: updateUnit.UpdatedBy,
 		UserID:    updateUnit.UserID,
+		Status:    updateUnit.Status,
 	}
 
 	return response, nil

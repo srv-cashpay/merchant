@@ -6,6 +6,7 @@ func (b *unitService) Update(req dto.UnitUpdateRequest) (dto.UnitUpdateResponse,
 	request := dto.UnitUpdateRequest{
 		UnitName: req.UnitName,
 		UserID:   req.UserID,
+		Status:   req.Status,
 	}
 
 	product, err := b.Repo.Update(req)
@@ -16,6 +17,7 @@ func (b *unitService) Update(req dto.UnitUpdateRequest) (dto.UnitUpdateResponse,
 	response := dto.UnitUpdateResponse{
 		UnitName: request.UnitName,
 		UserID:   request.UserID,
+		Status:   request.Status,
 	}
 
 	return response, nil
