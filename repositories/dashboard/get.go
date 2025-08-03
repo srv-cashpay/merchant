@@ -11,6 +11,7 @@ import (
 
 func (r *dashboardRepository) Get(req dto.GetDashboardRequest) (dto.GetDashboardResponse, error) {
 	var response dto.GetDashboardResponse
+startOfDay := time.Now().Truncate(24 * time.Hour)
 
 	var isSubscribed bool
 	var count int64
@@ -66,14 +67,16 @@ func (r *dashboardRepository) Get(req dto.GetDashboardRequest) (dto.GetDashboard
 	response.TotalSales = totalSales
 
 	if err := r.DB.Raw(`
-		SELECT COALESCE(SUM((json_data->>'price')::int * (json_data->>'quantity')::int), 0) 
-		FROM pos,
-		LATERAL json_array_elements(pos.product) AS json_data
-		WHERE pos.merchant_id = ? AND pos.deleted_at IS NULL 
-		AND pos.status_payment IN ('Paid')
-	`, req.MerchantID).Scan(&req.TotalPrice).Error; err != nil {
-		return response, err
-	}
+	SELECT COALESCE(SUM((json_data->>'price')::int * (json_data->>'quantity')::int), 0) 
+	FROM pos,
+	LATERAL json_array_elements(pos.product) AS json_data
+	WHERE pos.merchant_id = ? AND pos.deleted_at IS NULL 
+	AND pos.status_payment = 'Paid'
+	AND pos.created_at >= ?
+`, req.MerchantID, startOfDay).Scan(&req.TotalPrice).Error; err != nil {
+	return response, err
+}
+
 	response.TotalPrice = req.TotalPrice
 
 	if err := r.DB.Raw(`
