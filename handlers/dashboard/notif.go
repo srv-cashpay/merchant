@@ -13,22 +13,29 @@ var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
 	CheckOrigin: func(r *http.Request) bool {
-		return true // <- Izinkan semua origin (untuk testing)
+		// Untuk testing, izinkan semua origin
+		// TODO: Batasi origin untuk production
+		return true
 	},
 }
 
-// Handler WebSocket
+// HandleWebSocket adalah handler untuk koneksi WebSocket
 func (b *domainHandler) HandleWebSocket(c echo.Context) error {
-	conn, err := upgrader.Upgrade(c.Response(), c.Request(), nil)
+	// Gunakan c.Response().Writer untuk Upgrade
+	conn, err := upgrader.Upgrade(c.Response().Writer, c.Request(), nil)
 	if err != nil {
 		log.Println("WebSocket Upgrade Error:", err)
 		return err
 	}
-	defer conn.Close()
+	defer func() {
+		log.Println("Client disconnected:", conn.RemoteAddr())
+		conn.Close()
+	}()
 
 	log.Println("Client connected:", conn.RemoteAddr())
 
 	for {
+		// Membaca pesan dari client
 		messageType, message, err := conn.ReadMessage()
 		if err != nil {
 			log.Println("Read Error:", err)
@@ -36,25 +43,13 @@ func (b *domainHandler) HandleWebSocket(c echo.Context) error {
 		}
 		log.Printf("Received: %s", message)
 
+		// Kirim balik pesan ke client
 		if err := conn.WriteMessage(messageType, message); err != nil {
 			log.Println("Write Error:", err)
 			break
 		}
 	}
 
+	// Penting: return nil supaya Echo tidak kirim HTTP response
 	return nil
 }
-
-// func main() {
-// 	e := echo.New()
-
-// 	// Route untuk WebSocket
-// 	e.GET("/ws", handleWebSocket)
-
-// 	host := "0.0.0.0:8080"
-// 	fmt.Println("WebSocket server started at http://" + host)
-
-// 	if err := e.Start(host); err != nil {
-// 		log.Fatal("Echo Start Error:", err)
-// 	}
-// }
