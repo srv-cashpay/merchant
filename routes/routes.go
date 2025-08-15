@@ -234,6 +234,7 @@ func New() *echo.Echo {
 
 	e := echo.New()
 	e.POST("/menu/order", orderH.Order)
+	e.GET("/ws", dashboardH.HandleWebSocket)
 
 	sub := e.Group("sub", middlewares.AuthorizeJWT(JWT))
 	{

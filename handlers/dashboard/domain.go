@@ -7,6 +7,7 @@ import (
 
 type DomainHandler interface {
 	Get(c echo.Context) error
+	HandleWebSocket(c echo.Context) error
 }
 
 type domainHandler struct {
