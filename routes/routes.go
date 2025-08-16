@@ -3,6 +3,7 @@ package routes
 import (
 	"github.com/labstack/echo/v4"
 	"github.com/srv-cashpay/merchant/configs"
+	"github.com/srv-cashpay/merchant/handlers/dashboard"
 	h_pos "github.com/srv-cashpay/merchant/handlers/pos"
 	r_pos "github.com/srv-cashpay/merchant/repositories/pos"
 	s_pos "github.com/srv-cashpay/merchant/services/pos"
@@ -235,6 +236,7 @@ func New() *echo.Echo {
 	e := echo.New()
 	e.POST("/menu/order", orderH.Order)
 	e.GET("/ws", dashboardH.HandleWebSocket)
+	go dashboard.StartBroadcaster()
 
 	sub := e.Group("sub", middlewares.AuthorizeJWT(JWT))
 	{
