@@ -11,7 +11,7 @@ services:
     tty: true
     volumes:
       - .:/app
-      - ./configs/firebase-service-account.json:/configs/firebase-service-account.json:ro
+      - ./configs:/configs:ro
       - /opt/certs:/certs:ro
     ports:
       - 2358:2345
