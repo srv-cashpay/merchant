@@ -25,9 +25,7 @@ type dashboardService struct {
 	client *messaging.Client
 }
 
-func NewDashboardService(Repo r.DomainRepository, jwtS m.JWTService) DashboardService {
-	credFile := "./configs/firebase-service-account.json"
-
+func NewDashboardService(Repo r.DomainRepository, jwtS m.JWTService, credFile string) DashboardService {
 	opt := option.WithCredentialsFile(credFile)
 	app, err := firebase.NewApp(context.Background(), nil, opt)
 	if err != nil {

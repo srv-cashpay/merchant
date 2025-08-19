@@ -1,6 +1,8 @@
 package routes
 
 import (
+	"os"
+
 	"github.com/labstack/echo/v4"
 	"github.com/srv-cashpay/merchant/configs"
 	"github.com/srv-cashpay/merchant/handlers/dashboard"
@@ -116,7 +118,8 @@ import (
 )
 
 var (
-	DB = configs.InitDB()
+	DB       = configs.InitDB()
+	credFile = os.Getenv("FIREBASE_CRED_FILE")
 
 	pp = configs.InitApp()
 
@@ -179,7 +182,7 @@ var (
 	unitH = h_unit.NewUnitHandler(unitS)
 
 	dashboardR = r_dashboard.NewDashboardRepository(DB)
-	dashboardS = s_dashboard.NewDashboardService(dashboardR, JWT)
+	dashboardS = s_dashboard.NewDashboardService(dashboardR, JWT, credFile)
 	dashboardH = h_dashboard.NewDashboardHandler(dashboardS)
 
 	productR = r_product.NewProductRepository(DB)
