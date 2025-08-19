@@ -82,6 +82,7 @@ func InitDB() *gorm.DB {
 		&entity.Order{},
 		&entity.Reservation{},
 		&entity.DeleteAccount{},
+		&entity.FCMToken{},
 	)
 
 	return db

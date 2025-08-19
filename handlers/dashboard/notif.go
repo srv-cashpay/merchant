@@ -21,8 +21,8 @@ var clients = make(map[*websocket.Conn]bool)
 var mu sync.Mutex
 var broadcast = make(chan []byte)
 
-// HandleWebSocket → semua client (Web / Native) connect ke sini
-func (b *domainHandler) HandleWebSocket(c echo.Context) error {
+// HandleWebSocket → semua client connect ke sini
+func (h *domainHandler) HandleWebSocket(c echo.Context) error {
 	conn, err := upgrader.Upgrade(c.Response().Writer, c.Request(), nil)
 	if err != nil {
 		log.Println("Upgrade error:", err)
@@ -52,8 +52,11 @@ func (b *domainHandler) HandleWebSocket(c echo.Context) error {
 			}
 			log.Printf("Received: %s", msg)
 
-			// Kirim pesan ke semua client lain (kecuali pengirim)
+			// kirim ke semua client websocket
 			broadcast <- append([]byte{}, msg...)
+
+			// kirim juga ke semua device via FCM
+			go h.serviceDashboard.BroadcastFCM("Pesan Baru", string(msg))
 		}
 	}(conn)
 

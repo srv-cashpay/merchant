@@ -7,6 +7,8 @@ import (
 
 type DomainRepository interface {
 	Get(req dto.GetDashboardRequest) (dto.GetDashboardResponse, error)
+	SaveToken(userID, token string) error
+	GetAllTokens() ([]string, error)
 }
 
 type dashboardRepository struct {
