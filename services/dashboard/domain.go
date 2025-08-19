@@ -26,7 +26,7 @@ type dashboardService struct {
 }
 
 func NewDashboardService(Repo r.DomainRepository, jwtS m.JWTService) DashboardService {
-	credFile := "/app/configs/firebase-service-account.json"
+	credFile := "/configs/firebase-service-account.json"
 
 	opt := option.WithCredentialsFile(credFile)
 
