@@ -23,3 +23,20 @@ func (h *domainHandler) SaveToken(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, map[string]string{"status": "ok"})
 }
+
+func (h *domainHandler) SendBroadcast(c echo.Context) error {
+	req := struct {
+		Title string `json:"title"`
+		Body  string `json:"body"`
+	}{}
+
+	if err := c.Bind(&req); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
+	}
+
+	if err := h.serviceDashboard.BroadcastFCM(req.Title, req.Body); err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
+	}
+
+	return c.JSON(http.StatusOK, map[string]string{"status": "sent"})
+}

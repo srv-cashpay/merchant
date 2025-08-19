@@ -237,6 +237,8 @@ func New() *echo.Echo {
 	e.POST("/menu/order", orderH.Order)
 	e.GET("/ws", dashboardH.HandleWebSocket)
 	go dashboard.StartBroadcaster()
+	e.POST("/fcm/save-token", dashboardH.SaveToken)
+	e.POST("/fcm/broadcast", dashboardH.SendBroadcast)
 
 	sub := e.Group("sub", middlewares.AuthorizeJWT(JWT))
 	{
