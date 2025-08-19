@@ -26,19 +26,26 @@ type dashboardService struct {
 }
 
 func NewDashboardService(Repo r.DomainRepository, jwtS m.JWTService) DashboardService {
-credFile := "/app/configs/firebase-service-account.json"
+	credFile := "/app/configs/firebase-service-account.json"
 
-opt := option.WithCredentialsFile(credFile)
+	opt := option.WithCredentialsFile(credFile)
 
-// isi project id sesuai JSON kamu
-conf := &firebase.Config{ProjectID: "cashpay-2ac49"}
+	// isi project id sesuai JSON kamu
+	conf := &firebase.Config{ProjectID: "cashpay-2ac49"}
 
-app, err := firebase.NewApp(context.Background(), conf, opt)
-if err != nil {
-    log.Fatalf("error init firebase: %v", err)
-}
+	app, err := firebase.NewApp(context.Background(), conf, opt)
+	if err != nil {
+		log.Fatalf("error init firebase: %v", err)
+	}
 
-client, err := app.Messaging(context.Background())
-if err != nil {
-    log.Fatalf("error init fcm client: %v", err)
+	client, err := app.Messaging(context.Background())
+	if err != nil {
+		log.Fatalf("error init fcm client: %v", err)
+	}
+
+	return &dashboardService{
+		Repo:   Repo,
+		jwt:    jwtS,
+		client: client,
+	}
 }
