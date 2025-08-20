@@ -5,12 +5,14 @@ import (
 	"log"
 
 	m "github.com/srv-cashpay/middlewares/middlewares"
-	"google.golang.org/api/option"
+
+	"firebase.google.com/go/messaging"
 
 	firebase "firebase.google.com/go"
-	"firebase.google.com/go/messaging"
+
 	"github.com/srv-cashpay/merchant/dto"
 	r "github.com/srv-cashpay/merchant/repositories/dashboard"
+	"google.golang.org/api/option"
 )
 
 type DashboardService interface {
@@ -36,9 +38,9 @@ func NewDashboardService(Repo r.DomainRepository, jwtS m.JWTService) *dashboardS
 	credFile := "firebase-service-account.json"
 
 	opt := option.WithCredentialsFile(credFile)
-	conf := &firebase.Config{ProjectID: "cashpay-2ac49"}
+	// conf := &firebase.Config{ProjectID: "cashpay-2ac49"}
 
-	app, err := firebase.NewApp(context.Background(), conf, opt)
+	app, err := firebase.NewApp(context.Background(), nil, opt)
 	if err != nil {
 		log.Fatalln("Firebase init error:", err)
 	}
