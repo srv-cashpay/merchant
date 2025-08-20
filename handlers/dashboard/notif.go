@@ -3,7 +3,7 @@ package dashboard
 import (
 	"log"
 	"net/http"
-	"sync"
+	"time"
 
 	"github.com/gorilla/websocket"
 	"github.com/labstack/echo/v4"
@@ -17,11 +17,6 @@ var upgrader = websocket.Upgrader{
 	},
 }
 
-var clients = make(map[*websocket.Conn]bool)
-var mu sync.Mutex
-var broadcast = make(chan []byte)
-
-// HandleWebSocket → semua client connect ke sini
 func (h *domainHandler) HandleWebSocket(c echo.Context) error {
 	conn, err := upgrader.Upgrade(c.Response().Writer, c.Request(), nil)
 	if err != nil {
@@ -29,52 +24,70 @@ func (h *domainHandler) HandleWebSocket(c echo.Context) error {
 		return err
 	}
 
-	mu.Lock()
-	clients[conn] = true
-	mu.Unlock()
-
+	h.mu.Lock()
+	h.clients[conn] = true
+	h.mu.Unlock()
 	log.Println("Client connected:", conn.RemoteAddr())
 
-	go func(conn *websocket.Conn) {
-		defer func() {
-			mu.Lock()
-			delete(clients, conn)
-			mu.Unlock()
-			conn.Close()
-			log.Println("Client disconnected:", conn.RemoteAddr())
-		}()
-
-		for {
-			_, msg, err := conn.ReadMessage()
-			if err != nil {
-				log.Println("Read error:", err)
-				break
-			}
-			log.Printf("Received: %s", msg)
-
-			// kirim ke semua client websocket
-			broadcast <- append([]byte{}, msg...)
-
-			// kirim juga ke semua device via FCM
-			go h.serviceDashboard.BroadcastFCM("Pesan Baru", string(msg))
-		}
-	}(conn)
-
+	go h.readPump(conn)
 	return nil
 }
 
-// Broadcaster kirim pesan ke semua client
-func StartBroadcaster() {
+func (h *domainHandler) readPump(conn *websocket.Conn) {
+	defer func() {
+		h.mu.Lock()
+		delete(h.clients, conn)
+		h.mu.Unlock()
+		conn.Close()
+		log.Println("Client disconnected:", conn.RemoteAddr())
+	}()
+
+	conn.SetReadLimit(1024)
+	conn.SetReadDeadline(time.Now().Add(60 * time.Second))
+	conn.SetPongHandler(func(string) error {
+		conn.SetReadDeadline(time.Now().Add(60 * time.Second))
+		return nil
+	})
+
 	for {
-		msg := <-broadcast
-		mu.Lock()
-		for conn := range clients {
-			if err := conn.WriteMessage(websocket.TextMessage, msg); err != nil {
-				log.Println("Write error:", err)
-				conn.Close()
-				delete(clients, conn)
-			}
+		_, msg, err := conn.ReadMessage()
+		if err != nil {
+			log.Println("Read error:", err)
+			break
 		}
-		mu.Unlock()
+		h.broadcast <- msg
+		// kirim FCM via worker pool
+		go h.serviceDashboard.EnqueueFCM("Pesan Baru", string(msg))
+	}
+}
+
+func (h *domainHandler) StartBroadcaster() {
+	ticker := time.NewTicker(30 * time.Second)
+	defer ticker.Stop()
+	for {
+		select {
+		case msg := <-h.broadcast:
+			h.mu.Lock()
+			for conn := range h.clients {
+				conn.SetWriteDeadline(time.Now().Add(10 * time.Second))
+				if err := conn.WriteMessage(websocket.TextMessage, msg); err != nil {
+					log.Println("Write error:", err)
+					conn.Close()
+					delete(h.clients, conn)
+				}
+			}
+			h.mu.Unlock()
+		case <-ticker.C:
+			// ping semua client agar tetap alive
+			h.mu.Lock()
+			for conn := range h.clients {
+				conn.SetWriteDeadline(time.Now().Add(10 * time.Second))
+				if err := conn.WriteMessage(websocket.PingMessage, []byte{}); err != nil {
+					conn.Close()
+					delete(h.clients, conn)
+				}
+			}
+			h.mu.Unlock()
+		}
 	}
 }

@@ -25,18 +25,17 @@ func (h *domainHandler) SaveToken(c echo.Context) error {
 }
 
 func (h *domainHandler) SendBroadcast(c echo.Context) error {
-	req := struct {
+	var req struct {
 		Title string `json:"title"`
 		Body  string `json:"body"`
-	}{}
+	}
 
 	if err := c.Bind(&req); err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
 	}
 
-	if err := h.serviceDashboard.BroadcastFCM(req.Title, req.Body); err != nil {
-		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
-	}
+	// Enqueue broadcast ke worker pool
+	h.serviceDashboard.EnqueueFCM(req.Title, req.Body)
 
-	return c.JSON(http.StatusOK, map[string]string{"status": "sent"})
+	return c.JSON(http.StatusOK, map[string]string{"status": "broadcast enqueued"})
 }

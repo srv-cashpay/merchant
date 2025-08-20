@@ -9,6 +9,8 @@ type DomainRepository interface {
 	Get(req dto.GetDashboardRequest) (dto.GetDashboardResponse, error)
 	SaveToken(userID, token string) error
 	GetAllTokens() ([]string, error)
+
+	DeleteToken(token string) error
 }
 
 type dashboardRepository struct {

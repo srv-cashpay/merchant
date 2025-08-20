@@ -1,9 +1,10 @@
 package dashboard
 
-type FCMToken struct {
-	UserID string `gorm:"primaryKey"`
-	Token  string
-}
+import (
+	"log"
+
+	"github.com/srv-cashpay/merchant/entity"
+)
 
 func (r *dashboardRepository) SaveToken(userID, token string) error {
 	err := r.DB.Exec(`
@@ -25,4 +26,12 @@ func (r *dashboardRepository) GetAllTokens() ([]string, error) {
 	}
 
 	return tokens, nil
+}
+
+func (r *dashboardRepository) DeleteToken(token string) error {
+	err := r.DB.Where("token = ?", token).Delete(&entity.FCMToken{}).Error
+	if err != nil {
+		log.Println("DeleteToken error:", err)
+	}
+	return err
 }
