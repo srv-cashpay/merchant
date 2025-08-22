@@ -40,7 +40,9 @@ type dashboardService struct {
 func NewDashboardService(Repo r.DomainRepository, jwtS m.JWTService) *dashboardService {
 	credFile := "firebase-service-account.json"
 	opt := option.WithCredentialsFile(credFile)
-	app, err := firebase.NewApp(context.Background(), nil, opt)
+	conf := &firebase.Config{ProjectID: "cashpay-2ac49"}
+
+	app, err := firebase.NewApp(context.Background(), conf, opt)
 	if err != nil {
 		log.Fatalln("Firebase init error:", err)
 	}
