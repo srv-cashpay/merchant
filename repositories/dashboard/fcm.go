@@ -12,19 +12,15 @@ func (r *dashboardRepository) SaveToken(userID, token string) error {
 		VALUES (?, ?)
 		ON CONFLICT (user_id) DO UPDATE SET token = EXCLUDED.token
 	`, userID, token).Error
-
 	return err
 }
 
 func (r *dashboardRepository) GetAllTokens() ([]string, error) {
 	var tokens []string
-
-	// Query pakai Raw + Scan
 	err := r.DB.Raw("SELECT token FROM fcm_tokens").Scan(&tokens).Error
 	if err != nil {
 		return nil, err
 	}
-
 	return tokens, nil
 }
 
