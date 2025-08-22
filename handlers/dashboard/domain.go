@@ -26,6 +26,6 @@ func NewDashboardHandler(service s.DashboardService) DomainHandler {
 	return &domainHandler{
 		serviceDashboard: service,
 		clients:          make(map[*websocket.Conn]bool),
-		broadcast:        make(chan []byte, 100), // buffered
+		broadcast:        make(chan []byte, 100),
 	}
 }

@@ -38,7 +38,6 @@ type dashboardService struct {
 }
 
 func NewDashboardService(Repo r.DomainRepository, jwtS m.JWTService) *dashboardService {
-
 	credFile := "firebase-service-account.json"
 	opt := option.WithCredentialsFile(credFile)
 	app, err := firebase.NewApp(context.Background(), nil, opt)
@@ -55,9 +54,9 @@ func NewDashboardService(Repo r.DomainRepository, jwtS m.JWTService) *dashboardS
 		Repo:   Repo,
 		client: client,
 		fcmCh:  make(chan FCMJob, 100),
+		tokens: make(map[string]string), // ✅ inisialisasi map
 	}
 
-	// start worker pool
 	for i := 0; i < 5; i++ {
 		go s.fcmWorker()
 	}

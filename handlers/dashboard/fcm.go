@@ -15,7 +15,6 @@ var upgrader = websocket.Upgrader{
 	CheckOrigin:     func(r *http.Request) bool { return true },
 }
 
-// WebSocket
 func (h *domainHandler) HandleWebSocket(c echo.Context) error {
 	conn, err := upgrader.Upgrade(c.Response().Writer, c.Request(), nil)
 	if err != nil {
@@ -59,38 +58,18 @@ func (h *domainHandler) readPump(conn *websocket.Conn) {
 	}
 }
 
-func (h *domainHandler) StartBroadcaster() {
-	ticker := time.NewTicker(30 * time.Second)
-	defer ticker.Stop()
-	for {
-		select {
-		case msg := <-h.broadcast:
-			h.mu.Lock()
-			for conn := range h.clients {
-				conn.SetWriteDeadline(time.Now().Add(10 * time.Second))
-				if err := conn.WriteMessage(websocket.TextMessage, msg); err != nil {
-					log.Println("Write error:", err)
-					conn.Close()
-					delete(h.clients, conn)
-				}
-			}
-			h.mu.Unlock()
-		case <-ticker.C:
-			// ping agar tetap alive
-			h.mu.Lock()
-			for conn := range h.clients {
-				conn.SetWriteDeadline(time.Now().Add(10 * time.Second))
-				if err := conn.WriteMessage(websocket.PingMessage, []byte{}); err != nil {
-					conn.Close()
-					delete(h.clients, conn)
-				}
-			}
-			h.mu.Unlock()
-		}
+func (h *domainHandler) SendBroadcast(c echo.Context) error {
+	var req struct {
+		Title string `json:"title"`
+		Body  string `json:"body"`
 	}
+	if err := c.Bind(&req); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
+	}
+	h.serviceDashboard.EnqueueFCM(req.Title, req.Body)
+	return c.JSON(http.StatusOK, map[string]string{"status": "broadcast enqueued"})
 }
 
-// FCM token save
 type TokenRequest struct {
 	UserID string `json:"user_id"`
 	Token  string `json:"token"`
@@ -105,21 +84,5 @@ func (h *domainHandler) SaveToken(c echo.Context) error {
 	if err := h.serviceDashboard.SaveToken(req.UserID, req.Token); err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
-
 	return c.JSON(http.StatusOK, map[string]string{"status": "ok"})
-}
-
-func (h *domainHandler) SendBroadcast(c echo.Context) error {
-	var req struct {
-		Title string `json:"title"`
-		Body  string `json:"body"`
-	}
-
-	if err := c.Bind(&req); err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
-	}
-
-	h.serviceDashboard.EnqueueFCM(req.Title, req.Body)
-
-	return c.JSON(http.StatusOK, map[string]string{"status": "broadcast enqueued"})
 }

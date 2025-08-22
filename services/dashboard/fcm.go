@@ -15,7 +15,7 @@ func (s *dashboardService) SaveToken(userID, token string) error {
 	s.tokensMu.Lock()
 	defer s.tokensMu.Unlock()
 	s.tokens[userID] = token
-	return nil
+	return s.Repo.SaveToken(userID, token)
 }
 
 func (s *dashboardService) fcmWorker() {
@@ -38,7 +38,7 @@ func (s *dashboardService) fcmWorker() {
 			_, err := s.client.Send(context.Background(), message)
 			if err != nil {
 				log.Println("FCM send error:", err)
-				_ = s.Repo.DeleteToken(token) // hapus token invalid
+				_ = s.Repo.DeleteToken(token)
 			}
 		}
 	}
