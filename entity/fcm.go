@@ -2,5 +2,5 @@ package entity
 
 type FCMToken struct {
 	UserID string `gorm:"primaryKey"`
-	Token  string `gorm:"type:varchar(36);index" json:"token"`
+	Token  string `gorm:"type:varchar(256);index" json:"token"`
 }
