@@ -38,7 +38,7 @@ type dashboardService struct {
 }
 
 func NewDashboardService(Repo r.DomainRepository, jwtS m.JWTService) *dashboardService {
-	credFile := "cashpay-2ac49-firebase-adminsdk-fbsvc-233534c913.json"
+	credFile := "cashpay-2ac49-firebase-adminsdk-fbsvc-1ac288af19.json"
 	opt := option.WithCredentialsFile(credFile)
 	app, err := firebase.NewApp(context.Background(), nil, opt)
 	if err != nil {
