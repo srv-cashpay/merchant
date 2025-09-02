@@ -1,2 +1,3 @@
 configs/firebase-service-account.json
 .env
+.env-staging
