@@ -18,13 +18,13 @@ func (s *dashboardService) SaveToken(userID, token string) error {
 	return s.Repo.SaveToken(userID, token)
 }
 
-func (s *dashboardService) BroadcastNow(title, body string) ([]map[string]string, error) {
+func (s *dashboardService) BroadcastNow(title, body string) (string, error) {
 	tokens, err := s.Repo.GetAllTokens()
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 
-	var responses []map[string]string
+	var lastRes string
 	for _, token := range tokens {
 		msg := &messaging.Message{
 			Token: token,
@@ -41,10 +41,11 @@ func (s *dashboardService) BroadcastNow(title, body string) ([]map[string]string
 			continue
 		}
 
-		responses = append(responses, map[string]string{"name": res})
+		// simpan ID terakhir yang sukses
+		lastRes = res
 	}
 
-	return responses, nil
+	return lastRes, nil
 }
 
 func (s *dashboardService) fcmWorker() {

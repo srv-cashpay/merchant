@@ -61,12 +61,16 @@ func (h *domainHandler) SendBroadcast(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
 	}
 
-	responses, err := h.serviceDashboard.BroadcastNow(req.Title, req.Body)
+	res, err := h.serviceDashboard.BroadcastNow(req.Title, req.Body)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
 
-	return c.JSON(http.StatusOK, responses)
+	if res == "" {
+		return c.JSON(http.StatusOK, map[string]string{"status": "no tokens"})
+	}
+
+	return c.JSON(http.StatusOK, map[string]string{"name": res})
 }
 
 type TokenRequest struct {
