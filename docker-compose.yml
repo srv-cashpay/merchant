@@ -16,8 +16,6 @@ services:
       - 2358:2345
     networks:
       - shared_network
-    env_file:
-      - .env
 
 networks:
   shared_network:
