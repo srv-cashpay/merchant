@@ -20,6 +20,7 @@ type DashboardService interface {
 	Get(req dto.GetDashboardRequest) (dto.GetDashboardResponse, error)
 	EnqueueFCM(title, body string)
 	SaveToken(userID, token string) error
+	BroadcastNow(title, body string) ([]map[string]string, error)
 }
 
 type FCMJob struct {

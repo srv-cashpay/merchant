@@ -3,7 +3,6 @@ package dashboard
 import (
 	"log"
 	"net/http"
-	"time"
 
 	"github.com/gorilla/websocket"
 	"github.com/labstack/echo/v4"
@@ -40,13 +39,6 @@ func (h *domainHandler) readPump(conn *websocket.Conn) {
 		log.Println("Client disconnected:", conn.RemoteAddr())
 	}()
 
-	conn.SetReadLimit(1024)
-	conn.SetReadDeadline(time.Now().Add(60 * time.Second))
-	conn.SetPongHandler(func(string) error {
-		conn.SetReadDeadline(time.Now().Add(60 * time.Second))
-		return nil
-	})
-
 	for {
 		_, msg, err := conn.ReadMessage()
 		if err != nil {
@@ -54,6 +46,8 @@ func (h *domainHandler) readPump(conn *websocket.Conn) {
 			break
 		}
 		h.broadcast <- msg
+
+		// setiap pesan dari WS → enqueue FCM
 		h.serviceDashboard.EnqueueFCM("Pesan Baru", string(msg))
 	}
 }
@@ -66,8 +60,13 @@ func (h *domainHandler) SendBroadcast(c echo.Context) error {
 	if err := c.Bind(&req); err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
 	}
-	h.serviceDashboard.EnqueueFCM(req.Title, req.Body)
-	return c.JSON(http.StatusOK, map[string]string{"status": "broadcast enqueued"})
+
+	responses, err := h.serviceDashboard.BroadcastNow(req.Title, req.Body)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
+	}
+
+	return c.JSON(http.StatusOK, responses)
 }
 
 type TokenRequest struct {
