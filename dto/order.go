@@ -1,10 +1,9 @@
 package dto
 
 type FCMRequest struct {
-	Title string `json:"title"`
-	Body  string `json:"body"`
-	Name  string `json:"name"`
-
+	Title       string        `json:"title"`
+	Body        string        `json:"body"`
+	Name        string        `json:"name"`
 	ID          uint          `json:"id"`
 	UserID      string        `json:"user_id"`
 	MerchantID  string        `json:"merchant_id"`
