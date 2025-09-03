@@ -4,6 +4,16 @@ type FCMRequest struct {
 	Title string `json:"title"`
 	Body  string `json:"body"`
 	Name  string `json:"name"`
+
+	ID          uint          `json:"id"`
+	UserID      string        `json:"user_id"`
+	MerchantID  string        `json:"merchant_id"`
+	Product     []ProductItem `json:"product"`
+	ProductJSON string        `json:"-" gorm:"column:product"`
+	OrderName   string        `json:"order_name"`
+	CreatedBy   string        `json:"created_by"`
+	Description string        `json:"description"`
+	Status      int           `json:"status"`
 }
 
 type FCMResponse struct {

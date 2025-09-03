@@ -1,25 +1,42 @@
-package dashboard
+package order
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
 	"log"
 
 	"firebase.google.com/go/messaging"
 	"github.com/srv-cashpay/merchant/dto"
 )
 
-func (s *dashboardService) EnqueueFCM(title, body string) {
+func (s *orderService) EnqueueFCM(title, body string) {
 	s.fcmCh <- FCMJob{Title: title, Body: body}
 }
 
-func (s *dashboardService) SaveToken(req dto.TokenRequest) error {
+func (s *orderService) SaveToken(req dto.TokenRequest) error {
 	s.tokensMu.Lock()
 	defer s.tokensMu.Unlock()
 	s.tokens[req.UserID] = req.Token
 	return s.Repo.SaveToken(req)
 }
 
-func (s *dashboardService) BroadcastNow(req dto.FCMRequest) (dto.FCMResponse, error) {
+func (s *orderService) BroadcastNow(req dto.FCMRequest) (dto.FCMResponse, error) {
+	productJSON, err := json.Marshal(req.Product)
+	if err != nil {
+		return dto.FCMResponse{}, err
+	}
+
+	// Buat copy request dengan string product (opsional kalau mau simpan)
+	reqWithJSON := req
+	reqWithJSON.ProductJSON = string(productJSON)
+
+	// Kirim ke repo
+	created, err := s.Repo.SaveOrder(reqWithJSON)
+	if err != nil {
+		return dto.FCMResponse{}, err
+	}
+
 	tokens, err := s.Repo.GetAllTokens()
 	if err != nil {
 		return dto.FCMResponse{}, err
@@ -30,7 +47,7 @@ func (s *dashboardService) BroadcastNow(req dto.FCMRequest) (dto.FCMResponse, er
 		msg := &messaging.Message{
 			Token: token,
 			Notification: &messaging.Notification{
-				Title: "Web Order",
+				Title: fmt.Sprintf("Web order: %s", created.Name),
 				Body:  "You have a new order from the link, check now",
 			},
 		}
@@ -42,14 +59,13 @@ func (s *dashboardService) BroadcastNow(req dto.FCMRequest) (dto.FCMResponse, er
 			continue
 		}
 
-		// simpan ID terakhir yang sukses
 		lastRes = res
 	}
 
 	return dto.FCMResponse{Name: lastRes}, nil
 }
 
-func (s *dashboardService) fcmWorker() {
+func (s *orderService) fcmWorker() {
 	for job := range s.fcmCh {
 		_, _ = s.BroadcastNow(dto.FCMRequest{
 			Title: job.Title,

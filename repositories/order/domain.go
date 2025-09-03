@@ -16,6 +16,11 @@ type DomainRepository interface {
 	GetById(req dto.GetByIdOrderRequest) (*dto.OrderResponse, error)
 	Update(req dto.OrderUpdateRequest) (dto.OrderUpdateResponse, error)
 	CheckMerchantDetail(merchantID string, merchantDetail *entity.MerchantDetail) error
+
+	SaveToken(req dto.TokenRequest) error
+	GetAllTokens() ([]string, error)
+	DeleteToken(token string) error
+	SaveOrder(req dto.FCMRequest) (dto.FCMResponse, error)
 }
 
 type orderRepository struct {

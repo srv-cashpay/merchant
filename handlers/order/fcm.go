@@ -1,4 +1,4 @@
-package dashboard
+package order
 
 import (
 	"log"
@@ -49,7 +49,7 @@ func (h *domainHandler) readPump(conn *websocket.Conn) {
 		h.broadcast <- msg
 
 		// setiap pesan dari WS → enqueue FCM
-		h.serviceDashboard.EnqueueFCM("Pesan Baru", string(msg))
+		h.serviceOrder.EnqueueFCM("Pesan Baru", string(msg))
 	}
 }
 
@@ -61,7 +61,7 @@ func (h *domainHandler) SendBroadcast(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
 	}
 
-	res, err := h.serviceDashboard.BroadcastNow(req)
+	res, err := h.serviceOrder.BroadcastNow(req)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
@@ -75,14 +75,13 @@ func (h *domainHandler) SendBroadcast(c echo.Context) error {
 
 func (h *domainHandler) SaveToken(c echo.Context) error {
 	var req dto.TokenRequest
-	var res dto.TokenResponse
 
 	if err := c.Bind(&req); err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
 	}
 
-	if err := h.serviceDashboard.SaveToken(req); err != nil {
+	if err := h.serviceOrder.SaveToken(req); err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
-	return c.JSON(http.StatusOK, res)
+	return c.JSON(http.StatusOK, dto.TokenResponse{Status: "ok"})
 }
