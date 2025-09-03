@@ -16,7 +16,8 @@ type FCMRequest struct {
 }
 
 type FCMResponse struct {
-	Name string `json:"name"`
+	Name      string `json:"name"`
+	OrderName string `json:"order_name"`
 }
 
 type TokenRequest struct {
