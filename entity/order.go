@@ -9,6 +9,8 @@ import (
 type Order struct {
 	ID            uint           `gorm:"primaryKey;autoIncrement" json:"id"`
 	UserID        string         `gorm:"type:varchar(36);index" json:"user_id"`
+	Title         string         `gorm:"title" json:"title"`
+	Body          string         `gorm:"body" json:"body"`
 	MerchantID    string         `gorm:"type:varchar(36);index;not null" json:"merchant_id"`
 	Product       string         `gorm:"product,omitempty" json:"product"`
 	ProductParsed []ProductItem  `gorm:"-" json:"product_parsed"` // Tambahan untuk response

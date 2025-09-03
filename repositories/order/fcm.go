@@ -29,6 +29,8 @@ func (r *orderRepository) DeleteToken(token string) error {
 func (r *orderRepository) SaveOrder(req dto.FCMRequest) (dto.FCMResponse, error) {
 
 	create := entity.Order{
+		Title:      req.Title,
+		Body:       req.Body,
 		ID:         req.ID,
 		OrderName:  req.OrderName,
 		MerchantID: req.MerchantID,
