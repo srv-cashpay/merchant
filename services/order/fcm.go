@@ -47,7 +47,7 @@ func (s *orderService) BroadcastNow(req dto.FCMRequest) (dto.FCMResponse, error)
 		msg := &messaging.Message{
 			Token: token,
 			Notification: &messaging.Notification{
-				Title: "Web order",
+				Title: fmt.Sprintf("Web order: %s", created.Name),
 				Body:  "You have a new order from the link, check now",
 			},
 			Data: map[string]string{ // tambahin data biar client bisa buka modal
