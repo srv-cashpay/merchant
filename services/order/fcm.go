@@ -2,6 +2,8 @@ package order
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
 	"log"
 
 	"firebase.google.com/go/messaging"
@@ -20,6 +22,22 @@ func (s *orderService) SaveToken(req dto.TokenRequest) error {
 }
 
 func (s *orderService) BroadcastNow(req dto.FCMRequest) (dto.FCMResponse, error) {
+	productJSON, err := json.Marshal(req.Product)
+	if err != nil {
+		return dto.FCMResponse{}, err
+	}
+
+	// Copy request dengan JSON product
+	reqWithJSON := req
+	reqWithJSON.ProductJSON = string(productJSON)
+
+	// Simpan ke DB
+	created, err := s.Repo.SaveOrder(reqWithJSON)
+	if err != nil {
+		return dto.FCMResponse{}, err
+	}
+
+	// Ambil semua token
 	tokens, err := s.Repo.GetAllTokens()
 	if err != nil {
 		return dto.FCMResponse{}, err
@@ -27,11 +45,17 @@ func (s *orderService) BroadcastNow(req dto.FCMRequest) (dto.FCMResponse, error)
 
 	var lastRes string
 	for _, token := range tokens {
+		// ⚠️ kalau tetap pakai Notification, Android akan auto munculin notif
+		// jadi akan dobel dengan Notifee di client
 		msg := &messaging.Message{
 			Token: token,
 			Notification: &messaging.Notification{
-				Title: "Web Order",
+				Title: fmt.Sprintf("Web order: %s", created.OrderName), // pastikan pakai field OrderName
 				Body:  "You have a new order from the link, check now",
+			},
+			Data: map[string]string{ // tambahin data biar client bisa buka modal
+				"order_name": req.OrderName,
+				"product":    string(productJSON),
 			},
 		}
 
@@ -42,10 +66,10 @@ func (s *orderService) BroadcastNow(req dto.FCMRequest) (dto.FCMResponse, error)
 			continue
 		}
 
-		// simpan ID terakhir yang sukses
 		lastRes = res
 	}
 
+	// Kembalikan FCMResponse dengan ID terakhir
 	return dto.FCMResponse{Name: lastRes}, nil
 }
 

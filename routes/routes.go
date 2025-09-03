@@ -233,10 +233,10 @@ var (
 func New() *echo.Echo {
 
 	e := echo.New()
-	e.POST("/menu/order", orderH.Order)
+	// e.POST("/menu/order", orderH.Order)
 	e.GET("/ws", orderH.HandleWebSocket)
 	e.POST("/fcm/save-token", orderH.SaveToken)
-	e.POST("/fcm/broadcast", orderH.SendBroadcast)
+	e.POST("/menu/order", orderH.SendBroadcast)
 
 	sub := e.Group("sub", middlewares.AuthorizeJWT(JWT))
 	{
