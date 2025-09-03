@@ -58,24 +58,11 @@ func (h *domainHandler) SendBroadcast(c echo.Context) error {
 	var req dto.FCMRequest
 	var resp dto.FCMResponse
 
-	userid, ok := c.Get("UserId").(string)
-	if !ok {
+	merchantID := c.QueryParam("merchant_id")
+	if merchantID == "" {
 		return res.ErrorBuilder(&res.ErrorConstant.InternalServerError, nil).Send(c)
 	}
-
-	createdBy, ok := c.Get("CreatedBy").(string)
-	if !ok {
-		return res.ErrorBuilder(&res.ErrorConstant.InternalServerError, nil).Send(c)
-	}
-
-	merchantId, ok := c.Get("MerchantId").(string)
-	if !ok {
-		return res.ErrorBuilder(&res.ErrorConstant.InternalServerError, nil).Send(c)
-	}
-
-	req.UserID = userid
-	req.MerchantID = merchantId
-	req.CreatedBy = createdBy
+	req.MerchantID = merchantID
 
 	if err := c.Bind(&req); err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
