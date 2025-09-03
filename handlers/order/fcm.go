@@ -7,7 +7,6 @@ import (
 	"github.com/gorilla/websocket"
 	"github.com/labstack/echo/v4"
 	"github.com/srv-cashpay/merchant/dto"
-	res "github.com/srv-cashpay/util/s/response"
 )
 
 var upgrader = websocket.Upgrader{
@@ -57,25 +56,6 @@ func (h *domainHandler) readPump(conn *websocket.Conn) {
 func (h *domainHandler) SendBroadcast(c echo.Context) error {
 	var req dto.FCMRequest
 	var resp dto.FCMResponse
-
-	userid, ok := c.Get("UserId").(string)
-	if !ok {
-		return res.ErrorBuilder(&res.ErrorConstant.InternalServerError, nil).Send(c)
-	}
-
-	createdBy, ok := c.Get("CreatedBy").(string)
-	if !ok {
-		return res.ErrorBuilder(&res.ErrorConstant.InternalServerError, nil).Send(c)
-	}
-
-	merchantId, ok := c.Get("MerchantId").(string)
-	if !ok {
-		return res.ErrorBuilder(&res.ErrorConstant.InternalServerError, nil).Send(c)
-	}
-
-	req.UserID = userid
-	req.MerchantID = merchantId
-	req.CreatedBy = createdBy
 
 	if err := c.Bind(&req); err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
