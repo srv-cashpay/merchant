@@ -45,17 +45,17 @@ func (s *orderService) BroadcastNow(req dto.FCMRequest) (dto.FCMResponse, error)
 
 	var lastRes string
 	for _, token := range tokens {
-		// ⚠️ kalau tetap pakai Notification, Android akan auto munculin notif
-		// jadi akan dobel dengan Notifee di client
 		msg := &messaging.Message{
 			Token: token,
 			Notification: &messaging.Notification{
 				Title: fmt.Sprintf("Web order: %s", created.OrderName), // pastikan pakai field OrderName
 				Body:  "You have a new order from the link, check now",
 			},
-			Data: map[string]string{ // tambahin data biar client bisa buka modal
-				"order_name": req.OrderName,
-				"product":    string(productJSON),
+			Data: map[string]string{
+				"order_name":  req.OrderName,
+				"merchant_id": req.MerchantID,
+				"user_id":     req.UserID,
+				"product":     string(productJSON),
 			},
 		}
 
