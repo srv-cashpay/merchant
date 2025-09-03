@@ -2,8 +2,6 @@ package order
 
 import (
 	"context"
-	"encoding/json"
-	"fmt"
 	"log"
 
 	"firebase.google.com/go/messaging"
@@ -22,21 +20,6 @@ func (s *orderService) SaveToken(req dto.TokenRequest) error {
 }
 
 func (s *orderService) BroadcastNow(req dto.FCMRequest) (dto.FCMResponse, error) {
-	productJSON, err := json.Marshal(req.Product)
-	if err != nil {
-		return dto.FCMResponse{}, err
-	}
-
-	// Buat copy request dengan string product (opsional kalau mau simpan)
-	reqWithJSON := req
-	reqWithJSON.ProductJSON = string(productJSON)
-
-	// Kirim ke repo
-	created, err := s.Repo.SaveOrder(reqWithJSON)
-	if err != nil {
-		return dto.FCMResponse{}, err
-	}
-
 	tokens, err := s.Repo.GetAllTokens()
 	if err != nil {
 		return dto.FCMResponse{}, err
@@ -47,11 +30,8 @@ func (s *orderService) BroadcastNow(req dto.FCMRequest) (dto.FCMResponse, error)
 		msg := &messaging.Message{
 			Token: token,
 			Notification: &messaging.Notification{
-				Title: fmt.Sprintf("Web order: %s", created.OrderName),
+				Title: "Web Order",
 				Body:  "You have a new order from the link, check now",
-			},
-			Data: map[string]string{ // tambahin data biar client bisa buka modal
-				"product": string(productJSON),
 			},
 		}
 
@@ -62,6 +42,7 @@ func (s *orderService) BroadcastNow(req dto.FCMRequest) (dto.FCMResponse, error)
 			continue
 		}
 
+		// simpan ID terakhir yang sukses
 		lastRes = res
 	}
 
