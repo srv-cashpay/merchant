@@ -19,8 +19,8 @@ import (
 type DashboardService interface {
 	Get(req dto.GetDashboardRequest) (dto.GetDashboardResponse, error)
 	EnqueueFCM(title, body string)
-	SaveToken(userID, token string) error
-	BroadcastNow(title, body string) (string, error)
+	SaveToken(dto.TokenRequest) error
+	BroadcastNow(req dto.FCMRequest) (dto.FCMResponse, error)
 }
 
 type FCMJob struct {

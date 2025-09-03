@@ -6,6 +6,7 @@ import (
 
 	"github.com/gorilla/websocket"
 	"github.com/labstack/echo/v4"
+	"github.com/srv-cashpay/merchant/dto"
 )
 
 var upgrader = websocket.Upgrader{
@@ -53,39 +54,35 @@ func (h *domainHandler) readPump(conn *websocket.Conn) {
 }
 
 func (h *domainHandler) SendBroadcast(c echo.Context) error {
-	var req struct {
-		Title string `json:"title"`
-		Body  string `json:"body"`
-	}
+	var req dto.FCMRequest
+	var res dto.FCMResponse
+
 	if err := c.Bind(&req); err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
 	}
 
-	res, err := h.serviceDashboard.BroadcastNow(req.Title, req.Body)
+	res, err := h.serviceDashboard.BroadcastNow(req)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
 
-	if res == "" {
+	if res.Name == "" {
 		return c.JSON(http.StatusOK, map[string]string{"status": "no tokens"})
 	}
 
-	return c.JSON(http.StatusOK, map[string]string{"name": res})
-}
-
-type TokenRequest struct {
-	UserID string `json:"user_id"`
-	Token  string `json:"token"`
+	return c.JSON(http.StatusOK, map[string]string{"name": res.Name})
 }
 
 func (h *domainHandler) SaveToken(c echo.Context) error {
-	var req TokenRequest
+	var req dto.TokenRequest
+	var res dto.TokenResponse
+
 	if err := c.Bind(&req); err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
 	}
 
-	if err := h.serviceDashboard.SaveToken(req.UserID, req.Token); err != nil {
+	if err := h.serviceDashboard.SaveToken(req); err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
-	return c.JSON(http.StatusOK, map[string]string{"status": "ok"})
+	return c.JSON(http.StatusOK, res)
 }

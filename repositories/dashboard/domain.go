@@ -7,7 +7,7 @@ import (
 
 type DomainRepository interface {
 	Get(req dto.GetDashboardRequest) (dto.GetDashboardResponse, error)
-	SaveToken(userID, token string) error
+	SaveToken(req dto.TokenRequest) error
 	GetAllTokens() ([]string, error)
 
 	DeleteToken(token string) error

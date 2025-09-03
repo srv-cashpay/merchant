@@ -10,7 +10,6 @@ import (
 )
 
 func (r *orderRepository) Create(req dto.OrderRequest) (dto.OrderResponse, error) {
-	// Insert or update the auto_increment value based on merchant_id
 
 	create := entity.Order{
 		ID:         req.ID,
@@ -18,7 +17,7 @@ func (r *orderRepository) Create(req dto.OrderRequest) (dto.OrderResponse, error
 		MerchantID: req.MerchantID,
 		UserID:     req.UserID,
 		CreatedBy:  req.CreatedBy,
-		Product:    req.ProductJSON, // simpan JSON string
+		Product:    req.ProductJSON,
 	}
 
 	if err := r.DB.Save(&create).Error; err != nil {

@@ -1,5 +1,24 @@
 package dto
 
+type FCMRequest struct {
+	Title string `json:"title"`
+	Body  string `json:"body"`
+	Name  string `json:"name"`
+}
+
+type FCMResponse struct {
+	Name string `json:"name"`
+}
+
+type TokenRequest struct {
+	UserID string `json:"user_id"`
+	Token  string `json:"token"`
+}
+
+type TokenResponse struct {
+	Status string `json:"status"`
+}
+
 type OrderRequest struct {
 	ID          uint          `json:"id"`
 	UserID      string        `json:"user_id"`

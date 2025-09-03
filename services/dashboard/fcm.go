@@ -5,23 +5,24 @@ import (
 	"log"
 
 	"firebase.google.com/go/messaging"
+	"github.com/srv-cashpay/merchant/dto"
 )
 
 func (s *dashboardService) EnqueueFCM(title, body string) {
 	s.fcmCh <- FCMJob{Title: title, Body: body}
 }
 
-func (s *dashboardService) SaveToken(userID, token string) error {
+func (s *dashboardService) SaveToken(req dto.TokenRequest) error {
 	s.tokensMu.Lock()
 	defer s.tokensMu.Unlock()
-	s.tokens[userID] = token
-	return s.Repo.SaveToken(userID, token)
+	s.tokens[req.UserID] = req.Token
+	return s.Repo.SaveToken(req)
 }
 
-func (s *dashboardService) BroadcastNow(title, body string) (string, error) {
+func (s *dashboardService) BroadcastNow(req dto.FCMRequest) (dto.FCMResponse, error) {
 	tokens, err := s.Repo.GetAllTokens()
 	if err != nil {
-		return "", err
+		return dto.FCMResponse{}, err
 	}
 
 	var lastRes string
@@ -29,8 +30,8 @@ func (s *dashboardService) BroadcastNow(title, body string) (string, error) {
 		msg := &messaging.Message{
 			Token: token,
 			Notification: &messaging.Notification{
-				Title: title,
-				Body:  body,
+				Title: "Web Order",
+				Body:  "You have a new order from the link, check now",
 			},
 		}
 
@@ -45,11 +46,14 @@ func (s *dashboardService) BroadcastNow(title, body string) (string, error) {
 		lastRes = res
 	}
 
-	return lastRes, nil
+	return dto.FCMResponse{Name: lastRes}, nil
 }
 
 func (s *dashboardService) fcmWorker() {
 	for job := range s.fcmCh {
-		_, _ = s.BroadcastNow(job.Title, job.Body)
+		_, _ = s.BroadcastNow(dto.FCMRequest{
+			Title: job.Title,
+			Body:  job.Body,
+		})
 	}
 }
