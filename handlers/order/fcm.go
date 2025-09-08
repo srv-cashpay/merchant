@@ -73,11 +73,11 @@ func (h *domainHandler) SendBroadcast(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
 
-	if res.Name == "" {
+	if res.OrderName == "" {
 		return c.JSON(http.StatusOK, map[string]string{"status": "no tokens"})
 	}
 
-	return c.JSON(http.StatusOK, map[string]string{"name": resp.Name})
+	return c.JSON(http.StatusOK, map[string]string{"name": resp.OrderName})
 }
 
 func (h *domainHandler) SaveToken(c echo.Context) error {
