@@ -87,6 +87,12 @@ func (r *userRepository) Get(req *dto.Pagination) (dto.UserPaginationResponse, i
 	var userResponses []dto.UserResponse
 	for _, u := range users {
 
+		decryptedWa, err := util.Decrypt(u.Whatsapp)
+		if err != nil {
+			return dto.UserPaginationResponse{}, totalPages
+
+		}
+
 		decryptedEmail, err := util.Decrypt(u.Email)
 		if err != nil {
 			return dto.UserPaginationResponse{}, totalPages
@@ -95,7 +101,7 @@ func (r *userRepository) Get(req *dto.Pagination) (dto.UserPaginationResponse, i
 		userResp := dto.UserResponse{
 			ID:       u.ID,
 			FullName: u.FullName,
-			Whatsapp: u.Whatsapp,
+			Whatsapp: decryptedWa,
 			Email:    decryptedEmail,
 			Verified: dto.UserVerified{
 				ID:             u.Verified.ID,
