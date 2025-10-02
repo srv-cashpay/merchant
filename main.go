@@ -1,8 +1,6 @@
 package main
 
 import (
-	"log"
-
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/srv-cashpay/merchant/routes"
@@ -17,14 +15,7 @@ func main() {
 	e.Use(middleware.Recover())
 	e.Use(CORSMiddleware())
 
-	// Sertifikat Let's Encrypt
-	certFile := "/certs/fullchain.pem"
-	keyFile := "/certs/privkey.pem"
-
-	// Jalankan HTTPS
-	if err := e.StartTLS(":2345", certFile, keyFile); err != nil {
-		log.Fatal("StartTLS error: ", err)
-	}
+	e.Logger.Fatal(e.Start(":2345"))
 }
 
 // CORSMiddleware custom

@@ -45,7 +45,7 @@ type FCMJob struct {
 }
 
 func NewOrderService(Repo r.DomainRepository, jwtS m.JWTService) OrderService {
-	credFile := "cashpay-2ac49-firebase-adminsdk-fbsvc-1ac288af19.json"
+	credFile := "cashpay-2ac49-firebase-adminsdk-fbsvc-a068e30211.json"
 	opt := option.WithCredentialsFile(credFile)
 	app, err := firebase.NewApp(context.Background(), nil, opt)
 	if err != nil {

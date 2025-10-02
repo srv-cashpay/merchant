@@ -1,3 +1,8 @@
 configs/firebase-service-account.json
 .env
 .env-staging
+.env-prod
+docker-compose.prod.yml
+docker-compose.yml
+main.go
+cashpay-2ac49-firebase-adminsdk-fbsvc-a068e30211.json
