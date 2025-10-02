@@ -5,4 +5,5 @@ configs/firebase-service-account.json
 docker-compose.prod.yml
 docker-compose.yml
 main.go
+main-prod.go
 cashpay-2ac49-firebase-adminsdk-fbsvc-a068e30211.json
