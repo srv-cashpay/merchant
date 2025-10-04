@@ -4,7 +4,7 @@ import (
 	dto "github.com/srv-cashpay/merchant/dto"
 )
 
-func (b *voucherService) GetVerifikasi(req dto.GetVerifikasi) (*dto.VoucherResponse, error) {
+func (b *voucherService) GetVerifikasi(req dto.GetVerifikasi) (*dto.GetVerifikasiResponse, error) {
 	transaction, err := b.Repo.GetVerifikasi(req)
 	if err != nil {
 		return nil, err

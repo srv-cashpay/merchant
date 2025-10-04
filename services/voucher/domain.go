@@ -14,7 +14,7 @@ type VoucherService interface {
 	Delete(req dto.DeleteRequest) (dto.DeleteResponse, error)
 	Get(context echo.Context, req *dto.Pagination) dto.Response
 	GetById(req dto.GetByIdRequest) (*dto.VoucherResponse, error)
-	GetVerifikasi(req dto.GetVerifikasi) (*dto.VoucherResponse, error)
+	GetVerifikasi(req dto.GetVerifikasi) (*dto.GetVerifikasiResponse, error)
 	Update(req dto.VoucherUpdateRequest) (dto.VoucherUpdateResponse, error)
 }
 

@@ -245,6 +245,7 @@ func New() *echo.Echo {
 	e.GET("/ws", orderH.HandleWebSocket)
 	e.POST("/fcm/save-token", orderH.SaveToken)
 	e.POST("/menu/order", orderH.SendBroadcast)
+	e.GET("/voucher-verification/:id/:merchant_id", voucherH.GetVerifikasi)
 
 	sub := e.Group("sub", middlewares.AuthorizeJWT(JWT))
 	{
@@ -315,7 +316,7 @@ func New() *echo.Echo {
 		voucher.POST("/voucher/create", voucherH.Create)
 		voucher.GET("/voucher/pagination", voucherH.Get)
 		voucher.GET("/voucher/:id", voucherH.GetById)
-		voucher.GET("/verifikasi-voucher/:id", voucherH.GetVerifikasi)
+		voucher.PUT("/voucher-verification/:id/:merchant_id", voucherH.GetVerifikasi)
 		voucher.PUT("/voucher/update/:id", voucherH.Update)
 		voucher.DELETE("/voucher/:id", voucherH.Delete)
 		voucher.DELETE("/voucher/bulk-delete", voucherH.BulkDelete)

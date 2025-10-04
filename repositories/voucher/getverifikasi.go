@@ -5,15 +5,10 @@ import (
 	"github.com/srv-cashpay/merchant/entity"
 )
 
-func (b *voucherRepository) GetVerifikasi(req dto.GetVerifikasi) (*dto.VoucherResponse, error) {
-	var tr entity.Voucher
-	if err := b.DB.Where("id = ?", req.ID).First(&tr).Error; err != nil {
-		return nil, err
-	}
-
-	// ambil voucher_generate (entity)
+func (b *voucherRepository) GetVerifikasi(req dto.GetVerifikasi) (*dto.GetVerifikasiResponse, error) {
+	// ambil voucher_generate
 	var generates []entity.VoucherGenerate
-	if err := b.DB.Where("voucher_id = ?", tr.ID).Find(&generates).Error; err != nil {
+	if err := b.DB.Where("id = ? AND merchant_id = ?", req.ID, req.MerchantID).Find(&generates).Error; err != nil {
 		return nil, err
 	}
 
@@ -21,6 +16,7 @@ func (b *voucherRepository) GetVerifikasi(req dto.GetVerifikasi) (*dto.VoucherRe
 	dtoGenerates := make([]dto.VoucherGenerate, 0, len(generates))
 	for _, g := range generates {
 		dtoGenerates = append(dtoGenerates, dto.VoucherGenerate{
+			ID:          g.ID,
 			MerchantID:  g.MerchantID,
 			VoucherName: g.VoucherName,
 			VoucherLink: g.VoucherLink,
@@ -30,12 +26,7 @@ func (b *voucherRepository) GetVerifikasi(req dto.GetVerifikasi) (*dto.VoucherRe
 		})
 	}
 
-	// mapping ke response
-	response := &dto.VoucherResponse{
-		ID:              tr.ID,
-		UserID:          tr.UserID,
-		MerchantID:      tr.MerchantID,
-		CreatedBy:       tr.CreatedBy,
+	response := &dto.GetVerifikasiResponse{
 		VoucherGenerate: dtoGenerates,
 	}
 

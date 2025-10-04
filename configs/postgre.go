@@ -84,6 +84,7 @@ func InitDB() *gorm.DB {
 		&entity.DeleteAccount{},
 		&entity.FCMToken{},
 		&entity.Voucher{},
+		&entity.VoucherGenerate{},
 	)
 
 	return db

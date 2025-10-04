@@ -13,7 +13,7 @@ type DomainRepository interface {
 	BulkDelete(req dto.BulkDeleteRequest) (int, error)
 	Get(req *dto.Pagination) (RepositoryResult, int)
 	GetById(req dto.GetByIdRequest) (*dto.VoucherResponse, error)
-	GetVerifikasi(req dto.GetVerifikasi) (*dto.VoucherResponse, error)
+	GetVerifikasi(req dto.GetVerifikasi) (*dto.GetVerifikasiResponse, error)
 	Update(req dto.VoucherUpdateRequest) (dto.VoucherUpdateResponse, error)
 	CheckMerchantDetail(merchantID string, merchantDetail *entity.MerchantDetail) error
 }

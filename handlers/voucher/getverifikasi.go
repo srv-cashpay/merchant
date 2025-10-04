@@ -9,21 +9,13 @@ import (
 func (b *domainHandler) GetVerifikasi(c echo.Context) error {
 	var req dto.GetVerifikasi
 
-	// idStr := c.Param("id")
-
-	idUint, err := res.IsNumber(c, "id")
-	if err != nil {
-		return res.ErrorBuilder(&res.ErrorConstant.BadRequest, err).Send(c)
-	}
-
-	req.ID = idUint
+	req.ID = c.Param("id")
+	req.MerchantID = c.Param("merchant_id")
 
 	transaction, err := b.serviceVoucher.GetVerifikasi(req)
 	if err != nil {
 		return res.ErrorBuilder(&res.ErrorConstant.NotFound, err).Send(c)
-
 	}
 
 	return res.SuccessResponse(transaction).Send(c)
-
 }

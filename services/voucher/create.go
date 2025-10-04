@@ -32,7 +32,7 @@ func (s *voucherService) Create(req dto.VoucherRequest) (dto.VoucherResponse, er
 			return dto.VoucherResponse{}, err
 		}
 
-		link := "https://cashpay.my.id/" + secureID + "/" + req.MerchantID
+		link := "https://cashpay.my.id/voucher-verification/" + secureID + "/" + req.MerchantID
 
 		qr, err := generateQRCode(link)
 		if err != nil {
@@ -40,13 +40,14 @@ func (s *voucherService) Create(req dto.VoucherRequest) (dto.VoucherResponse, er
 		}
 
 		voucherGenerates = append(voucherGenerates, dto.VoucherGenerate{
+			ID:          secureID,
 			MerchantID:  req.MerchantID,
 			VoucherName: req.VoucherName,
 			VoucherLink: link,
 			VoucherQR:   qr, // 👈 tambahin field baru di DTO
 			StartDate:   req.StartDate,
 			EndDate:     req.EndDate,
-			Status:      req.Status,
+			Status:      false,
 		})
 	}
 

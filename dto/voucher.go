@@ -8,7 +8,7 @@ type VoucherRequest struct {
 	VoucherName     string            `json:"voucher_name"`
 	StartDate       string            `json:"start_date"`
 	EndDate         string            `json:"end_date"`
-	Status          int               `json:"status"`
+	Status          bool              `json:"status"`
 	CreatedBy       string            `json:"created_by"`
 	VoucherGenerate []VoucherGenerate `json:"voucher_generate"`
 }
@@ -22,13 +22,14 @@ type VoucherResponse struct {
 }
 
 type VoucherGenerate struct {
+	ID          string `json:"id"`
 	MerchantID  string `json:"merchant_id"`
 	VoucherName string `json:"voucher_name"`
 	VoucherLink string `json:"voucher_link"`
 	VoucherQR   string `json:"voucher_qr"`
 	StartDate   string `json:"start_date"`
 	EndDate     string `json:"end_date"`
-	Status      int    `json:"status"`
+	Status      bool   `json:"status"`
 }
 
 type VoucherGetByIdRequest struct {
@@ -38,6 +39,10 @@ type VoucherGetByIdRequest struct {
 type GetVerifikasi struct {
 	ID         string `param:"id" validate:"required"`
 	MerchantID string `param:"merchant_id" validate:"required"`
+}
+
+type GetVerifikasiResponse struct {
+	VoucherGenerate []VoucherGenerate `json:"voucher_generate"`
 }
 
 type VoucherDeleteRequest struct {

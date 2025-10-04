@@ -35,18 +35,24 @@ func (r *voucherRepository) Create(req dto.VoucherRequest) (dto.VoucherResponse,
 		return dto.VoucherResponse{}, err
 	}
 
-	// Step 3: mapping VoucherGenerate hanya untuk response (bukan insert ke DB baru)
-	var dtoGenerates []dto.VoucherGenerate
+	var dtoGenerates []entity.VoucherGenerate
 	for _, v := range req.VoucherGenerate {
-		dtoGenerates = append(dtoGenerates, dto.VoucherGenerate{
+		dtoGenerates = append(dtoGenerates, entity.VoucherGenerate{
+			ID:          v.ID,
+			VoucherID:   create.ID, // FK ke master voucher
 			MerchantID:  req.MerchantID,
 			VoucherName: v.VoucherName,
 			VoucherLink: v.VoucherLink,
-			VoucherQR:   v.VoucherQR,
 			StartDate:   v.StartDate,
 			EndDate:     v.EndDate,
-			Status:      v.Status,
+			Status:      false,
 		})
+	}
+
+	if len(dtoGenerates) > 0 {
+		if err := r.DB.Create(&dtoGenerates).Error; err != nil {
+			return dto.VoucherResponse{}, err
+		}
 	}
 
 	// Step 4: mapping ke DTO response
@@ -55,7 +61,7 @@ func (r *voucherRepository) Create(req dto.VoucherRequest) (dto.VoucherResponse,
 		MerchantID:      create.MerchantID,
 		UserID:          create.UserID,
 		CreatedBy:       create.CreatedBy,
-		VoucherGenerate: dtoGenerates, // hanya tampil di response
+		VoucherGenerate: req.VoucherGenerate, // hanya tampil di response
 	}
 
 	return response, nil
