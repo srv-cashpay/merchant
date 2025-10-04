@@ -28,11 +28,7 @@ func (b *voucherService) Update(req dto.VoucherUpdateRequest) (dto.VoucherUpdate
 
 	// Step 3: mapping hasil ke response
 	response := dto.VoucherUpdateResponse{
-		ID:              updated.ID,
-		UserID:          updated.UserID,
-		MerchantID:      updated.MerchantID,
-		UpdatedBy:       updated.UpdatedBy,
-		VoucherGenerate: updated.VoucherGenerate, // ✅ ambil langsung dari repo
+		Status: updated.Status,
 	}
 
 	return response, nil

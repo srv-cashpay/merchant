@@ -56,19 +56,13 @@ type VoucherDeleteResponse struct {
 }
 
 type VoucherUpdateRequest struct {
-	ID              string `json:"id"`
-	UserID          string `json:"user_id"`
-	MerchantID      string `json:"merchant_id"`
-	Nomor           string `json:"nomor"`
-	VoucherGenerate []VoucherGenerate
-	UpdatedBy       string `json:"updated_by"`
+	ID         string `param:"id" validate:"required"`
+	UserID     string `json:"user_id"`
+	MerchantID string `param:"merchant_id" validate:"required"`
+	Status     bool   `json:"status"`
+	UpdatedBy  string `json:"updated_by"`
 }
 
 type VoucherUpdateResponse struct {
-	ID              string `json:"id"`
-	UserID          string `json:"user_id"`
-	MerchantID      string `json:"merchant_id"`
-	Nomor           string `json:"nomor"`
-	VoucherGenerate []VoucherGenerate
-	UpdatedBy       string `json:"updated_by"`
+	Status bool `json:"status"`
 }
