@@ -15,6 +15,10 @@ import (
 	r_merk "github.com/srv-cashpay/merchant/repositories/merk"
 	s_merk "github.com/srv-cashpay/merchant/services/merk"
 
+	h_voucher "github.com/srv-cashpay/merchant/handlers/voucher"
+	r_voucher "github.com/srv-cashpay/merchant/repositories/voucher"
+	s_voucher "github.com/srv-cashpay/merchant/services/voucher"
+
 	h_category "github.com/srv-cashpay/merchant/handlers/category"
 	r_category "github.com/srv-cashpay/merchant/repositories/category"
 	s_category "github.com/srv-cashpay/merchant/services/category"
@@ -148,6 +152,10 @@ var (
 	merkR = r_merk.NewMerkRepository(DB)
 	merkS = s_merk.NewMerkService(merkR, JWT)
 	merkH = h_merk.NewMerkHandler(merkS)
+
+	voucherR = r_voucher.NewVoucherRepository(DB)
+	voucherS = s_voucher.NewVoucherService(voucherR, JWT)
+	voucherH = h_voucher.NewVoucherHandler(voucherS)
 
 	orderR = r_order.NewOrderRepository(DB)
 	orderS = s_order.NewOrderService(orderR, JWT)
@@ -300,6 +308,17 @@ func New() *echo.Echo {
 		merk.PUT("/merk/update/:id", merkH.Update)
 		merk.DELETE("/merk/:id", merkH.Delete)
 		merk.DELETE("/merk/bulk-delete", merkH.BulkDelete)
+	}
+
+	voucher := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
+	{
+		voucher.POST("/voucher/create", voucherH.Create)
+		voucher.GET("/voucher/pagination", voucherH.Get)
+		voucher.GET("/voucher/:id", voucherH.GetById)
+		voucher.GET("/verifikasi-voucher/:id", voucherH.GetVerifikasi)
+		voucher.PUT("/voucher/update/:id", voucherH.Update)
+		voucher.DELETE("/voucher/:id", voucherH.Delete)
+		voucher.DELETE("/voucher/bulk-delete", voucherH.BulkDelete)
 	}
 
 	order := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
