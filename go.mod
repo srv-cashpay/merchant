@@ -6,14 +6,16 @@ toolchain go1.24.5
 
 require (
 	firebase.google.com/go v3.13.0+incompatible
+	github.com/google/uuid v1.6.0
 	github.com/joho/godotenv v1.5.1
 	github.com/labstack/echo/v4 v4.12.0
 	github.com/midtrans/midtrans-go v1.3.8
 	github.com/plutov/paypal/v4 v4.15.0
+	github.com/skip2/go-qrcode v0.0.0-20200617195104-da1b6568686e
 	github.com/srv-cashpay/auth v0.0.0-20250420081851-2a728276c864
 	github.com/srv-cashpay/middlewares v0.0.0-20250120090519-4aa5ca3d5cac
 	github.com/srv-cashpay/pos v0.0.0-20250317074838-1b049d295205
-	github.com/srv-cashpay/product v0.0.0-20250621091318-99f7db572a89
+	github.com/srv-cashpay/product v0.0.0-20251012053331-1c96d7d3df16
 	github.com/srv-cashpay/util v0.0.0-20250728073605-f710558a1115
 	google.golang.org/api v0.247.0
 	gorm.io/driver/postgres v1.5.9
@@ -45,7 +47,6 @@ require (
 	github.com/golang-jwt/jwt/v4 v4.5.0 // indirect
 	github.com/golang/protobuf v1.5.4 // indirect
 	github.com/google/s2a-go v0.1.9 // indirect
-	github.com/google/uuid v1.6.0 // indirect
 	github.com/googleapis/enterprise-certificate-proxy v0.3.6 // indirect
 	github.com/googleapis/gax-go/v2 v2.15.0 // indirect
 	github.com/h2non/filetype v1.1.3 // indirect
@@ -62,7 +63,6 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/planetscale/vtprotobuf v0.6.1-0.20240319094008-0393e58bdf10 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
-	github.com/skip2/go-qrcode v0.0.0-20200617195104-da1b6568686e // indirect
 	github.com/spiffe/go-spiffe/v2 v2.5.0 // indirect
 	github.com/streadway/amqp v1.1.0 // indirect
 	github.com/teris-io/shortid v0.0.0-20220617161101-71ec9f2aa569 // indirect
