@@ -243,32 +243,32 @@ func New() *echo.Echo {
 	e := echo.New()
 	// e.POST("/menu/order", orderH.Order)
 	e.GET("/ws", orderH.HandleWebSocket)
-	e.POST("/fcm/save-token", orderH.SaveToken)
-	e.POST("/menu/order", orderH.SendBroadcast)
-	e.GET("/voucher-verification/:id/:merchant_id", voucherH.GetVerifikasi)
-	e.PUT("/voucher-verification/:id/:merchant_id", voucherH.Update)
+	e.POST("/api/fcm/save-token", orderH.SaveToken)
+	e.POST("/api/menu/order", orderH.SendBroadcast)
+	e.GET("/api/voucher-verification/:id/:merchant_id", voucherH.GetVerifikasi)
+	e.PUT("/api/voucher-verification/:id/:merchant_id", voucherH.Update)
 
 	sub := e.Group("sub", middlewares.AuthorizeJWT(JWT))
 	{
-		sub.GET("/transaction/:order_id/status", subscribeH.CheckTransactionStatus)
-		sub.POST("/midtrans/callback", subscribeH.MidtransCallback)
-		sub.POST("/charge-bni", subscribeH.ChargeBni)
-		sub.POST("/charge-permata", subscribeH.ChargePermata)
-		sub.POST("/charge-mandiri", subscribeH.ChargeMandiri)
-		sub.POST("/charge-bri", subscribeH.ChargeBri)
-		sub.POST("/charge-cimb", subscribeH.ChargeCimb)
+		sub.GET("/api/transaction/:order_id/status", subscribeH.CheckTransactionStatus)
+		sub.POST("/api/midtrans/callback", subscribeH.MidtransCallback)
+		sub.POST("/api/charge-bni", subscribeH.ChargeBni)
+		sub.POST("/api/charge-permata", subscribeH.ChargePermata)
+		sub.POST("/api/charge-mandiri", subscribeH.ChargeMandiri)
+		sub.POST("/api/charge-bri", subscribeH.ChargeBri)
+		sub.POST("/api/charge-cimb", subscribeH.ChargeCimb)
 
-		sub.POST("/charge-qris", subscribeH.ChargeQris)
-		sub.POST("/charge-gopay", subscribeH.ChargeGopay)
-		sub.POST("/charge-shopeepay", subscribeH.ChargeShopeePay)
+		sub.POST("/api/charge-qris", subscribeH.ChargeQris)
+		sub.POST("/api/charge-gopay", subscribeH.ChargeGopay)
+		sub.POST("/api/charge-shopeepay", subscribeH.ChargeShopeePay)
 
-		sub.POST("/charge-gpay", subscribeH.ChargeGpay)
-		sub.GET("/tokenize", subscribeH.TokenizeCardHandler)
-		sub.POST("/charge-card", subscribeH.CardPayment)
-		sub.POST("/cancel/:order_id", subscribeH.CancelPay)
+		sub.POST("/api/charge-gpay", subscribeH.ChargeGpay)
+		sub.GET("/api/tokenize", subscribeH.TokenizeCardHandler)
+		sub.POST("/api/charge-card", subscribeH.CardPayment)
+		sub.POST("/api/cancel/:order_id", subscribeH.CancelPay)
 
-		sub.POST("/paypal", subscribeH.PayPal)
-		sub.GET("/paypal/capture/:order_id", subscribeH.CapturePaypalOrder)
+		sub.POST("/api/paypal", subscribeH.PayPal)
+		sub.GET("/api/paypal/capture/:order_id", subscribeH.CapturePaypalOrder)
 
 	}
 	pos := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
@@ -416,8 +416,8 @@ func New() *echo.Echo {
 		paymentmethod.DELETE("/payment-method/bulk-delete", paymentmethodH.BulkDelete)
 
 	}
-	e.GET("/uploads/:file_name", productH.GetPicture)
-	e.GET("/payment-method/uploads/:file_name", paymentmethodH.GetPicture)
+	e.GET("/api/uploads/:file_name", productH.GetPicture)
+	e.GET("/api/payment-method/uploads/:file_name", paymentmethodH.GetPicture)
 
 	history := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
 	{
