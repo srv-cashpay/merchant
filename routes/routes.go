@@ -416,8 +416,8 @@ func New() *echo.Echo {
 		paymentmethod.DELETE("/payment-method/bulk-delete", paymentmethodH.BulkDelete)
 
 	}
-	e.GET("/api/uploads/:file_name", productH.GetPicture)
-	e.GET("/api/payment-method/uploads/:file_name", paymentmethodH.GetPicture)
+	e.GET("/api/merchant/uploads/:file_name", productH.GetPicture)
+	e.GET("/api/merchant/payment-method/uploads/:file_name", paymentmethodH.GetPicture)
 
 	history := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
 	{
