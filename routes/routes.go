@@ -243,48 +243,48 @@ func New() *echo.Echo {
 	e := echo.New()
 	// e.POST("/menu/order", orderH.Order)
 	e.GET("/ws", orderH.HandleWebSocket)
-	e.POST("/api/fcm/save-token", orderH.SaveToken)
-	e.POST("/api/menu/order", orderH.SendBroadcast)
-	e.GET("/api/voucher-verification/:id/:merchant_id", voucherH.GetVerifikasi)
-	e.PUT("/api/voucher-verification/:id/:merchant_id", voucherH.Update)
+	e.POST("/api/v1/fcm/save-token", orderH.SaveToken)
+	e.POST("/api/v1/menu/order", orderH.SendBroadcast)
+	e.GET("/api/v1/voucher-verification/:id/:merchant_id", voucherH.GetVerifikasi)
+	e.PUT("/api/v1/voucher-verification/:id/:merchant_id", voucherH.Update)
 
 	sub := e.Group("sub", middlewares.AuthorizeJWT(JWT))
 	{
-		sub.GET("/api/transaction/:order_id/status", subscribeH.CheckTransactionStatus)
-		sub.POST("/api/midtrans/callback", subscribeH.MidtransCallback)
-		sub.POST("/api/charge-bni", subscribeH.ChargeBni)
-		sub.POST("/api/charge-permata", subscribeH.ChargePermata)
-		sub.POST("/api/charge-mandiri", subscribeH.ChargeMandiri)
-		sub.POST("/api/charge-bri", subscribeH.ChargeBri)
-		sub.POST("/api/charge-cimb", subscribeH.ChargeCimb)
+		sub.GET("/api/v1/transaction/:order_id/status", subscribeH.CheckTransactionStatus)
+		sub.POST("/api/v1/midtrans/callback", subscribeH.MidtransCallback)
+		sub.POST("/api/v1/charge-bni", subscribeH.ChargeBni)
+		sub.POST("/api/v1/charge-permata", subscribeH.ChargePermata)
+		sub.POST("/api/v1/charge-mandiri", subscribeH.ChargeMandiri)
+		sub.POST("/api/v1/charge-bri", subscribeH.ChargeBri)
+		sub.POST("/api/v1/charge-cimb", subscribeH.ChargeCimb)
 
-		sub.POST("/api/charge-qris", subscribeH.ChargeQris)
-		sub.POST("/api/charge-gopay", subscribeH.ChargeGopay)
-		sub.POST("/api/charge-shopeepay", subscribeH.ChargeShopeePay)
+		sub.POST("/api/v1/charge-qris", subscribeH.ChargeQris)
+		sub.POST("/api/v1/charge-gopay", subscribeH.ChargeGopay)
+		sub.POST("/api/v1/charge-shopeepay", subscribeH.ChargeShopeePay)
 
-		sub.POST("/api/charge-gpay", subscribeH.ChargeGpay)
-		sub.GET("/api/tokenize", subscribeH.TokenizeCardHandler)
-		sub.POST("/api/charge-card", subscribeH.CardPayment)
-		sub.POST("/api/cancel/:order_id", subscribeH.CancelPay)
+		sub.POST("/api/v1/charge-gpay", subscribeH.ChargeGpay)
+		sub.GET("/api/v1/tokenize", subscribeH.TokenizeCardHandler)
+		sub.POST("/api/v1/charge-card", subscribeH.CardPayment)
+		sub.POST("/api/v1/cancel/:order_id", subscribeH.CancelPay)
 
-		sub.POST("/api/paypal", subscribeH.PayPal)
-		sub.GET("/api/paypal/capture/:order_id", subscribeH.CapturePaypalOrder)
+		sub.POST("/api/v1/paypal", subscribeH.PayPal)
+		sub.GET("/api/v1/paypal/capture/:order_id", subscribeH.CapturePaypalOrder)
 
 	}
-	pos := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
+	pos := e.Group("api/v1/merchant", middlewares.AuthorizeJWT(JWT))
 	{
 		pos.POST("/pos/create", posH.Create)
 	}
-	packages := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
+	packages := e.Group("api/v1/merchant", middlewares.AuthorizeJWT(JWT))
 	{
 		packages.POST("/packages/create", subscribeH.Create)
 	}
-	merchant := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
+	merchant := e.Group("api/v1/merchant", middlewares.AuthorizeJWT(JWT))
 	{
 		merchant.PUT("/update", merchantH.Update)
 		merchant.GET("/get", merchantH.Get)
 	}
-	contentsetting := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
+	contentsetting := e.Group("api/v1/merchant", middlewares.AuthorizeJWT(JWT))
 	{
 		contentsetting.PUT("/contentsetting/update", contentsettingH.Update)
 		contentsetting.GET("/contentsetting/get", contentsettingH.Get)
@@ -294,7 +294,7 @@ func New() *echo.Echo {
 		web.GET("/content", contentsettingH.Get)
 
 	}
-	printer := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
+	printer := e.Group("api/v1/merchant", middlewares.AuthorizeJWT(JWT))
 	{
 		printer.PUT("/printer/update", printerH.Update)
 		printer.GET("/printer/get", printerH.Get)
@@ -302,7 +302,7 @@ func New() *echo.Echo {
 		printer.DELETE("/printer/:id", printerH.Delete)
 	}
 
-	merk := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
+	merk := e.Group("api/v1/merchant", middlewares.AuthorizeJWT(JWT))
 	{
 		merk.POST("/merk/create", merkH.Create)
 		merk.GET("/merk/pagination", merkH.Get)
@@ -312,7 +312,7 @@ func New() *echo.Echo {
 		merk.DELETE("/merk/bulk-delete", merkH.BulkDelete)
 	}
 
-	voucher := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
+	voucher := e.Group("api/v1/merchant", middlewares.AuthorizeJWT(JWT))
 	{
 		voucher.POST("/voucher/create", voucherH.Create)
 		voucher.GET("/voucher/pagination", voucherH.Get)
@@ -321,7 +321,7 @@ func New() *echo.Echo {
 		voucher.DELETE("/voucher/bulk-delete", voucherH.BulkDelete)
 	}
 
-	order := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
+	order := e.Group("api/v1/merchant", middlewares.AuthorizeJWT(JWT))
 	{
 		order.POST("/order/create", orderH.Create)
 		order.GET("/order/pagination", orderH.Get)
@@ -331,7 +331,7 @@ func New() *echo.Echo {
 		order.DELETE("/order/bulk-delete", orderH.BulkDelete)
 	}
 
-	pin := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
+	pin := e.Group("api/v1/merchant", middlewares.AuthorizeJWT(JWT))
 	{
 		pin.POST("/pin/create", pinH.Create)
 		pin.GET("/pin/pagination", pinH.Get)
@@ -343,7 +343,7 @@ func New() *echo.Echo {
 		pin.GET("/pin/status", pinH.GetPinStatus)
 
 	}
-	permission := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
+	permission := e.Group("api/v1/merchant", middlewares.AuthorizeJWT(JWT))
 	{
 		permission.POST("/permission/create", permissionH.Create)
 		permission.GET("/permission", permissionH.Get)
@@ -352,7 +352,7 @@ func New() *echo.Echo {
 		permission.DELETE("/permission/:id", permissionH.Delete)
 		permission.DELETE("/permission/bulk-delete", permissionH.BulkDelete)
 	}
-	role := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
+	role := e.Group("api/v1/merchant", middlewares.AuthorizeJWT(JWT))
 	{
 		role.POST("/role/create", roleH.Create)
 		permission.GET("/role", permissionH.Get)
@@ -361,7 +361,7 @@ func New() *echo.Echo {
 		role.DELETE("/role/:id", roleH.Delete)
 		role.DELETE("/role/bulk-delete", roleH.BulkDelete)
 	}
-	roleuser := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
+	roleuser := e.Group("api/v1/merchant", middlewares.AuthorizeJWT(JWT))
 	{
 		roleuser.POST("/roleuser/create", roleuserH.Create)
 		roleuser.GET("/roleuser", roleuserH.Get)
@@ -370,7 +370,7 @@ func New() *echo.Echo {
 		roleuser.DELETE("/roleuser/:id", roleuserH.Delete)
 		roleuser.DELETE("/roleuser/bulk-delete", roleuserH.BulkDelete)
 	}
-	roleuserpermission := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
+	roleuserpermission := e.Group("api/v1/merchant", middlewares.AuthorizeJWT(JWT))
 	{
 		roleuserpermission.POST("/roleuserpermission/create", roleuserpermissionH.Create)
 		roleuserpermission.GET("/roleuserpermission", roleuserpermissionH.Get)
@@ -380,7 +380,7 @@ func New() *echo.Echo {
 		roleuserpermission.DELETE("/roleuserpermission/bulk-delete", roleuserpermissionH.BulkDelete)
 	}
 
-	tax := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
+	tax := e.Group("api/v1/merchant", middlewares.AuthorizeJWT(JWT))
 	{
 		tax.POST("/tax/create", taxH.Create)
 		tax.GET("/tax/pagination", taxH.Get)
@@ -390,7 +390,7 @@ func New() *echo.Echo {
 		tax.DELETE("/tax/bulk-delete", taxH.BulkDelete)
 	}
 
-	table := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
+	table := e.Group("api/v1/merchant", middlewares.AuthorizeJWT(JWT))
 	{
 		table.POST("/table/create", tableH.Create)
 		table.GET("/table/pagination", tableH.Get)
@@ -398,7 +398,7 @@ func New() *echo.Echo {
 		table.DELETE("/table/:id", tableH.Delete)
 		table.DELETE("/table/bulk-delete", tableH.BulkDelete)
 	}
-	reservation := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
+	reservation := e.Group("api/v1/merchant", middlewares.AuthorizeJWT(JWT))
 	{
 		reservation.POST("/reservation/create", reservationH.Create)
 		reservation.GET("/reservation/pagination", reservationH.Get)
@@ -407,7 +407,7 @@ func New() *echo.Echo {
 		reservation.DELETE("/reservation/bulk-delete", reservationH.BulkDelete)
 	}
 
-	paymentmethod := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
+	paymentmethod := e.Group("api/v1/merchant", middlewares.AuthorizeJWT(JWT))
 	{
 		paymentmethod.POST("/payment-method/create", paymentmethodH.Create)
 		paymentmethod.GET("/payment-method", paymentmethodH.Get)
@@ -416,17 +416,17 @@ func New() *echo.Echo {
 		paymentmethod.DELETE("/payment-method/bulk-delete", paymentmethodH.BulkDelete)
 
 	}
-	e.GET("/api/merchant/uploads/:file_name", productH.GetPicture)
-	e.GET("/api/merchant/payment-method/uploads/:file_name", paymentmethodH.GetPicture)
+	e.GET("/api/v1/merchant/uploads/:file_name", productH.GetPicture)
+	e.GET("/api/v1/merchant/payment-method/uploads/:file_name", paymentmethodH.GetPicture)
 
-	history := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
+	history := e.Group("api/v1/merchant", middlewares.AuthorizeJWT(JWT))
 	{
 		history.GET("/history/pagination", historyH.Get)
 		history.GET("/history/:id", historyH.GetById)
 		history.PUT("/history/expire/:order_id", historyH.CheckExpire)
 	}
 
-	discount := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
+	discount := e.Group("api/v1/merchant", middlewares.AuthorizeJWT(JWT))
 	{
 		discount.POST("/discount/create", discountH.Create)
 		discount.GET("/discount/pagination", discountH.Get)
@@ -436,7 +436,7 @@ func New() *echo.Echo {
 		discount.DELETE("/discount/bulk-delete", discountH.BulkDelete)
 	}
 
-	user := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
+	user := e.Group("api/v1/merchant", middlewares.AuthorizeJWT(JWT))
 	{
 		user.POST("/user/create", userH.Create)
 		user.GET("/user/pagination", userH.Get)
@@ -445,7 +445,7 @@ func New() *echo.Echo {
 		user.DELETE("/user/bulk-delete", userH.BulkDelete)
 	}
 
-	category := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
+	category := e.Group("api/v1/merchant", middlewares.AuthorizeJWT(JWT))
 	{
 		category.POST("/category/create", categoryH.Create)
 		category.GET("/category/pagination", categoryH.Pagination)
@@ -454,7 +454,7 @@ func New() *echo.Echo {
 		category.DELETE("/category/:id", categoryH.Delete)
 		category.DELETE("/category/bulk-delete", categoryH.BulkDelete)
 	}
-	unit := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
+	unit := e.Group("api/v1/merchant", middlewares.AuthorizeJWT(JWT))
 	{
 		unit.POST("/unit/create", unitH.Create)
 		unit.GET("/unit/pagination", unitH.Get)
@@ -463,7 +463,7 @@ func New() *echo.Echo {
 		unit.DELETE("/unit/:id", unitH.Delete)
 		unit.DELETE("/unit/bulk-delete", unitH.BulkDelete)
 	}
-	deleteAccount := e.Group("api/account", middlewares.AuthorizeJWT(JWT))
+	deleteAccount := e.Group("api/v1/account", middlewares.AuthorizeJWT(JWT))
 	{
 		deleteAccount.POST("/request-delete", deleteaccountH.Create)
 		// deleteAccount.GET("/unit/pagination", unitH.Get)
@@ -471,15 +471,15 @@ func New() *echo.Echo {
 		// deleteAccount.DELETE("/unit/:id", unitH.Delete)
 		// deleteAccount.DELETE("/unit/bulk-delete", unitH.BulkDelete)
 	}
-	authenticator := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
+	authenticator := e.Group("api/v1/merchant", middlewares.AuthorizeJWT(JWT))
 	{
 		authenticator.POST("/authenticator/request", authenticatorH.Create)
 	}
-	dashboard := e.Group("api/dashboard", middlewares.AuthorizeJWT(JWT))
+	dashboard := e.Group("api/v1/dashboard", middlewares.AuthorizeJWT(JWT))
 	{
 		dashboard.GET("/index", dashboardH.Get)
 	}
-	product := e.Group("/api/merchant", middlewares.AuthorizeJWT(JWT))
+	product := e.Group("api/v1/merchant", middlewares.AuthorizeJWT(JWT))
 	{
 		product.POST("/product/create", productH.Create)
 		product.GET("/product/:id", productH.GetById)
