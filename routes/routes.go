@@ -242,7 +242,7 @@ func New() *echo.Echo {
 
 	e := echo.New()
 	// e.POST("/menu/order", orderH.Order)
-	e.GET("api/merchant/ws", orderH.HandleWebSocket)
+	e.GET("/api/merchant/ws", orderH.HandleWebSocket)
 	e.POST("/api/merchant/fcm/save-token", orderH.SaveToken)
 	e.POST("/api/merchant/menu/order", orderH.SendBroadcast)
 	e.GET("/api/merchant/voucher-verification/:id/:merchant_id", voucherH.GetVerifikasi)
@@ -475,9 +475,9 @@ func New() *echo.Echo {
 	{
 		authenticator.POST("/authenticator/request", authenticatorH.Create)
 	}
-	dashboard := e.Group("api/dashboard", middlewares.AuthorizeJWT(JWT))
+	dashboard := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
 	{
-		dashboard.GET("/index", dashboardH.Get)
+		dashboard.GET("/dashboard/index", dashboardH.Get)
 	}
 	product := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
 	{
