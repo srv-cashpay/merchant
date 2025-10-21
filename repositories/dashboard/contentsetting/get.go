@@ -10,11 +10,6 @@ import (
 func (r *contentsettingRepository) Get(req dto.ContentSettingRequest) (dto.ContentSettingResponse, error) {
 	var data entity.ContentSetting
 
-	// ambil data berdasarkan ID
-	if err := r.DB.First(&data, "id = ?", req.ID).Error; err != nil {
-		return dto.ContentSettingResponse{}, err
-	}
-
 	// decode JSONB ke array of struct
 	var topHeader []dto.TopHeader
 	var buttonHeader []dto.ButtonHeader
