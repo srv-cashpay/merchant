@@ -9,8 +9,8 @@ import (
 
 type DomainRepository interface {
 	Get(req dto.ContentSettingRequest) (dto.ContentSettingResponse, error)
-	GetById(req dto.GetByContentSettingIdRequest) (*entity.ContentSetting, error)
-	Update(setting *entity.ContentSetting) error
+	GetById(id string) (*entity.ContentSetting, error)
+	Update(req dto.UpdateContentSettingRequest) error
 }
 
 type contentsettingRepository struct {

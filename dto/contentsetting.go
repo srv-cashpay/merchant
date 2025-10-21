@@ -18,15 +18,15 @@ type ContentSettingRequest struct {
 }
 
 type ContentSettingResponse struct {
-	ID           string    `json:"id"`
-	UserID       string    `json:"user_id"`
-	MerchantID   string    `json:"merchant_id"`
-	TopHeader    []string  `json:"top_header"`
-	ButtonHeader []string  `json:"button_header"`
-	Feature      []string  `json:"feature"`
-	Footer       []string  `json:"footer"`
-	UpdatedBy    string    `json:"updated_by"`
-	UpdatedAt    time.Time `json:"updated_at"`
+	ID           string         `json:"id"`
+	UserID       string         `json:"user_id"`
+	MerchantID   string         `json:"merchant_id"`
+	TopHeader    []TopHeader    `json:"top_header"`
+	ButtonHeader []ButtonHeader `json:"button_header"`
+	Feature      []Feature      `json:"feature"`
+	Footer       []Footer       `json:"footer"`
+	UpdatedBy    string         `json:"updated_by"`
+	UpdatedAt    time.Time      `json:"updated_at"`
 }
 
 type UpdateContentSettingRequest struct {

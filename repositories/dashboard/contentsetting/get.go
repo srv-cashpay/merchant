@@ -1,6 +1,8 @@
 package contentsetting
 
 import (
+	"encoding/json"
+
 	dto "github.com/srv-cashpay/merchant/dto"
 	"github.com/srv-cashpay/merchant/entity"
 )
@@ -8,19 +10,38 @@ import (
 func (r *contentsettingRepository) Get(req dto.ContentSettingRequest) (dto.ContentSettingResponse, error) {
 	var data entity.ContentSetting
 
-	// ambil data berdasarkan ID (atau bisa pakai merchant_id tergantung kebutuhan)
+	// ambil data berdasarkan ID
 	if err := r.DB.First(&data, "id = ?", req.ID).Error; err != nil {
 		return dto.ContentSettingResponse{}, err
+	}
+
+	// decode JSONB ke array of struct
+	var topHeader []dto.TopHeader
+	var buttonHeader []dto.ButtonHeader
+	var feature []dto.Feature
+	var footer []dto.Footer
+
+	if len(data.TopHeader) > 0 {
+		_ = json.Unmarshal(data.TopHeader, &topHeader)
+	}
+	if len(data.ButtonHeader) > 0 {
+		_ = json.Unmarshal(data.ButtonHeader, &buttonHeader)
+	}
+	if len(data.Feature) > 0 {
+		_ = json.Unmarshal(data.Feature, &feature)
+	}
+	if len(data.Footer) > 0 {
+		_ = json.Unmarshal(data.Footer, &footer)
 	}
 
 	response := dto.ContentSettingResponse{
 		ID:           data.ID,
 		UserID:       data.UserID,
 		MerchantID:   data.MerchantID,
-		TopHeader:    data.TopHeader,
-		ButtonHeader: data.ButtonHeader,
-		Feature:      data.Feature,
-		Footer:       data.Footer,
+		TopHeader:    topHeader,
+		ButtonHeader: buttonHeader,
+		Feature:      feature,
+		Footer:       footer,
 		UpdatedBy:    data.UpdatedBy,
 		UpdatedAt:    data.UpdatedAt,
 	}
