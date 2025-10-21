@@ -10,7 +10,15 @@ import (
 func (r *contentsettingRepository) Get(req dto.ContentSettingRequest) (dto.ContentSettingResponse, error) {
 	var data entity.ContentSetting
 
-	// decode JSONB ke array of struct
+	// Ambil satu data global (misal untuk landing page utama)
+	if err := r.DB.
+		Where("deleted_at IS NULL").
+		Order("updated_at DESC").
+		First(&data).Error; err != nil {
+		return dto.ContentSettingResponse{}, err
+	}
+
+	// decode JSONB ke struct
 	var topHeader []dto.TopHeader
 	var buttonHeader []dto.ButtonHeader
 	var feature []dto.Feature
