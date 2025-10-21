@@ -1,38 +1,48 @@
 package contentsetting
 
 import (
+	"encoding/json"
+	"time"
+
 	dto "github.com/srv-cashpay/merchant/dto"
 )
 
-func (b *contentsettingService) Update(req dto.UpdateContentSettingRequest) (dto.UpdateContentSettingResponse, error) {
-	request := dto.UpdateContentSettingRequest{
-		ID:          req.ID,
-		Logo:        req.Logo,
-		Description: req.Description,
-		Title:       req.Title,
-		LinkAndroid: req.LinkAndroid,
-		LinkApple:   req.LinkApple,
-		UpdatedBy:   req.UpdatedBy,
-		UserID:      req.UserID,
-		MerchantID:  req.MerchantID,
-	}
-
-	contentsetting, err := b.Repo.Update(req)
+func (s *contentsettingService) Update(req dto.UpdateContentSettingRequest) (dto.UpdateContentSettingResponse, error) {
+	// Ambil data lama dari DB
+	setting, err := s.Repo.GetById(dto.GetByContentSettingIdRequest{ID: req.ID})
 	if err != nil {
-		return contentsetting, err
+		return dto.UpdateContentSettingResponse{}, err
 	}
 
-	response := dto.UpdateContentSettingResponse{
-		ID:          request.ID,
-		Logo:        request.Logo,
-		Description: request.Description,
-		Title:       request.Title,
-		LinkAndroid: request.LinkAndroid,
-		LinkApple:   request.LinkApple,
-		UpdatedBy:   request.UpdatedBy,
-		UserID:      request.UserID,
-		MerchantID:  request.MerchantID,
+	// 🔹 Marshal tiap array struct ke JSON string
+	topHeaderJSON, _ := json.Marshal(req.TopHeader)
+	buttonHeaderJSON, _ := json.Marshal(req.ButtonHeader)
+	featureJSON, _ := json.Marshal(req.Feature)
+	footerJSON, _ := json.Marshal(req.Footer)
+
+	// 🔹 Simpan sebagai array string (karena field di entity adalah []string)
+	setting.TopHeader = []string{string(topHeaderJSON)}
+	setting.ButtonHeader = []string{string(buttonHeaderJSON)}
+	setting.Feature = []string{string(featureJSON)}
+	setting.Footer = []string{string(footerJSON)}
+	setting.UpdatedBy = req.UpdatedBy
+	setting.UpdatedAt = time.Now()
+
+	// 🔹 Update ke database
+	if err := s.Repo.Update(setting); err != nil {
+		return dto.UpdateContentSettingResponse{}, err
 	}
 
-	return response, nil
+	// 🔹 Return response DTO
+	return dto.UpdateContentSettingResponse{
+		ID:           setting.ID,
+		UserID:       setting.UserID,
+		MerchantID:   setting.MerchantID,
+		TopHeader:    req.TopHeader,
+		ButtonHeader: req.ButtonHeader,
+		Feature:      req.Feature,
+		Footer:       req.Footer,
+		UpdatedBy:    setting.UpdatedBy,
+		UpdatedAt:    setting.UpdatedAt,
+	}, nil
 }
