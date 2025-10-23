@@ -143,3 +143,10 @@ func (t *Timestamp) UnmarshalJSON(data []byte) error {
 func (t Timestamp) ToTime() time.Time {
 	return time.Time(t)
 }
+
+type ImportResultDTO struct {
+	Total    int      `json:"total"`
+	Success  int      `json:"success"`
+	Failed   int      `json:"failed"`
+	Failures []string `json:"failures"`
+}

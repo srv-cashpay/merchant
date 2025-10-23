@@ -79,6 +79,10 @@ import (
 	r_product "github.com/srv-cashpay/merchant/repositories/product"
 	s_product "github.com/srv-cashpay/merchant/services/product"
 
+	h_importproduct "github.com/srv-cashpay/merchant/handlers/product/import_data"
+	r_importproduct "github.com/srv-cashpay/merchant/repositories/product/import_data"
+	s_importproduct "github.com/srv-cashpay/merchant/services/product/import_data"
+
 	h_getmerk "github.com/srv-cashpay/merchant/handlers/product/merk"
 	r_getmerk "github.com/srv-cashpay/merchant/repositories/product/merk"
 	s_getmerk "github.com/srv-cashpay/merchant/services/product/merk"
@@ -193,6 +197,10 @@ var (
 	productS = s_product.NewProductService(productR, JWT)
 	productH = h_product.NewProductHandler(productS)
 
+	importproductR = r_importproduct.NewImportRepository(DB)
+	importproductS = s_importproduct.NewImportService(importproductR, JWT)
+	importproductH = h_importproduct.NewImportHandler(importproductS)
+
 	getmerkR = r_getmerk.NewGetMerkRepository(DB)
 	getmerkS = s_getmerk.NewGetMerkService(getmerkR, JWT)
 	getmerkH = h_getmerk.NewMerkHandler(getmerkS)
@@ -247,6 +255,10 @@ func New() *echo.Echo {
 	e.POST("/api/merchant/menu/order", orderH.SendBroadcast)
 	e.GET("/api/merchant/voucher-verification/:id/:merchant_id", voucherH.GetVerifikasi)
 	e.PUT("/api/merchant/voucher-verification/:id/:merchant_id", voucherH.Update)
+
+	e.Group("/api/products/import")
+	e.GET("/template", importproductH.DownloadTemplate)
+	e.POST("/upload", importproductH.UploaProdducts)
 
 	sub := e.Group("sub", middlewares.AuthorizeJWT(JWT))
 	{

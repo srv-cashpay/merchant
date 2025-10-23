@@ -38,15 +38,10 @@ func (r *contentsettingRepository) Get(req dto.ContentSettingRequest) (dto.Conte
 	}
 
 	response := dto.ContentSettingResponse{
-		ID:           data.ID,
-		UserID:       data.UserID,
-		MerchantID:   data.MerchantID,
 		TopHeader:    topHeader,
 		ButtonHeader: buttonHeader,
 		Feature:      feature,
 		Footer:       footer,
-		UpdatedBy:    data.UpdatedBy,
-		UpdatedAt:    data.UpdatedAt,
 	}
 
 	return response, nil

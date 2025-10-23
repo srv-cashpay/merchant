@@ -64,6 +64,7 @@ type TopHeader struct {
 
 type ButtonHeader struct {
 	ButtonName string `json:"button_name"`
+	Link       string `json:"link"`
 }
 
 type Feature struct {
