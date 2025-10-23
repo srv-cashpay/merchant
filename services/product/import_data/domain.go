@@ -6,13 +6,12 @@ import (
 
 	m "github.com/srv-cashpay/middlewares/middlewares"
 
-	"github.com/srv-cashpay/merchant/dto"
 	r "github.com/srv-cashpay/merchant/repositories/product/import_data"
 )
 
 type ImportService interface {
 	GenerateTemplate() ([]byte, string, error)
-	ImportProducts(ctx context.Context, fileHeader *multipart.FileHeader, userID string) (dto.ImportResultDTO, error)
+	ImportProducts(ctx context.Context, fileHeader *multipart.FileHeader) (map[string]interface{}, error)
 }
 
 type importService struct {

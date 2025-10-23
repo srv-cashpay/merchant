@@ -8,7 +8,7 @@ import (
 )
 
 type DomainRepository interface {
-	SaveBatch(ctx context.Context, products []entity.Product) error
+	BulkInsert(ctx context.Context, products []entity.Product) error
 }
 
 type importRepository struct {

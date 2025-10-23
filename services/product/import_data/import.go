@@ -3,94 +3,103 @@ package import_data
 import (
 	"context"
 	"encoding/csv"
-	"errors"
 	"fmt"
+	"io"
 	"mime/multipart"
 	"strconv"
 	"time"
 
-	"github.com/srv-cashpay/merchant/dto"
 	"github.com/srv-cashpay/product/entity"
 )
 
-func (s *importService) ImportProducts(ctx context.Context, fileHeader *multipart.FileHeader, userID string) (dto.ImportResultDTO, error) {
-	if fileHeader == nil {
-		return dto.ImportResultDTO{}, errors.New("file tidak ditemukan")
-	}
-
+func (s *importService) ImportProducts(ctx context.Context, fileHeader *multipart.FileHeader) (map[string]interface{}, error) {
 	file, err := fileHeader.Open()
 	if err != nil {
-		return dto.ImportResultDTO{}, err
+		return nil, fmt.Errorf("gagal membuka file: %w", err)
 	}
 	defer file.Close()
 
 	reader := csv.NewReader(file)
-	rows, err := reader.ReadAll()
+	reader.TrimLeadingSpace = true
+
+	// Baca header
+	headers, err := reader.Read()
 	if err != nil {
-		return dto.ImportResultDTO{}, errors.New("gagal membaca CSV: " + err.Error())
+		return nil, fmt.Errorf("gagal membaca header: %w", err)
 	}
 
-	if len(rows) < 2 {
-		return dto.ImportResultDTO{}, errors.New("file tidak memiliki data")
+	expectedHeaders := []string{
+		"barcode", "sku", "merk_id", "category_id",
+		"product_name", "stock", "minimal_stock",
+		"price", "description", "status",
 	}
 
-	var (
-		validProducts []entity.Product
-		failedRows    []string
-	)
+	if len(headers) != len(expectedHeaders) {
+		return nil, fmt.Errorf("template tidak sesuai: jumlah kolom tidak cocok")
+	}
 
-	for i, row := range rows[1:] {
-		if len(row) < 7 {
-			failedRows = append(failedRows, fmt.Sprintf("baris %d tidak lengkap", i+2))
-			continue
+	for i, h := range headers {
+		if h != expectedHeaders[i] {
+			return nil, fmt.Errorf("kolom ke-%d harus '%s', bukan '%s'", i+1, expectedHeaders[i], h)
+		}
+	}
+
+	var imported []entity.Product
+	rowNumber := 2 // Karena baris pertama adalah header
+
+	for {
+		record, err := reader.Read()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return nil, fmt.Errorf("gagal membaca baris %d: %w", rowNumber, err)
 		}
 
-		stock, _ := strconv.Atoi(row[3])
-		minStock, _ := strconv.Atoi(row[4])
-		price, _ := strconv.Atoi(row[5])
-
-		if row[2] == "" {
-			failedRows = append(failedRows, fmt.Sprintf("baris %d: nama produk kosong", i+2))
-			continue
+		if len(record) < len(expectedHeaders) {
+			return nil, fmt.Errorf("baris %d tidak lengkap", rowNumber)
 		}
 
+		// Parsing data sesuai kolom
 		product := entity.Product{
-			ID:           fmt.Sprintf("PROD-%d", time.Now().UnixNano()),
-			Barcode:      row[0],
-			CategoryID:   row[1],
-			ProductName:  row[2],
-			Stock:        stock,
-			MinimalStock: minStock,
-			Price:        price,
-			Description:  row[6],
-			UserID:       userID,
-			Status:       1,
-			CreatedBy:    userID,
-			CreatedAt:    time.Now(),
-			UpdatedAt:    time.Now(),
+			ID:          fmt.Sprintf("PROD-%d", time.Now().UnixNano()),
+			Barcode:     record[0],
+			UserID:      "", // bisa isi dari context jwt
+			MerchantID:  "", // bisa isi dari context jwt
+			MerkID:      record[2],
+			CategoryID:  record[3],
+			ProductName: record[4],
+			Description: record[8],
+			CreatedBy:   "import_system",
+			CreatedAt:   time.Now(),
+			UpdatedAt:   time.Now(),
 		}
 
-		validProducts = append(validProducts, product)
+		// Convert angka
+		if stock, err := strconv.Atoi(record[5]); err == nil {
+			product.Stock = stock
+		}
+		if minStock, err := strconv.Atoi(record[6]); err == nil {
+			product.MinimalStock = minStock
+		}
+		if price, err := strconv.Atoi(record[7]); err == nil {
+			product.Price = price
+		}
+		if status, err := strconv.Atoi(record[9]); err == nil {
+			product.Status = status
+		}
+
+		imported = append(imported, product)
+		rowNumber++
 	}
 
-	if len(validProducts) == 0 {
-		return dto.ImportResultDTO{
-			Total:    len(rows) - 1,
-			Success:  0,
-			Failed:   len(failedRows),
-			Failures: failedRows,
-		}, errors.New("tidak ada data valid untuk disimpan")
+	// Simpan ke DB via repository
+	if err := s.Repo.BulkInsert(ctx, imported); err != nil {
+		return nil, fmt.Errorf("gagal menyimpan data produk: %w", err)
 	}
 
-	err = s.Repo.SaveBatch(ctx, validProducts)
-	if err != nil {
-		return dto.ImportResultDTO{}, err
-	}
-
-	return dto.ImportResultDTO{
-		Total:    len(rows) - 1,
-		Success:  len(validProducts),
-		Failed:   len(failedRows),
-		Failures: failedRows,
+	return map[string]interface{}{
+		"message":       fmt.Sprintf("%d produk berhasil diimport", len(imported)),
+		"importedCount": len(imported),
 	}, nil
 }

@@ -3,28 +3,38 @@ package import_data
 import (
 	"bytes"
 	"encoding/csv"
+	"fmt"
+	"time"
 )
 
 func (s *importService) GenerateTemplate() ([]byte, string, error) {
-	buf := &bytes.Buffer{}
-	writer := csv.NewWriter(buf)
-
-	// header
-	header := []string{"Name", "Email", "Role"}
-	if err := writer.Write(header); err != nil {
-		return nil, "", err
+	headers := []string{
+		"barcode", "sku", "merk_id", "category_id",
+		"product_name", "stock", "minimal_stock",
+		"price", "description", "status",
 	}
 
-	// contoh data
-	sample := []string{"John Doe", "john@example.com", "admin"}
-	if err := writer.Write(sample); err != nil {
-		return nil, "", err
+	example := []string{
+		"BR12345", "1001", "MERK01", "CAT01",
+		"Nasi Goreng", "100", "10", "15000",
+		"Menu populer", "1",
 	}
 
+	var buf bytes.Buffer
+	writer := csv.NewWriter(&buf)
+
+	if err := writer.Write(headers); err != nil {
+		return nil, "", err
+	}
+	if err := writer.Write(example); err != nil {
+		return nil, "", err
+	}
 	writer.Flush()
+
 	if err := writer.Error(); err != nil {
 		return nil, "", err
 	}
 
-	return buf.Bytes(), "template_users.csv", nil
+	filename := fmt.Sprintf("product_template_%d.csv", time.Now().Unix())
+	return buf.Bytes(), filename, nil
 }

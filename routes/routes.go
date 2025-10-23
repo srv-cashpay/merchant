@@ -258,7 +258,7 @@ func New() *echo.Echo {
 
 	e.Group("/api/products/import")
 	e.GET("/template", importproductH.DownloadTemplate)
-	e.POST("/upload", importproductH.UploaProdducts)
+	e.POST("/upload", importproductH.UploadProducts)
 
 	sub := e.Group("sub", middlewares.AuthorizeJWT(JWT))
 	{

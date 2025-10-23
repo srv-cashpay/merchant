@@ -8,7 +8,7 @@ import (
 
 type DomainHandler interface {
 	DownloadTemplate(c echo.Context) error
-	UploaProdducts(c echo.Context) error
+	UploadProducts(c echo.Context) error
 }
 
 type domainHandler struct {

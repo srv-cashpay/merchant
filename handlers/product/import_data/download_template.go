@@ -16,5 +16,6 @@ func (h *domainHandler) DownloadTemplate(c echo.Context) error {
 
 	c.Response().Header().Set(echo.HeaderContentDisposition, "attachment; filename="+filename)
 	c.Response().Header().Set(echo.HeaderContentType, "text/csv")
+
 	return c.Blob(http.StatusOK, "text/csv", data)
 }
