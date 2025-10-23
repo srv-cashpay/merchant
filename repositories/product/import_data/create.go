@@ -6,9 +6,6 @@ import (
 	"github.com/srv-cashpay/product/entity"
 )
 
-func (r *importRepository) BulkInsert(ctx context.Context, products []entity.Product) error {
-	if len(products) == 0 {
-		return nil
-	}
-	return r.DB.WithContext(ctx).Create(&products).Error
+func (r *importRepository) Create(ctx context.Context, product *entity.Product) error {
+	return r.DB.WithContext(ctx).Create(product).Error
 }

@@ -1,105 +1,81 @@
 package import_data
 
 import (
+	"bytes"
 	"context"
-	"encoding/csv"
 	"fmt"
 	"io"
 	"mime/multipart"
 	"strconv"
-	"time"
 
 	"github.com/srv-cashpay/product/entity"
+	"github.com/xuri/excelize/v2"
 )
 
 func (s *importService) ImportProducts(ctx context.Context, fileHeader *multipart.FileHeader) (map[string]interface{}, error) {
 	file, err := fileHeader.Open()
 	if err != nil {
-		return nil, fmt.Errorf("gagal membuka file: %w", err)
+		return nil, fmt.Errorf("gagal membuka file: %v", err)
 	}
 	defer file.Close()
 
-	reader := csv.NewReader(file)
-	reader.TrimLeadingSpace = true
-
-	// Baca header
-	headers, err := reader.Read()
+	// Read Excel
+	data, err := io.ReadAll(file)
 	if err != nil {
-		return nil, fmt.Errorf("gagal membaca header: %w", err)
+		return nil, fmt.Errorf("gagal membaca file: %v", err)
 	}
 
-	expectedHeaders := []string{
-		"barcode", "sku", "merk_id", "category_id",
-		"product_name", "stock", "minimal_stock",
-		"price", "description", "status",
+	f, err := excelize.OpenReader(bytes.NewReader(data))
+	if err != nil {
+		return nil, fmt.Errorf("file bukan format excel yang valid")
 	}
 
-	if len(headers) != len(expectedHeaders) {
-		return nil, fmt.Errorf("template tidak sesuai: jumlah kolom tidak cocok")
+	sheet := f.GetSheetName(0)
+	rows, err := f.GetRows(sheet)
+	if err != nil {
+		return nil, fmt.Errorf("gagal membaca sheet: %v", err)
 	}
 
-	for i, h := range headers {
-		if h != expectedHeaders[i] {
-			return nil, fmt.Errorf("kolom ke-%d harus '%s', bukan '%s'", i+1, expectedHeaders[i], h)
-		}
+	if len(rows) <= 1 {
+		return nil, fmt.Errorf("template kosong atau tidak ada data")
 	}
 
-	var imported []entity.Product
-	rowNumber := 2 // Karena baris pertama adalah header
-
-	for {
-		record, err := reader.Read()
-		if err == io.EOF {
-			break
-		}
-		if err != nil {
-			return nil, fmt.Errorf("gagal membaca baris %d: %w", rowNumber, err)
+	var imported int
+	for i, row := range rows[1:] { // skip header
+		if len(row) < 10 {
+			continue
 		}
 
-		if len(record) < len(expectedHeaders) {
-			return nil, fmt.Errorf("baris %d tidak lengkap", rowNumber)
-		}
+		stock, _ := strconv.Atoi(row[5])
+		minStock, _ := strconv.Atoi(row[6])
+		price, _ := strconv.Atoi(row[7])
+		status, _ := strconv.Atoi(row[9])
 
-		// Parsing data sesuai kolom
 		product := entity.Product{
-			ID:          fmt.Sprintf("PROD-%d", time.Now().UnixNano()),
-			Barcode:     record[0],
-			UserID:      "", // bisa isi dari context jwt
-			MerchantID:  "", // bisa isi dari context jwt
-			MerkID:      record[2],
-			CategoryID:  record[3],
-			ProductName: record[4],
-			Description: record[8],
-			CreatedBy:   "import_system",
-			CreatedAt:   time.Now(),
-			UpdatedAt:   time.Now(),
+			Barcode:      row[0],
+			MerkID:       row[2],
+			CategoryID:   row[3],
+			ProductName:  row[4],
+			Stock:        stock,
+			MinimalStock: minStock,
+			Price:        price,
+			Description:  row[8],
+			Status:       status,
 		}
 
-		// Convert angka
-		if stock, err := strconv.Atoi(record[5]); err == nil {
-			product.Stock = stock
+		if err := s.Repo.Create(ctx, &product); err != nil {
+			return nil, fmt.Errorf("baris %d gagal disimpan: %v", i+2, err)
 		}
-		if minStock, err := strconv.Atoi(record[6]); err == nil {
-			product.MinimalStock = minStock
-		}
-		if price, err := strconv.Atoi(record[7]); err == nil {
-			product.Price = price
-		}
-		if status, err := strconv.Atoi(record[9]); err == nil {
-			product.Status = status
-		}
-
-		imported = append(imported, product)
-		rowNumber++
-	}
-
-	// Simpan ke DB via repository
-	if err := s.Repo.BulkInsert(ctx, imported); err != nil {
-		return nil, fmt.Errorf("gagal menyimpan data produk: %w", err)
+		imported++
 	}
 
 	return map[string]interface{}{
-		"message":       fmt.Sprintf("%d produk berhasil diimport", len(imported)),
-		"importedCount": len(imported),
+		"message":       "import berhasil",
+		"importedCount": imported,
 	}, nil
+}
+
+func parseUint(s string) uint64 {
+	v, _ := strconv.ParseUint(s, 10, 64)
+	return v
 }
