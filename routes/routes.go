@@ -83,6 +83,10 @@ import (
 	r_importproduct "github.com/srv-cashpay/merchant/repositories/product/import_data"
 	s_importproduct "github.com/srv-cashpay/merchant/services/product/import_data"
 
+	h_exportproduct "github.com/srv-cashpay/merchant/handlers/product/export_data"
+	r_exportproduct "github.com/srv-cashpay/merchant/repositories/product/export_data"
+	s_exportproduct "github.com/srv-cashpay/merchant/services/product/export_data"
+
 	h_getmerk "github.com/srv-cashpay/merchant/handlers/product/merk"
 	r_getmerk "github.com/srv-cashpay/merchant/repositories/product/merk"
 	s_getmerk "github.com/srv-cashpay/merchant/services/product/merk"
@@ -200,6 +204,10 @@ var (
 	importproductR = r_importproduct.NewImportRepository(DB)
 	importproductS = s_importproduct.NewImportService(importproductR, JWT)
 	importproductH = h_importproduct.NewImportHandler(importproductS)
+
+	exportproductR = r_exportproduct.NewExportRepository(DB)
+	exportproductS = s_exportproduct.NewExportService(exportproductR, JWT)
+	exportproductH = h_exportproduct.NewExportHandler(exportproductS)
 
 	getmerkR = r_getmerk.NewGetMerkRepository(DB)
 	getmerkS = s_getmerk.NewGetMerkService(getmerkR, JWT)

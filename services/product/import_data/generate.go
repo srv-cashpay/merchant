@@ -11,9 +11,8 @@ func (s *importService) GenerateTemplate() ([]byte, string, error) {
 	sheet := f.GetSheetName(0)
 
 	headers := []string{
-		"ID", "Merchant ID", "User ID", "Barcode", "SKU", "Merk ID",
-		"Category ID", "Product Name", "Stock", "Minimal Stock",
-		"Price", "Description", "Status",
+		"Barcode", "SKU", "Merk ID", "Category ID", "Product Name",
+		"Stock", "Minimal Stock", "Price", "Description", "Status",
 	}
 
 	for i, h := range headers {
@@ -25,7 +24,7 @@ func (s *importService) GenerateTemplate() ([]byte, string, error) {
 		Font:      &excelize.Font{Bold: true},
 		Alignment: &excelize.Alignment{Horizontal: "center"},
 	})
-	f.SetCellStyle(sheet, "A1", "M1", style)
+	f.SetCellStyle(sheet, "A1", "J1", style)
 
 	var buf bytes.Buffer
 	if err := f.Write(&buf); err != nil {
