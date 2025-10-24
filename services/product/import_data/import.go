@@ -20,7 +20,6 @@ func (s *importService) ImportProducts(ctx context.Context, fileHeader *multipar
 	}
 	defer file.Close()
 
-	// Baca seluruh isi file Excel
 	data, err := io.ReadAll(file)
 	if err != nil {
 		return nil, fmt.Errorf("gagal membaca file: %v", err)
@@ -41,38 +40,37 @@ func (s *importService) ImportProducts(ctx context.Context, fileHeader *multipar
 		return nil, fmt.Errorf("template kosong atau tidak ada data")
 	}
 
+	merchantID := ctx.Value("MerchantId").(string)
+	userID := ctx.Value("UserId").(string)
+	createdBy := ctx.Value("CreatedBy").(string)
+
 	var imported int
-	for i, row := range rows[1:] { // Skip header
-		if len(row) < 13 {
+	for i, row := range rows[1:] { // skip header
+		if len(row) < 9 { // karena mulai dari Barcode, SKU, dst
 			continue
 		}
 
-		// Ambil kolom dari Excel (A-M)
-		id := row[0]
-		merchantID := row[1]
-		userID := row[2]
-		barcode := row[3]
-		sku := parseUint(row[4])
-		merkID := row[5]
-		categoryID := row[6]
-		productName := row[7]
-		stock, _ := strconv.Atoi(row[8])
-		minStock, _ := strconv.Atoi(row[9])
-		price, _ := strconv.Atoi(row[10])
-		description := row[11]
-		status, _ := strconv.Atoi(row[12])
+		barcode := row[0]
+		sku := parseUint(row[1])
+		merkID := row[2]
+		categoryID := row[3]
+		productName := row[4]
+		stock, _ := strconv.Atoi(row[5])
+		minStock, _ := strconv.Atoi(row[6])
+		price, _ := strconv.Atoi(row[7])
+		description := row[8]
+		status := 1
+		if len(row) > 9 {
+			status, _ = strconv.Atoi(row[9])
+		}
 
-		// Jika kolom ID kosong → generate ID unik
-		if id == "" {
-			newID, err := generateProductID("p=")
-			if err != nil {
-				return nil, fmt.Errorf("gagal membuat secure ID: %v", err)
-			}
-			id = newID
+		newID, err := generateProductID("p=")
+		if err != nil {
+			return nil, fmt.Errorf("gagal membuat ID produk di baris %d: %v", i+2, err)
 		}
 
 		product := entity.Product{
-			ID:           id,
+			ID:           newID,
 			MerchantID:   merchantID,
 			UserID:       userID,
 			Barcode:      barcode,
@@ -85,6 +83,7 @@ func (s *importService) ImportProducts(ctx context.Context, fileHeader *multipar
 			Price:        price,
 			Description:  description,
 			Status:       status,
+			CreatedBy:    createdBy,
 		}
 
 		if err := s.Repo.Create(ctx, &product); err != nil {

@@ -1,17 +1,15 @@
 package import_data
 
 import (
+	"context"
 	"net/http"
 
 	res "github.com/srv-cashpay/util/s/response"
 
 	"github.com/labstack/echo/v4"
-	"github.com/srv-cashpay/merchant/dto"
 )
 
 func (h *domainHandler) UploadProducts(c echo.Context) error {
-	var req dto.ProductRequest
-
 	fileHeader, err := c.FormFile("file")
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{
@@ -19,7 +17,7 @@ func (h *domainHandler) UploadProducts(c echo.Context) error {
 		})
 	}
 
-	userid, ok := c.Get("UserId").(string)
+	userID, ok := c.Get("UserId").(string)
 	if !ok {
 		return res.ErrorBuilder(&res.ErrorConstant.InternalServerError, nil).Send(c)
 	}
@@ -29,15 +27,17 @@ func (h *domainHandler) UploadProducts(c echo.Context) error {
 		return res.ErrorBuilder(&res.ErrorConstant.InternalServerError, nil).Send(c)
 	}
 
-	merchantId, ok := c.Get("MerchantId").(string)
+	merchantID, ok := c.Get("MerchantId").(string)
 	if !ok {
 		return res.ErrorBuilder(&res.ErrorConstant.InternalServerError, nil).Send(c)
 	}
-	req.UserID = userid
-	req.MerchantID = merchantId
-	req.CreatedBy = createdBy
 
-	result, err := h.serviceImport.ImportProducts(c.Request().Context(), fileHeader)
+	// 🔹 Kirim context + metadata ke service
+	ctx := context.WithValue(c.Request().Context(), "UserId", userID)
+	ctx = context.WithValue(ctx, "CreatedBy", createdBy)
+	ctx = context.WithValue(ctx, "MerchantId", merchantID)
+
+	result, err := h.serviceImport.ImportProducts(ctx, fileHeader)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{
 			"error": err.Error(),
