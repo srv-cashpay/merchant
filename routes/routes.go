@@ -256,7 +256,6 @@ func New() *echo.Echo {
 	e.GET("/api/merchant/voucher-verification/:id/:merchant_id", voucherH.GetVerifikasi)
 	e.PUT("/api/merchant/voucher-verification/:id/:merchant_id", voucherH.Update)
 
-	e.Group("/api/products/import")
 	e.GET("/template", importproductH.DownloadTemplate)
 	e.POST("/upload", importproductH.UploadProducts)
 

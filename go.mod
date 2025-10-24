@@ -15,8 +15,9 @@ require (
 	github.com/srv-cashpay/auth v0.0.0-20250420081851-2a728276c864
 	github.com/srv-cashpay/middlewares v0.0.0-20250120090519-4aa5ca3d5cac
 	github.com/srv-cashpay/pos v0.0.0-20250317074838-1b049d295205
-	github.com/srv-cashpay/product v0.0.0-20251012053331-1c96d7d3df16
+	github.com/srv-cashpay/product v0.0.0-20251019123908-7c08856e35f4
 	github.com/srv-cashpay/util v0.0.0-20250728073605-f710558a1115
+	github.com/xuri/excelize/v2 v2.10.0
 	google.golang.org/api v0.247.0
 	gorm.io/driver/postgres v1.5.9
 )
@@ -70,7 +71,6 @@ require (
 	github.com/teris-io/shortid v0.0.0-20220617161101-71ec9f2aa569 // indirect
 	github.com/tiendc/go-deepcopy v1.7.1 // indirect
 	github.com/xuri/efp v0.0.1 // indirect
-	github.com/xuri/excelize/v2 v2.10.0 // indirect
 	github.com/xuri/nfp v0.0.2-0.20250530014748-2ddeb826f9a9 // indirect
 	github.com/zeebo/errs v1.4.0 // indirect
 	go.opentelemetry.io/auto/sdk v1.1.0 // indirect

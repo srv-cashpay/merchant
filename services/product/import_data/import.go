@@ -3,6 +3,7 @@ package import_data
 import (
 	"bytes"
 	"context"
+	"crypto/rand"
 	"fmt"
 	"io"
 	"mime/multipart"
@@ -19,12 +20,13 @@ func (s *importService) ImportProducts(ctx context.Context, fileHeader *multipar
 	}
 	defer file.Close()
 
-	// Read Excel
+	// Baca seluruh file
 	data, err := io.ReadAll(file)
 	if err != nil {
 		return nil, fmt.Errorf("gagal membaca file: %v", err)
 	}
 
+	// Parse Excel
 	f, err := excelize.OpenReader(bytes.NewReader(data))
 	if err != nil {
 		return nil, fmt.Errorf("file bukan format excel yang valid")
@@ -41,31 +43,48 @@ func (s *importService) ImportProducts(ctx context.Context, fileHeader *multipar
 	}
 
 	var imported int
-	for i, row := range rows[1:] { // skip header
-		if len(row) < 10 {
+	for i, row := range rows[1:] { // Skip header
+		if len(row) < 11 {
 			continue
 		}
+		id := row[0]
+		if id == "" {
+			newID, err := generateProductID("p=")
+			if err != nil {
+				return nil, fmt.Errorf("gagal membuat secure ID: %v", err)
+			}
+			id = newID
+		}
 
-		stock, _ := strconv.Atoi(row[5])
-		minStock, _ := strconv.Atoi(row[6])
-		price, _ := strconv.Atoi(row[7])
-		status, _ := strconv.Atoi(row[9])
+		barcode := row[1]
+		sku := parseUint(row[2])
+		merkID := row[3]
+		categoryID := row[4]
+		productName := row[5]
+		stock, _ := strconv.Atoi(row[6])
+		minStock, _ := strconv.Atoi(row[7])
+		price, _ := strconv.Atoi(row[8])
+		description := row[9]
+		status, _ := strconv.Atoi(row[10])
 
 		product := entity.Product{
-			Barcode:      row[0],
-			MerkID:       row[2],
-			CategoryID:   row[3],
-			ProductName:  row[4],
+			ID:           id,
+			Barcode:      barcode,
+			SKU:          sku,
+			MerkID:       merkID,
+			CategoryID:   categoryID,
+			ProductName:  productName,
 			Stock:        stock,
 			MinimalStock: minStock,
 			Price:        price,
-			Description:  row[8],
+			Description:  description,
 			Status:       status,
 		}
 
 		if err := s.Repo.Create(ctx, &product); err != nil {
 			return nil, fmt.Errorf("baris %d gagal disimpan: %v", i+2, err)
 		}
+
 		imported++
 	}
 
@@ -78,4 +97,28 @@ func (s *importService) ImportProducts(ctx context.Context, fileHeader *multipar
 func parseUint(s string) uint64 {
 	v, _ := strconv.ParseUint(s, 10, 64)
 	return v
+}
+
+func generateProductID(prefix string) (string, error) {
+	securePart, err := generateSecurePart()
+	if err != nil {
+		return "", err
+	}
+	return fmt.Sprintf("%s%s", prefix, securePart), nil
+}
+
+func generateSecurePart() (string, error) {
+	const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz"
+
+	securePart := make([]byte, 12)
+	_, err := rand.Read(securePart)
+	if err != nil {
+		return "", err
+	}
+
+	for i := range securePart {
+		securePart[i] = chars[securePart[i]%byte(len(chars))]
+	}
+
+	return string(securePart), nil
 }
