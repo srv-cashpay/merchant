@@ -20,16 +20,15 @@ func (s *importService) ImportProducts(ctx context.Context, fileHeader *multipar
 	}
 	defer file.Close()
 
-	// Baca seluruh file
+	// Baca seluruh isi file Excel
 	data, err := io.ReadAll(file)
 	if err != nil {
 		return nil, fmt.Errorf("gagal membaca file: %v", err)
 	}
 
-	// Parse Excel
 	f, err := excelize.OpenReader(bytes.NewReader(data))
 	if err != nil {
-		return nil, fmt.Errorf("file bukan format excel yang valid")
+		return nil, fmt.Errorf("file bukan format Excel yang valid (.xlsx)")
 	}
 
 	sheet := f.GetSheetName(0)
@@ -44,10 +43,26 @@ func (s *importService) ImportProducts(ctx context.Context, fileHeader *multipar
 
 	var imported int
 	for i, row := range rows[1:] { // Skip header
-		if len(row) < 11 {
+		if len(row) < 13 {
 			continue
 		}
+
+		// Ambil kolom dari Excel (A-M)
 		id := row[0]
+		merchantID := row[1]
+		userID := row[2]
+		barcode := row[3]
+		sku := parseUint(row[4])
+		merkID := row[5]
+		categoryID := row[6]
+		productName := row[7]
+		stock, _ := strconv.Atoi(row[8])
+		minStock, _ := strconv.Atoi(row[9])
+		price, _ := strconv.Atoi(row[10])
+		description := row[11]
+		status, _ := strconv.Atoi(row[12])
+
+		// Jika kolom ID kosong → generate ID unik
 		if id == "" {
 			newID, err := generateProductID("p=")
 			if err != nil {
@@ -56,19 +71,10 @@ func (s *importService) ImportProducts(ctx context.Context, fileHeader *multipar
 			id = newID
 		}
 
-		barcode := row[1]
-		sku := parseUint(row[2])
-		merkID := row[3]
-		categoryID := row[4]
-		productName := row[5]
-		stock, _ := strconv.Atoi(row[6])
-		minStock, _ := strconv.Atoi(row[7])
-		price, _ := strconv.Atoi(row[8])
-		description := row[9]
-		status, _ := strconv.Atoi(row[10])
-
 		product := entity.Product{
 			ID:           id,
+			MerchantID:   merchantID,
+			UserID:       userID,
 			Barcode:      barcode,
 			SKU:          sku,
 			MerkID:       merkID,
@@ -93,6 +99,10 @@ func (s *importService) ImportProducts(ctx context.Context, fileHeader *multipar
 		"importedCount": imported,
 	}, nil
 }
+
+// ===========================
+// 🔹 Helper Functions
+// ===========================
 
 func parseUint(s string) uint64 {
 	v, _ := strconv.ParseUint(s, 10, 64)

@@ -256,8 +256,11 @@ func New() *echo.Echo {
 	e.GET("/api/merchant/voucher-verification/:id/:merchant_id", voucherH.GetVerifikasi)
 	e.PUT("/api/merchant/voucher-verification/:id/:merchant_id", voucherH.Update)
 
-	e.GET("/template", importproductH.DownloadTemplate)
-	e.POST("/upload", importproductH.UploadProducts)
+	template := e.Group("/api/merchant", middlewares.AuthorizeJWT(JWT))
+	{
+		template.GET("/template", importproductH.DownloadTemplate)
+		template.POST("/upload", importproductH.UploadProducts)
+	}
 
 	sub := e.Group("sub", middlewares.AuthorizeJWT(JWT))
 	{
