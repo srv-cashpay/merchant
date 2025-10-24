@@ -2,24 +2,25 @@ package export_data
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/xuri/excelize/v2"
 )
 
 func (s *exportService) ExportExcel(ctx context.Context) (*excelize.File, error) {
-	users, err := s.Repo.FindAll(ctx)
+	products, err := s.Repo.FindAll(ctx)
 	if err != nil {
 		return nil, err
 	}
 
 	f := excelize.NewFile()
-	sheet := "Users"
-	f.NewSheet(sheet)
-	f.SetSheetRow(sheet, "A1", &[]string{"ID", "Name", "Price", "Stock"})
+	sheet := "Product Export"
+	f.SetSheetName("Sheet1", sheet)
+	f.SetSheetRow(sheet, "A1", &[]string{"ID", "Product Name", "Price", "Stock"})
 
-	for i, user := range users {
-		row := []interface{}{user.ID, user.ProductName, user.Price, user.Stock}
-		cell := "A" + string(rune(i+2))
+	for i, p := range products {
+		row := []interface{}{p.ID, p.ProductName, p.Price, p.Stock}
+		cell := fmt.Sprintf("A%d", i+2)
 		f.SetSheetRow(sheet, cell, &row)
 	}
 

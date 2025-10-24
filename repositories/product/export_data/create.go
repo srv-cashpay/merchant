@@ -7,9 +7,9 @@ import (
 )
 
 func (r *exportRepository) FindAll(ctx context.Context) ([]entity.Product, error) {
-	var users []entity.Product
-	if err := r.DB.WithContext(ctx).Find(&users).Error; err != nil {
+	var products []entity.Product
+	if err := r.DB.WithContext(ctx).Find(&products).Error; err != nil {
 		return nil, err
 	}
-	return users, nil
+	return products, nil
 }

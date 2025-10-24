@@ -22,7 +22,7 @@ func (h *domainHandler) ExportExcel(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
 
-	filename := "users.xlsx"
+	filename := "products.xlsx"
 	c.Response().Header().Set(echo.HeaderContentType, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
 	c.Response().Header().Set(echo.HeaderContentDisposition, "attachment; filename="+filename)
 
