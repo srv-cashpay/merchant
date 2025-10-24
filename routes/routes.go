@@ -270,6 +270,11 @@ func New() *echo.Echo {
 		template.POST("/upload", importproductH.UploadProducts)
 	}
 
+	export := e.Group("/api/merchant", middlewares.AuthorizeJWT(JWT))
+	{
+		export.GET("/export/excel", exportproductH.ExportExcel)
+	}
+
 	sub := e.Group("sub", middlewares.AuthorizeJWT(JWT))
 	{
 		sub.GET("/api/transaction/:order_id/status", subscribeH.CheckTransactionStatus)
