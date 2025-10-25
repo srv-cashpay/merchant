@@ -9,7 +9,7 @@ import (
 )
 
 type DomainRepository interface {
-	FindByFilter(ctx context.Context, req dto.ExportFilter) ([]entity.Product, error)
+	FindAllByFilter(ctx context.Context, req dto.ExportFilter) ([]entity.Product, error)
 }
 
 type exportRepository struct {
