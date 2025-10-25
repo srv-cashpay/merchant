@@ -10,6 +10,8 @@ func (b *productRepository) Update(req dto.ProductUpdateRequest) (dto.ProductUpd
 	updateProduct := entity.Product{
 		SKU:          req.SKU,
 		Barcode:      req.Barcode,
+		CategoryID:   req.CategoryID,
+		MerkID:       req.MerkID,
 		ProductName:  req.ProductName,
 		Stock:        req.Stock,
 		MinimalStock: req.MinimalStock,
@@ -38,6 +40,8 @@ func (b *productRepository) Update(req dto.ProductUpdateRequest) (dto.ProductUpd
 	response := dto.ProductUpdateResponse{
 		SKU:          updateProduct.SKU,
 		Barcode:      updateProduct.Barcode,
+		CategoryID:   updateProduct.CategoryID,
+		MerkID:       updateProduct.MerkID,
 		ProductName:  updateProduct.ProductName,
 		Stock:        updateProduct.Stock,
 		MinimalStock: updateProduct.MinimalStock,

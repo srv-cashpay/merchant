@@ -68,6 +68,8 @@ type ProductBulkDeleteResponse struct {
 type ProductUpdateRequest struct {
 	ID           string `json:"id"`
 	Barcode      string `json:"barcode"`
+	MerkID       string `json:"merk_id"`
+	CategoryID   string `json:"category_id"`
 	SKU          uint64 `json:"sku"`
 	ProductName  string `json:"product_name"`
 	Stock        int    `json:"stock"`
@@ -109,6 +111,8 @@ type ProductUpdateResponse struct {
 	SKU          uint64 `json:"sku"`
 	Barcode      string `json:"barcode"`
 	ProductName  string `json:"product_name"`
+	MerkID       string `json:"merk_id"`
+	CategoryID   string `json:"category_id"`
 	Stock        int    `json:"stock"`
 	MinimalStock int    `json:"minimal_stock"`
 	Price        int    `json:"price"`
