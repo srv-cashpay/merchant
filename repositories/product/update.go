@@ -9,6 +9,7 @@ func (b *productRepository) Update(req dto.ProductUpdateRequest) (dto.ProductUpd
 	// Menyiapkan struktur update untuk produk
 	updateProduct := entity.Product{
 		SKU:          req.SKU,
+		Barcode:      req.Barcode,
 		ProductName:  req.ProductName,
 		Stock:        req.Stock,
 		MinimalStock: req.MinimalStock,
