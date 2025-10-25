@@ -8,6 +8,7 @@ import (
 func (b *productRepository) Update(req dto.ProductUpdateRequest) (dto.ProductUpdateResponse, error) {
 	// Menyiapkan struktur update untuk produk
 	updateProduct := entity.Product{
+		SKU:          req.SKU,
 		ProductName:  req.ProductName,
 		Stock:        req.Stock,
 		MinimalStock: req.MinimalStock,
@@ -34,6 +35,8 @@ func (b *productRepository) Update(req dto.ProductUpdateRequest) (dto.ProductUpd
 
 	// Menyiapkan response setelah pembaruan berhasil
 	response := dto.ProductUpdateResponse{
+		SKU:          updateProduct.SKU,
+		Barcode:      updateProduct.Barcode,
 		ProductName:  updateProduct.ProductName,
 		Stock:        updateProduct.Stock,
 		MinimalStock: updateProduct.MinimalStock,

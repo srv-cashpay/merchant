@@ -28,6 +28,7 @@ func (s *productService) Create(req dto.ProductRequest) (dto.ProductResponse, er
 
 	create := dto.ProductRequest{
 		Barcode:      req.Barcode,
+		SKU:          req.SKU,
 		ProductName:  req.ProductName,
 		Description:  req.Description,
 		Stock:        req.Stock,
@@ -60,6 +61,7 @@ func (s *productService) Create(req dto.ProductRequest) (dto.ProductResponse, er
 	response := dto.ProductResponse{
 		ID:           created.ID,
 		UserID:       created.UserID,
+		SKU:          created.SKU,
 		Barcode:      req.Barcode,
 		ProductName:  created.ProductName,
 		Description:  created.Description,

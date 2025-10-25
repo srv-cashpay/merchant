@@ -34,6 +34,7 @@ func (b *productRepository) GetById(req dto.GetByIdRequest) (*dto.ProductRespons
 
 	response := &dto.ProductResponse{
 		ID:           tr.ID,
+		SKU:          tr.SKU,
 		UserID:       tr.UserID,
 		MerchantID:   tr.MerchantID,
 		Barcode:      tr.Barcode,
@@ -42,6 +43,7 @@ func (b *productRepository) GetById(req dto.GetByIdRequest) (*dto.ProductRespons
 		Stock:        tr.Stock,
 		MinimalStock: tr.MinimalStock,
 		Status:       statusString,
+		Description:  tr.Description,
 		MerkID:       tr.MerkID,
 		CategoryID:   tr.CategoryID,
 		CreatedAt:    dto.Timestamp(tr.CreatedAt),

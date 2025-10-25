@@ -36,6 +36,7 @@ func (r *productRepository) Create(req dto.ProductRequest) (dto.ProductResponse,
 	// Create the new product entry
 	create := product.Product{
 		ID:           secureID,
+		SKU:          req.SKU,
 		Barcode:      req.Barcode,
 		ProductName:  req.ProductName,
 		Stock:        req.Stock,
@@ -75,6 +76,7 @@ func (r *productRepository) Create(req dto.ProductRequest) (dto.ProductResponse,
 	response := dto.ProductResponse{
 		ID:           create.ID,
 		UserID:       create.UserID,
+		SKU:          create.SKU,
 		MerchantID:   create.MerchantID,
 		Barcode:      req.Barcode,
 		MerkID:       req.MerkID,

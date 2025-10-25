@@ -21,6 +21,7 @@ func (b *productService) Update(req dto.ProductUpdateRequest) (dto.ProductUpdate
 	}
 
 	request := dto.ProductUpdateRequest{
+		SKU:          req.SKU,
 		ProductName:  req.ProductName,
 		Stock:        req.Stock,
 		MinimalStock: req.MinimalStock,
@@ -38,6 +39,7 @@ func (b *productService) Update(req dto.ProductUpdateRequest) (dto.ProductUpdate
 	}
 
 	response := dto.ProductUpdateResponse{
+		SKU:          req.SKU,
 		ProductName:  request.ProductName,
 		Stock:        request.Stock,
 		MinimalStock: request.MinimalStock,
