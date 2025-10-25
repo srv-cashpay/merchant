@@ -4,20 +4,33 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+	dto "github.com/srv-cashpay/merchant/dto"
+	res "github.com/srv-cashpay/util/s/response"
 )
 
-type ExportFilter struct {
-	From string `json:"from"`
-	To   string `json:"to"`
-}
-
 func (h *domainHandler) ExportExcel(c echo.Context) error {
-	var filter ExportFilter
-	if err := c.Bind(&filter); err != nil {
+	var req dto.ExportFilter
+
+	// ✅ Ambil UserID dan MerchantID dari token
+	userid, ok := c.Get("UserId").(string)
+	if !ok {
+		return res.ErrorBuilder(&res.ErrorConstant.InternalServerError, nil).Send(c)
+	}
+	merchantId, ok := c.Get("MerchantId").(string)
+	if !ok {
+		return res.ErrorBuilder(&res.ErrorConstant.InternalServerError, nil).Send(c)
+	}
+
+	// ✅ Bind body (From, To, dll)
+	if err := c.Bind(&req); err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "invalid body"})
 	}
 
-	f, err := h.serviceExport.ExportExcel(c.Request().Context())
+	req.UserID = userid
+	req.MerchantID = merchantId
+
+	// ✅ Kirim filter ke service
+	f, err := h.serviceExport.ExportExcel(c.Request().Context(), req)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}

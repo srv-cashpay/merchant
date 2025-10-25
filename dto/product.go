@@ -150,3 +150,11 @@ type ImportResultDTO struct {
 	Failed   int      `json:"failed"`
 	Failures []string `json:"failures"`
 }
+
+type ExportFilter struct {
+	From       string `json:"from"`
+	To         string `json:"to"`
+	UserID     string `json:"user_id"`
+	Barcode    string `json:"barcode"`
+	MerchantID string `json:"merchant_id"`
+}
