@@ -47,6 +47,7 @@ func (b *productRepository) GetById(req dto.GetByIdRequest) (*dto.ProductRespons
 		MerkID:       tr.MerkID,
 		CategoryID:   tr.CategoryID,
 		CreatedAt:    dto.Timestamp(tr.CreatedAt),
+		CreatedBy:    tr.CreatedBy,
 	}
 
 	return response, nil
