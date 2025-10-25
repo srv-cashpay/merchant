@@ -29,6 +29,7 @@ func (b *productService) Update(req dto.ProductUpdateRequest) (dto.ProductUpdate
 		UpdatedBy:    req.UpdatedBy,
 		UserID:       req.UserID,
 		Description:  req.Description,
+		MerchantID:   req.MerchantID,
 	}
 
 	product, err := b.Repo.Update(req)
@@ -45,6 +46,7 @@ func (b *productService) Update(req dto.ProductUpdateRequest) (dto.ProductUpdate
 		UpdatedBy:    request.UpdatedBy,
 		UserID:       request.UserID,
 		Description:  request.Description,
+		MerchantID:   request.MerchantID,
 	}
 
 	return response, nil

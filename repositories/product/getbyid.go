@@ -38,6 +38,7 @@ func (b *productRepository) GetById(req dto.GetByIdRequest) (*dto.ProductRespons
 		MerchantID:   tr.MerchantID,
 		Barcode:      tr.Barcode,
 		ProductName:  tr.ProductName,
+		Price:        tr.Price,
 		Stock:        tr.Stock,
 		MinimalStock: tr.MinimalStock,
 		Status:       statusString,
