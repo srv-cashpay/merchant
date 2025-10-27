@@ -11,6 +11,7 @@ type DomainHandler interface {
 	Get(c echo.Context) error
 	Delete(c echo.Context) error
 	BulkDelete(c echo.Context) error
+	BulkEdit(c echo.Context) error
 	GetById(c echo.Context) error
 	Update(c echo.Context) error
 	UploadImage(c echo.Context) error

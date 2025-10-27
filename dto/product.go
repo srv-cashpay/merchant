@@ -22,6 +22,21 @@ type ProductRequest struct {
 	CreatedBy    string `json:"created_by"`
 }
 
+type BulkEditAvail struct {
+	ID           string  `json:"id"`
+	SKU          *uint64 `json:"sku,omitempty"`
+	Barcode      *string `json:"barcode,omitempty"`
+	MerkID       *string `json:"merk_id,omitempty"`
+	CategoryID   *string `json:"category_id,omitempty"`
+	ProductName  *string `json:"product_name,omitempty"`
+	Description  *string `json:"description,omitempty"`
+	Stock        *int    `json:"stock,omitempty"`
+	MinimalStock *int    `json:"minimal_stock,omitempty"`
+	Price        *int    `json:"price,omitempty"`
+	Status       *int    `json:"status,omitempty"`
+	UpdatedBy    string  `json:"updated_by"`
+}
+
 type ProductResponse struct {
 	ID           string    `json:"id"`
 	SKU          uint64    `json:"sku"`
@@ -165,4 +180,16 @@ type ExportFilter struct {
 	UserID     string `json:"user_id"`
 	Barcode    string `json:"barcode"`
 	MerchantID string `json:"merchant_id"`
+}
+
+type BulkEditRequest struct {
+	ID        []string        `json:"id"`
+	Items     []BulkEditAvail `json:"items"`
+	UpdatedBy string          `json:"updated_by"`
+}
+
+type BulkEditResponse struct {
+	ID        []string `json:"id"`
+	UpdatedBy string   `json:"updated_by"`
+	Count     int      `json:"count"`
 }

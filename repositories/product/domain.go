@@ -13,6 +13,7 @@ type DomainRepository interface {
 	GetById(req dto.GetByIdRequest) (*dto.ProductResponse, error)
 	Delete(req dto.DeleteRequest) (dto.DeleteResponse, error)
 	BulkDelete(req dto.BulkDeleteRequest) (int, error)
+	BulkEdit(req dto.BulkEditRequest) (int, error)
 	Update(req dto.ProductUpdateRequest) (dto.ProductUpdateResponse, error)
 	SaveFile(req dto.ProductUploadRequest) (dto.ProductUploadResponse, error)
 	GetPicture(req dto.GetProductUploadRequest) (*dto.GetProductUploadResponse, error)
