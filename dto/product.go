@@ -23,18 +23,19 @@ type ProductRequest struct {
 }
 
 type BulkEditAvail struct {
-	ID           string  `json:"id"`
-	SKU          *uint64 `json:"sku,omitempty"`
-	Barcode      *string `json:"barcode,omitempty"`
-	MerkID       *string `json:"merk_id,omitempty"`
-	CategoryID   *string `json:"category_id,omitempty"`
-	ProductName  *string `json:"product_name,omitempty"`
-	Description  *string `json:"description,omitempty"`
-	Stock        *int    `json:"stock,omitempty"`
-	MinimalStock *int    `json:"minimal_stock,omitempty"`
-	Price        *int    `json:"price,omitempty"`
-	Status       *int    `json:"status,omitempty"`
-	UpdatedBy    string  `json:"updated_by"`
+	ID           string `json:"id"`
+	SKU          uint64 `json:"sku,omitempty"`
+	Barcode      string `json:"barcode,omitempty"`
+	MerkID       string `json:"merk_id,omitempty"`
+	CategoryID   string `json:"category_id,omitempty"`
+	ProductName  string `json:"product_name,omitempty"`
+	Description  string `json:"description,omitempty"`
+	Stock        int    `json:"stock,omitempty"`
+	MinimalStock int    `json:"minimal_stock,omitempty"`
+	Price        int    `json:"price,omitempty"`
+	Status       int    `json:"status,omitempty"`
+	UpdatedBy    string `json:"updated_by"`
+	UpdatedAt    string `json:"updated_at"`
 }
 
 type ProductResponse struct {

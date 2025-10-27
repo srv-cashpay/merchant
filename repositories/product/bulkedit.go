@@ -1,6 +1,8 @@
 package product
 
 import (
+	"time"
+
 	dto "github.com/srv-cashpay/merchant/dto"
 	"github.com/srv-cashpay/product/entity"
 )
@@ -18,50 +20,55 @@ func (b *productRepository) BulkEdit(req dto.BulkEditRequest) (int, error) {
 			continue
 		}
 
-		updates := map[string]interface{}{}
+		updateData := map[string]interface{}{}
 
-		if item.SKU != nil {
-			updates["sku"] = *item.SKU
+		if item.SKU != 0 {
+			updateData["sku"] = item.SKU
 		}
-		if item.Barcode != nil {
-			updates["barcode"] = *item.Barcode
+		if item.Barcode != "" {
+			updateData["barcode"] = item.Barcode
 		}
-		if item.MerkID != nil {
-			updates["merk_id"] = *item.MerkID
+		if item.MerkID != "" {
+			updateData["merk_id"] = item.MerkID
 		}
-		if item.CategoryID != nil {
-			updates["category_id"] = *item.CategoryID
+		if item.CategoryID != "" {
+			updateData["category_id"] = item.CategoryID
 		}
-		if item.ProductName != nil {
-			updates["product_name"] = *item.ProductName
+		if item.ProductName != "" {
+			updateData["product_name"] = item.ProductName
 		}
-		if item.Description != nil {
-			updates["description"] = *item.Description
+		if item.Description != "" {
+			updateData["description"] = item.Description
 		}
-		if item.Stock != nil {
-			updates["stock"] = *item.Stock
+		if item.Stock != 0 {
+			updateData["stock"] = item.Stock
 		}
-		if item.MinimalStock != nil {
-			updates["minimal_stock"] = *item.MinimalStock
+		if item.MinimalStock != 0 {
+			updateData["minimal_stock"] = item.MinimalStock
 		}
-		if item.Price != nil {
-			updates["price"] = *item.Price
+		if item.Price != 0 {
+			updateData["price"] = item.Price
 		}
-		if item.Status != nil {
-			updates["status"] = *item.Status
+		if item.Status != 0 {
+			updateData["status"] = item.Status
 		}
 
-		updates["updated_by"] = req.UpdatedBy
+		// Selalu update info pengguna & waktu
+		updateData["updated_by"] = item.UpdatedBy
+		updateData["updated_at"] = time.Now()
 
-		if len(updates) == 0 {
+		// Jika tidak ada field yang diubah, lewati
+		if len(updateData) == 0 {
 			continue
 		}
 
-		result := tx.Model(&entity.Product{}).Where("id = ?", item.ID).Updates(updates)
+		// Update satu produk
+		result := tx.Model(&entity.Product{}).Where("id = ?", item.ID).Updates(updateData)
 		if result.Error != nil {
 			tx.Rollback()
 			return 0, result.Error
 		}
+
 		totalUpdated += int(result.RowsAffected)
 	}
 
