@@ -512,6 +512,7 @@ func New() *echo.Echo {
 		product.GET("/product/:id", productH.GetById)
 		product.DELETE("/product/:id", productH.Delete)
 		product.DELETE("/product/bulk-delete", productH.BulkDelete)
+		product.PUT("/product/bulk-edit", productH.BulkEdit)
 		product.PUT("/product/update/:id", productH.Update)
 		product.GET("/product/pagination", productH.Get)
 		product.GET("/product/merk", getmerkH.Get)
