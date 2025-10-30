@@ -3,7 +3,6 @@ package user
 import (
 	"crypto/rand"
 	"fmt"
-	"strconv"
 
 	"github.com/srv-cashpay/auth/entity"
 	dto "github.com/srv-cashpay/merchant/dto"
@@ -46,22 +45,6 @@ func (r *userRepository) Create(req dto.UserMerchantRequest) (dto.UserMerchantRe
 		return dto.UserMerchantResponse{}, err
 	}
 
-	// Map the status from integer to string
-	statusMap := map[int]string{
-		1: "active",
-		2: "inactive",
-	}
-
-	createdStatus, err := strconv.Atoi(fmt.Sprintf("%v", create.Verified.StatusAccount))
-	if err != nil {
-		return dto.UserMerchantResponse{}, fmt.Errorf("invalid status value: %v", create.Verified.StatusAccount)
-	}
-
-	statusString, ok := statusMap[createdStatus]
-	if !ok {
-		return dto.UserMerchantResponse{}, fmt.Errorf("invalid status value in database")
-	}
-
 	// Build the response for the created user
 	response := dto.UserMerchantResponse{
 		ID:           create.ID,
@@ -70,7 +53,6 @@ func (r *userRepository) Create(req dto.UserMerchantRequest) (dto.UserMerchantRe
 		Whatsapp:     create.Whatsapp,
 		Email:        create.Email,
 		Password:     create.Password,
-		Status:       statusString,
 	}
 
 	return response, nil

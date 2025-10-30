@@ -32,17 +32,6 @@ func (s *userService) Create(req dto.UserMerchantRequest) (dto.UserMerchantRespo
 		return dto.UserMerchantResponse{}, err
 	}
 
-	statusMap := map[int]string{
-		1: "active",
-		2: "inactive",
-	}
-
-	// Dapatkan string status berdasarkan nilai integer
-	statusString, ok := statusMap[create.Status]
-	if !ok {
-		return dto.UserMerchantResponse{}, fmt.Errorf("invalid status value in database")
-	}
-
 	response := dto.UserMerchantResponse{
 		AccessRoleID: created.AccessRoleID,
 		FullName:     created.FullName,
@@ -50,7 +39,6 @@ func (s *userService) Create(req dto.UserMerchantRequest) (dto.UserMerchantRespo
 		Email:        created.Email,
 		Password:     created.Password,
 		Description:  created.Description,
-		Status:       statusString,
 		UserID:       created.UserID,
 		MerchantID:   created.MerchantID,
 		CreatedBy:    created.CreatedBy,
