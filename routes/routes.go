@@ -75,6 +75,10 @@ import (
 	r_user "github.com/srv-cashpay/merchant/repositories/user"
 	s_user "github.com/srv-cashpay/merchant/services/user"
 
+	h_usermerchant "github.com/srv-cashpay/merchant/handlers/usermerchant"
+	r_usermerchant "github.com/srv-cashpay/merchant/repositories/usermerchant"
+	s_usermerchant "github.com/srv-cashpay/merchant/services/usermerchant"
+
 	h_product "github.com/srv-cashpay/merchant/handlers/product"
 	r_product "github.com/srv-cashpay/merchant/repositories/product"
 	s_product "github.com/srv-cashpay/merchant/services/product"
@@ -240,6 +244,10 @@ var (
 	userR = r_user.NewUserRepository(DB)
 	userS = s_user.NewUserService(userR, JWT)
 	userH = h_user.NewUserHandler(userS)
+
+	usermerchantR = r_usermerchant.NewUserMerchantRepository(DB)
+	usermerchantS = s_usermerchant.NewUserMerchantService(usermerchantR, JWT)
+	usermerchantH = h_usermerchant.NewUserMerchantHandler(usermerchantS)
 
 	taxR = r_tax.NewTaxRepository(DB)
 	taxS = s_tax.NewTaxService(taxR, JWT)
@@ -470,6 +478,15 @@ func New() *echo.Echo {
 		user.PUT("/user/update/:id", userH.Update)
 		user.DELETE("/user/:id", userH.Delete)
 		user.DELETE("/user/bulk-delete", userH.BulkDelete)
+	}
+
+	usermerchant := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
+	{
+		usermerchant.POST("/user_merchant/create", usermerchantH.Create)
+		usermerchant.GET("/user_merchant/pagination", usermerchantH.Get)
+		usermerchant.PUT("/user_merchant/update/:id", usermerchantH.Update)
+		usermerchant.DELETE("/user_merchant/:id", usermerchantH.Delete)
+		usermerchant.DELETE("/user_merchant/bulk-delete", usermerchantH.BulkDelete)
 	}
 
 	category := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
