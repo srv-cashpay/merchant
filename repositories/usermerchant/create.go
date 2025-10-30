@@ -33,8 +33,12 @@ func (r *userRepository) Create(req dto.UserMerchantRequest) (dto.UserMerchantRe
 
 	// Create the new user entry
 	create := entity.AccessDoor{
-		ID:       secureID,
-		FullName: req.FullName,
+		ID:           secureID,
+		AccessRoleID: req.AccessRoleID,
+		FullName:     req.FullName,
+		Whatsapp:     req.Whatsapp,
+		Email:        req.Email,
+		Password:     req.Password,
 	}
 
 	// Save the new user to the database
@@ -60,9 +64,13 @@ func (r *userRepository) Create(req dto.UserMerchantRequest) (dto.UserMerchantRe
 
 	// Build the response for the created user
 	response := dto.UserMerchantResponse{
-		ID:       create.ID,
-		FullName: create.FullName,
-		Status:   statusString,
+		ID:           create.ID,
+		AccessRoleID: create.AccessRoleID,
+		FullName:     create.FullName,
+		Whatsapp:     create.Whatsapp,
+		Email:        create.Email,
+		Password:     create.Password,
+		Status:       statusString,
 	}
 
 	return response, nil

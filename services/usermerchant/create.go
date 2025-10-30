@@ -16,14 +16,15 @@ func (s *userService) Create(req dto.UserMerchantRequest) (dto.UserMerchantRespo
 
 	create := dto.UserMerchantRequest{
 		AccessRoleID: req.AccessRoleID,
+		FullName:     req.FullName,
+		Whatsapp:     req.Whatsapp,
+		Email:        req.Email,
+		Password:     req.Password,
 		Description:  req.Description,
 		Status:       req.Status,
 		UserID:       req.UserID,
 		MerchantID:   req.MerchantID,
 		CreatedBy:    req.CreatedBy,
-		Whatsapp:     req.Whatsapp,
-		Email:        req.Email,
-		Password:     req.Password,
 	}
 
 	created, err := s.Repo.Create(create)
@@ -43,13 +44,16 @@ func (s *userService) Create(req dto.UserMerchantRequest) (dto.UserMerchantRespo
 	}
 
 	response := dto.UserMerchantResponse{
-		ID:          created.ID,
-		UserID:      created.UserID,
-		FullName:    created.FullName,
-		Description: created.Description,
-		Status:      statusString,
-		MerchantID:  created.MerchantID,
-		CreatedBy:   created.CreatedBy,
+		AccessRoleID: created.AccessRoleID,
+		FullName:     created.FullName,
+		Whatsapp:     created.Whatsapp,
+		Email:        created.Email,
+		Password:     created.Password,
+		Description:  created.Description,
+		Status:       statusString,
+		UserID:       created.UserID,
+		MerchantID:   created.MerchantID,
+		CreatedBy:    created.CreatedBy,
 	}
 
 	return response, nil
