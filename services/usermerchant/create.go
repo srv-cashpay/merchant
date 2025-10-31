@@ -32,7 +32,14 @@ func (s *userService) Create(req dto.UserMerchantRequest) (dto.UserMerchantRespo
 	if encryp != nil {
 		return dto.UserMerchantResponse{}, encryp
 	}
+
+	secureID, err := util.GenerateSecureID()
+	if err != nil {
+		return dto.UserMerchantResponse{}, res.ErrorBuilder(&res.ErrorConstant.InternalServerError, err)
+	}
+
 	create := dto.UserMerchantRequest{
+		ID:           secureID,
 		AccessRoleID: req.AccessRoleID,
 		FullName:     req.FullName,
 		Whatsapp:     encryptedWhatsapp,

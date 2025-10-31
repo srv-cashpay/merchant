@@ -9,30 +9,10 @@ import (
 )
 
 func (r *userRepository) Create(req dto.UserMerchantRequest) (dto.UserMerchantResponse, error) {
-	// Insert or update the auto_increment value based on merchant_id
-	var autoIncrement int
-	err := r.DB.Raw(`
-		INSERT INTO merchant_auto_increments (merchant_id, next_increment)
-		VALUES (?, 1)
-		ON CONFLICT (merchant_id) DO UPDATE
-		SET next_increment = merchant_auto_increments.next_increment + 1
-		RETURNING next_increment - 1;
-	`, req.MerchantID).Scan(&autoIncrement).Error
-
-	if err != nil {
-		return dto.UserMerchantResponse{}, err
-	}
-
-	// Generate UserMerchant ID with prefix and auto increment value
-	prefix := "p="
-	secureID, err := generateUserMerchantID(prefix, autoIncrement)
-	if err != nil {
-		return dto.UserMerchantResponse{}, err
-	}
 
 	// Create the new user entry
 	create := entity.AccessDoor{
-		ID:           secureID,
+		ID:           req.ID,
 		AccessRoleID: req.AccessRoleID,
 		FullName:     req.FullName,
 		Whatsapp:     req.Whatsapp,
