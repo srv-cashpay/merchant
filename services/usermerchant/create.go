@@ -1,27 +1,44 @@
 package user
 
 import (
-	"crypto/rand"
-	"fmt"
-	"time"
+	res "github.com/srv-cashpay/util/s/response"
 
 	dto "github.com/srv-cashpay/merchant/dto"
-	"golang.org/x/crypto/blake2b"
+	util "github.com/srv-cashpay/util/s"
 )
 
 func (s *userService) Create(req dto.UserMerchantRequest) (dto.UserMerchantResponse, error) {
-	if req.Status != 1 && req.Status != 2 {
-		return dto.UserMerchantResponse{}, fmt.Errorf("invalid status: must be 1 (active) or 2 (inactive)")
+	// Validate email
+	if !util.IsValidEmail(req.Email) {
+		return dto.UserMerchantResponse{}, res.ErrorBuilder(&res.ErrorConstant.RegisterMail, nil)
 	}
 
+	req.Whatsapp = util.FormatWhatsappNumber(req.Whatsapp)
+
+	// Encrypt the email
+	encryptedEmail, err := util.Encrypt(req.Email)
+	if err != nil {
+		return dto.UserMerchantResponse{}, res.ErrorBuilder(&res.ErrorConstant.InternalServerError, err)
+	}
+
+	// Encrypt the email
+	encryptedWhatsapp, err := util.Encrypt(req.Whatsapp)
+	if err != nil {
+		return dto.UserMerchantResponse{}, res.ErrorBuilder(&res.ErrorConstant.InternalServerError, err)
+	}
+
+	// Proceed with the signup process
+	encryp := util.EncryptPasswordUserMerchant(&req)
+	if encryp != nil {
+		return dto.UserMerchantResponse{}, encryp
+	}
 	create := dto.UserMerchantRequest{
 		AccessRoleID: req.AccessRoleID,
 		FullName:     req.FullName,
-		Whatsapp:     req.Whatsapp,
-		Email:        req.Email,
+		Whatsapp:     encryptedWhatsapp,
+		Email:        encryptedEmail,
 		Password:     req.Password,
 		Description:  req.Description,
-		Status:       req.Status,
 		UserID:       req.UserID,
 		MerchantID:   req.MerchantID,
 		CreatedBy:    req.CreatedBy,
@@ -45,35 +62,4 @@ func (s *userService) Create(req dto.UserMerchantRequest) (dto.UserMerchantRespo
 	}
 
 	return response, nil
-}
-
-func GenerateSecureID() (string, error) {
-	const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-="
-
-	// Generate a salt
-	salt := make([]byte, 16)
-	_, err := rand.Read(salt)
-	if err != nil {
-		return "", err
-	}
-
-	// Combine salt and current timestamp for uniqueness
-	timestamp := time.Now().UnixNano()
-	saltedID := fmt.Sprintf("%x%d", salt, timestamp)
-
-	// Hash the combination using Blake2
-	hash, err := blake2b.New512(nil)
-	if err != nil {
-		return "", err
-	}
-	hash.Write([]byte(saltedID))
-	hashBytes := hash.Sum(nil)
-
-	// Convert hash bytes into a valid string
-	var secureID []byte
-	for i := 0; i < 12; i++ {
-		secureID = append(secureID, chars[hashBytes[i]%byte(len(chars))])
-	}
-
-	return string(secureID), nil
 }

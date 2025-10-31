@@ -32,7 +32,6 @@ type UserMerchantRequest struct {
 	LoginAttempts int       `json:"login_attempts"`
 	Suspended     bool      `json:"suspended"`
 	LastAttempt   time.Time `json:"last_attempt"`
-	Status        int       `json:"status"`
 	Description   string    `json:"description"`
 	CreatedBy     string    `json:"created_by"`
 	UpdatedBy     string    `json:"updated_by"`
@@ -52,7 +51,6 @@ type UserMerchantResponse struct {
 	LoginAttempts int       `json:"login_attempts"`
 	Suspended     bool      `json:"suspended"`
 	LastAttempt   time.Time `json:"last_attempt"`
-	Status        string    `json:"status"`
 	Description   string    `json:"description"`
 	CreatedBy     string    `json:"created_by"`
 	UpdatedBy     string    `json:"updated_by"`
@@ -77,7 +75,6 @@ type UserMerchantUpdateRequest struct {
 	MerchantID  string    `json:"merchant_id"`
 	FullName    string    `json:"full_name"`
 	Email       string    `json:"email"`
-	Status      bool      `json:"status"`
 	Description string    `json:"description"`
 	CreatedBy   string    `json:"created_by"`
 	UpdatedBy   string    `json:"updated_by"`
@@ -90,7 +87,6 @@ type UserMerchantUpdateResponse struct {
 	UserID      string    `json:"user_id"`
 	MerchantID  string    `json:"merchant_id"`
 	FullName    string    `json:"full_name"`
-	Status      bool      `json:"status"`
 	Description string    `json:"description"`
 	CreatedBy   string    `json:"created_by"`
 	UpdatedBy   string    `json:"updated_by"`
@@ -110,7 +106,6 @@ type GetUserMerchantResponse struct {
 	LoginAttempts int                  `json:"login_attempts"`
 	Suspended     bool                 `json:"suspended"`
 	LastAttempt   time.Time            `json:"last_attempt"`
-	Status        string               `json:"status"`
 	Description   string               `json:"description"`
 	Verified      UserMerchantVerified `json:"verified"`
 	Merchant      GetMerchantResponse  `json:"merchant"`

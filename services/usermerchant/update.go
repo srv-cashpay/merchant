@@ -5,7 +5,6 @@ import "github.com/srv-cashpay/merchant/dto"
 func (b *userService) Update(req dto.UserMerchantUpdateRequest) (dto.UserMerchantUpdateResponse, error) {
 	request := dto.UserMerchantUpdateRequest{
 		FullName:    req.FullName,
-		Status:      req.Status,
 		UpdatedBy:   req.UpdatedBy,
 		Description: req.Description,
 	}
@@ -17,7 +16,6 @@ func (b *userService) Update(req dto.UserMerchantUpdateRequest) (dto.UserMerchan
 
 	response := dto.UserMerchantUpdateResponse{
 		FullName:    request.FullName,
-		Status:      request.Status,
 		UpdatedBy:   request.UpdatedBy,
 		Description: request.Description,
 	}
