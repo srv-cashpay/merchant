@@ -11,8 +11,7 @@ require (
 	github.com/labstack/echo/v4 v4.12.0
 	github.com/midtrans/midtrans-go v1.3.8
 	github.com/plutov/paypal/v4 v4.15.0
-	github.com/srv-cashpay/auth v0.0.0-20250420081851-2a728276c864
-	github.com/srv-cashpay/middlewares v0.0.0-20250120090519-4aa5ca3d5cac
+	github.com/srv-cashpay/middlewares v0.0.0-20250421061951-7b6fa9b2a4df
 	github.com/srv-cashpay/pos v0.0.0-20250317074838-1b049d295205
 	github.com/srv-cashpay/product v0.0.0-20251019123908-7c08856e35f4
 	github.com/srv-cashpay/util v0.0.0-20251031010804-57bcd66481bf
@@ -40,9 +39,13 @@ require (
 	github.com/envoyproxy/go-control-plane/envoy v1.32.4 // indirect
 	github.com/envoyproxy/protoc-gen-validate v1.2.1 // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect
+	github.com/gabriel-vasile/mimetype v1.4.3 // indirect
 	github.com/go-jose/go-jose/v4 v4.0.5 // indirect
 	github.com/go-logr/logr v1.4.3 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
+	github.com/go-playground/locales v0.14.1 // indirect
+	github.com/go-playground/universal-translator v0.18.1 // indirect
+	github.com/go-playground/validator/v10 v10.17.0 // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/golang-jwt/jwt/v4 v4.5.0 // indirect
 	github.com/golang/protobuf v1.5.4 // indirect
@@ -57,6 +60,7 @@ require (
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
+	github.com/leodido/go-urn v1.4.0 // indirect
 	github.com/lib/pq v1.10.9 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/olivere/elastic/v7 v7.0.32 // indirect
@@ -67,6 +71,7 @@ require (
 	github.com/sirupsen/logrus v1.9.3 // indirect
 	github.com/skip2/go-qrcode v0.0.0-20200617195104-da1b6568686e // indirect
 	github.com/spiffe/go-spiffe/v2 v2.5.0 // indirect
+	github.com/srv-cashpay/auth v0.0.0-20251106130605-c824b5607836 // indirect
 	github.com/streadway/amqp v1.1.0 // indirect
 	github.com/teris-io/shortid v0.0.0-20220617161101-71ec9f2aa569 // indirect
 	github.com/tiendc/go-deepcopy v1.7.1 // indirect

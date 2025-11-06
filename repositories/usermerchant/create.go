@@ -18,6 +18,7 @@ func (r *userRepository) Create(req dto.UserMerchantRequest) (dto.UserMerchantRe
 		Whatsapp:     req.Whatsapp,
 		Email:        req.Email,
 		Password:     req.Password,
+		MerchantID:   req.MerchantID,
 	}
 
 	// Save the new user to the database
@@ -33,6 +34,7 @@ func (r *userRepository) Create(req dto.UserMerchantRequest) (dto.UserMerchantRe
 		Whatsapp:     create.Whatsapp,
 		Email:        create.Email,
 		Password:     create.Password,
+		MerchantID:   create.MerchantID,
 	}
 
 	return response, nil
