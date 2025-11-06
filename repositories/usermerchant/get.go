@@ -13,94 +13,75 @@ import (
 
 func (r *userRepository) Get(req *dto.Pagination) (dto.UserMerchantPaginationResponse, int) {
 	var users []entity.AccessDoor
-
 	var totalRows int64
 	totalPages, fromRow, toRow := 0, 0, 0
 
-	// Ubah offset agar sesuai dengan page yang dimulai dari 1
 	offset := (req.Page - 1) * req.Limit
 
-	// Ambil data sesuai limit, offset, dan urutan
-	find := r.DB.Preload("Verified").Preload("Merchant").Where("merchant_id = ?", req.MerchantID).Limit(req.Limit).Offset(offset).Order(req.Sort)
+	// Awal query dengan filter merchant_id
+	find := r.DB.
+		Preload("Verified").
+		Preload("Merchant").
+		Where("merchant_id = ?", req.MerchantID)
 
-	// Generate where query untuk search
+	// Tambahkan filter search (jika ada)
 	if req.Searchs != nil {
-		for _, value := range req.Searchs {
-			column := value.Column
-			action := value.Action
-			query := value.Query
-
-			switch action {
+		for _, s := range req.Searchs {
+			switch s.Action {
 			case "equals":
-				find = find.Where(fmt.Sprintf("%s = ?", column), query)
+				find = find.Where(fmt.Sprintf("%s = ?", s.Column), s.Query)
 			case "contains":
-				find = find.Where(fmt.Sprintf("%s LIKE ?", column), "%"+query+"%")
+				find = find.Where(fmt.Sprintf("%s LIKE ?", s.Column), "%"+s.Query+"%")
 			case "in":
-				find = find.Where(fmt.Sprintf("%s IN (?)", column), strings.Split(query, ","))
+				find = find.Where(fmt.Sprintf("%s IN (?)", s.Column), strings.Split(s.Query, ","))
 			}
 		}
 	}
 
-	find = find.Find(&users)
-
-	// Periksa jika ada error saat pengambilan data
-	if errFind := find.Error; errFind != nil {
-		return dto.UserMerchantPaginationResponse{}, totalPages
+	// Hitung total data sesuai merchant_id dan filter search
+	if errCount := find.Model(&entity.AccessDoor{}).Count(&totalRows).Error; errCount != nil {
+		return dto.UserMerchantPaginationResponse{}, 0
 	}
 
-	req.Rows = users
-
-	// Hitung total data
-	if errCount := r.DB.Model(&entity.AccessDoor{}).Count(&totalRows).Error; errCount != nil {
-		return dto.UserMerchantPaginationResponse{}, totalPages
+	// Ambil data dengan limit dan offset
+	if err := find.
+		Limit(req.Limit).
+		Offset(offset).
+		Order(req.Sort).
+		Find(&users).Error; err != nil {
+		return dto.UserMerchantPaginationResponse{}, 0
 	}
 
-	for i := range users {
-		users[i].FullName = helpers.TruncateString(users[i].FullName, 47)
-	}
-
-	req.TotalRows = int(totalRows)
-
-	// Hitung total halaman berdasarkan limit
+	// Hitung total halaman
 	totalPages = int(math.Ceil(float64(totalRows) / float64(req.Limit)))
-	req.TotalPages = totalPages
-	// Hitung `fromRow` dan `toRow` untuk page saat ini
+
+	// Hitung posisi baris
 	if req.Page == 1 {
-		// Untuk halaman pertama
 		fromRow = 1
 		toRow = req.Limit
 	} else {
-		if req.Page <= totalPages {
-			fromRow = (req.Page-1)*req.Limit + 1
-			toRow = req.Page * req.Limit
-		}
+		fromRow = (req.Page-1)*req.Limit + 1
+		toRow = req.Page * req.Limit
 	}
-
-	// Pastikan `toRow` tidak melebihi `totalRows`
 	if toRow > int(totalRows) {
 		toRow = int(totalRows)
 	}
 
-	// Set hasil akhir
-	req.FromRow = fromRow
-	req.ToRow = toRow
+	// Mapping hasil data
 	var userResponses []dto.GetUserMerchantResponse
 	for _, u := range users {
-
 		decryptedWa, err := util.Decrypt(u.Whatsapp)
 		if err != nil {
-			return dto.UserMerchantPaginationResponse{}, totalPages
-
+			continue
 		}
-
 		decryptedEmail, err := util.Decrypt(u.Email)
 		if err != nil {
-			return dto.UserMerchantPaginationResponse{}, totalPages
-
+			continue
 		}
-		userResp := dto.GetUserMerchantResponse{
+
+		userResponses = append(userResponses, dto.GetUserMerchantResponse{
 			ID:       u.ID,
-			FullName: u.FullName,
+			FullName: helpers.TruncateString(u.FullName, 47),
 			Whatsapp: decryptedWa,
 			Email:    decryptedEmail,
 			Verified: dto.UserMerchantVerified{
@@ -122,23 +103,20 @@ func (r *userRepository) Get(req *dto.Pagination) (dto.UserMerchantPaginationRes
 				CurrencyID:   u.Merchant.CurrencyID,
 				Phone:        u.Merchant.Phone,
 			},
-		}
-		userResponses = append(userResponses, userResp)
+		})
 	}
+
+	// Response pagination
 	response := dto.UserMerchantPaginationResponse{
-		Limit:        req.Limit,
-		Page:         req.Page,
-		Sort:         req.Sort,
-		TotalRows:    req.TotalRows,
-		TotalPages:   req.TotalPages,
-		FirstPage:    req.FirstPage,
-		PreviousPage: req.PreviousPage,
-		NextPage:     req.NextPage,
-		LastPage:     req.LastPage,
-		FromRow:      req.FromRow,
-		ToRow:        req.ToRow,
-		Data:         userResponses,
-		Searchs:      req.Searchs,
+		Limit:      req.Limit,
+		Page:       req.Page,
+		Sort:       req.Sort,
+		TotalRows:  int(totalRows),
+		TotalPages: totalPages,
+		FromRow:    fromRow,
+		ToRow:      toRow,
+		Data:       userResponses,
+		Searchs:    req.Searchs,
 	}
 
 	return response, totalPages
