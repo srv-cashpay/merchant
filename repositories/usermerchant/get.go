@@ -89,6 +89,16 @@ func (r *userRepository) Get(req *dto.Pagination) (dto.UserMerchantPaginationRes
 			continue
 		}
 
+		verifiedStatus := "not verified"
+		if u.Verified.Verified {
+			verifiedStatus = "verified"
+		}
+
+		accountStatus := "inactive"
+		if u.Verified.StatusAccount {
+			accountStatus = "active"
+		}
+
 		userResponses = append(userResponses, dto.GetUserMerchantResponse{
 			ID:       u.ID,
 			FullName: helpers.TruncateString(u.FullName, 47),
@@ -99,8 +109,8 @@ func (r *userRepository) Get(req *dto.Pagination) (dto.UserMerchantPaginationRes
 				ID:             u.Verified.ID,
 				UserID:         u.Verified.UserID,
 				Token:          u.Verified.Token,
-				Verified:       u.Verified.Verified,
-				StatusAccount:  u.Verified.StatusAccount,
+				Verified:       verifiedStatus,
+				StatusAccount:  accountStatus,
 				AccountExpired: u.Verified.AccountExpired,
 				Otp:            u.Verified.Otp,
 				ExpiredAt:      u.Verified.ExpiredAt,

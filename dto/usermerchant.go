@@ -62,8 +62,8 @@ type UserMerchantVerified struct {
 	ID             string    `json:"id"`
 	UserID         string    `json:"user_id"`
 	Token          string    `json:"token"`
-	Verified       bool      `json:"verified"`
-	StatusAccount  bool      `json:"status_account"`
+	Verified       string    `json:"verified"`
+	StatusAccount  string    `json:"status_account"`
 	AccountExpired time.Time `json:"account_expired"`
 	Otp            string    `json:"otp"`
 	ExpiredAt      time.Time `json:"expired_at"`
