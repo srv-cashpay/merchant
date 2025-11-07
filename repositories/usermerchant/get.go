@@ -80,10 +80,11 @@ func (r *userRepository) Get(req *dto.Pagination) (dto.UserMerchantPaginationRes
 		}
 
 		userResponses = append(userResponses, dto.GetUserMerchantResponse{
-			ID:       u.ID,
-			FullName: helpers.TruncateString(u.FullName, 47),
-			Whatsapp: decryptedWa,
-			Email:    decryptedEmail,
+			ID:           u.ID,
+			FullName:     helpers.TruncateString(u.FullName, 47),
+			Whatsapp:     decryptedWa,
+			Email:        decryptedEmail,
+			AccessRoleID: u.AccessRoleID,
 			Verified: dto.UserMerchantVerified{
 				ID:             u.Verified.ID,
 				UserID:         u.Verified.UserID,
