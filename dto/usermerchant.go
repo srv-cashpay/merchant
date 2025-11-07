@@ -103,6 +103,7 @@ type GetUserMerchantResponse struct {
 	Email         string               `json:"email"`
 	Password      string               `json:"password"`
 	AccessRoleID  string               `json:"access_role_id"`
+	RoleName      string               `json:"role_name"`
 	LoginAttempts int                  `json:"login_attempts"`
 	Suspended     bool                 `json:"suspended"`
 	LastAttempt   time.Time            `json:"last_attempt"`

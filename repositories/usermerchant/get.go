@@ -7,6 +7,7 @@ import (
 
 	"github.com/srv-cashpay/auth/entity"
 	dto "github.com/srv-cashpay/merchant/dto"
+	mentity "github.com/srv-cashpay/merchant/entity"
 	"github.com/srv-cashpay/merchant/helpers"
 	util "github.com/srv-cashpay/util/s"
 )
@@ -18,13 +19,13 @@ func (r *userRepository) Get(req *dto.Pagination) (dto.UserMerchantPaginationRes
 
 	offset := (req.Page - 1) * req.Limit
 
-	// Awal query dengan filter merchant_id
+	// --- Ambil data utama user merchant ---
 	find := r.DB.
 		Preload("Verified").
 		Preload("Merchant").
 		Where("merchant_id = ?", req.MerchantID)
 
-	// Tambahkan filter search (jika ada)
+	// --- Tambahkan filter search jika ada ---
 	if req.Searchs != nil {
 		for _, s := range req.Searchs {
 			switch s.Action {
@@ -38,12 +39,12 @@ func (r *userRepository) Get(req *dto.Pagination) (dto.UserMerchantPaginationRes
 		}
 	}
 
-	// Hitung total data sesuai merchant_id dan filter search
+	// --- Hitung total baris data ---
 	if errCount := find.Model(&entity.AccessDoor{}).Count(&totalRows).Error; errCount != nil {
 		return dto.UserMerchantPaginationResponse{}, 0
 	}
 
-	// Ambil data dengan limit dan offset
+	// --- Ambil data user merchant ---
 	if err := find.
 		Limit(req.Limit).
 		Offset(offset).
@@ -52,10 +53,19 @@ func (r *userRepository) Get(req *dto.Pagination) (dto.UserMerchantPaginationRes
 		return dto.UserMerchantPaginationResponse{}, 0
 	}
 
-	// Hitung total halaman
+	// --- Ambil semua role, buat map biar cepat lookup ---
+	var roles []mentity.Role
+	roleMap := make(map[string]string)
+	if err := r.DB.Find(&roles).Error; err == nil {
+		for _, role := range roles {
+			roleMap[role.ID] = role.Role
+		}
+	}
+
+	// --- Hitung total halaman ---
 	totalPages = int(math.Ceil(float64(totalRows) / float64(req.Limit)))
 
-	// Hitung posisi baris
+	// --- Hitung posisi baris ---
 	if req.Page == 1 {
 		fromRow = 1
 		toRow = req.Limit
@@ -67,7 +77,7 @@ func (r *userRepository) Get(req *dto.Pagination) (dto.UserMerchantPaginationRes
 		toRow = int(totalRows)
 	}
 
-	// Mapping hasil data
+	// --- Mapping hasil data ---
 	var userResponses []dto.GetUserMerchantResponse
 	for _, u := range users {
 		decryptedWa, err := util.Decrypt(u.Whatsapp)
@@ -80,11 +90,11 @@ func (r *userRepository) Get(req *dto.Pagination) (dto.UserMerchantPaginationRes
 		}
 
 		userResponses = append(userResponses, dto.GetUserMerchantResponse{
-			ID:           u.ID,
-			FullName:     helpers.TruncateString(u.FullName, 47),
-			Whatsapp:     decryptedWa,
-			Email:        decryptedEmail,
-			AccessRoleID: u.AccessRoleID,
+			ID:       u.ID,
+			FullName: helpers.TruncateString(u.FullName, 47),
+			Whatsapp: decryptedWa,
+			Email:    decryptedEmail,
+			RoleName: roleMap[u.AccessRoleID], // ✅ ambil nama role dari map hasil query roles
 			Verified: dto.UserMerchantVerified{
 				ID:             u.Verified.ID,
 				UserID:         u.Verified.UserID,
@@ -107,7 +117,7 @@ func (r *userRepository) Get(req *dto.Pagination) (dto.UserMerchantPaginationRes
 		})
 	}
 
-	// Response pagination
+	// --- Response pagination ---
 	response := dto.UserMerchantPaginationResponse{
 		Limit:      req.Limit,
 		Page:       req.Page,
