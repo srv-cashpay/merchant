@@ -484,6 +484,7 @@ func New() *echo.Echo {
 	{
 		usermerchant.POST("/user_merchant/create", usermerchantH.Create)
 		usermerchant.GET("/user_merchant/pagination", usermerchantH.Get)
+		usermerchant.GET("/user_merchant/:id", usermerchantH.GetById)
 		usermerchant.PUT("/user_merchant/update/:id", usermerchantH.Update)
 		usermerchant.DELETE("/user_merchant/:id", usermerchantH.Delete)
 		usermerchant.DELETE("/user_merchant/bulk-delete", usermerchantH.BulkDelete)
