@@ -3,19 +3,68 @@ package user
 import (
 	"github.com/srv-cashpay/auth/entity"
 	dto "github.com/srv-cashpay/merchant/dto"
+	mentity "github.com/srv-cashpay/merchant/entity"
+	util "github.com/srv-cashpay/util/s"
 )
 
 func (b *userRepository) GetById(req dto.GetByIdRequest) (*dto.UserMerchantResponse, error) {
-	tr := entity.AccessDoor{
-		ID: req.ID,
-	}
+	var user entity.AccessDoor
 
-	if err := b.DB.Where("id = ?", tr.ID).Take(&tr).Error; err != nil {
+	// Ambil data user + relasi Verified dan Merchant (kalau perlu)
+	if err := b.DB.
+		Preload("Verified").
+		Preload("Merchant").
+		Where("id = ?", req.ID).
+		Take(&user).Error; err != nil {
 		return nil, err
 	}
 
+	// ✅ Ambil role name berdasarkan access_role_id
+	var role mentity.Role
+	_ = b.DB.First(&role, "id = ?", user.AccessRoleID)
+
+	// ✅ Ubah boolean menjadi string
+	verifiedStatus := "not verified"
+	if user.Verified.Verified {
+		verifiedStatus = "verified"
+	}
+
+	accountStatus := "inactive"
+	if user.Verified.StatusAccount {
+		accountStatus = "active"
+	}
+
+	// ✅ Dekripsi data jika terenkripsi
+	decryptedWa, _ := util.Decrypt(user.Whatsapp)
+	decryptedEmail, _ := util.Decrypt(user.Email)
+
+	// ✅ Buat response DTO
 	response := &dto.UserMerchantResponse{
-		FullName: tr.FullName,
+		ID:            user.ID,
+		MerchantID:    user.MerchantID,
+		FullName:      user.FullName,
+		Whatsapp:      decryptedWa,
+		Email:         decryptedEmail,
+		Password:      user.Password,
+		AccessRoleID:  user.AccessRoleID,
+		RoleName:      role.Role,
+		LoginAttempts: user.LoginAttempts,
+		Suspended:     user.Suspended,
+		LastAttempt:   user.LastAttempt,
+		CreatedBy:     user.CreatedBy,
+		UpdatedBy:     user.UpdatedBy,
+		DeletedBy:     user.DeletedBy,
+		CreatedAt:     user.CreatedAt,
+		Verified: dto.UserMerchantVerified{
+			ID:             user.Verified.ID,
+			UserID:         user.Verified.UserID,
+			Token:          user.Verified.Token,
+			Verified:       verifiedStatus, // ✅ ubah ke string
+			StatusAccount:  accountStatus,  // ✅ ubah ke string
+			AccountExpired: user.Verified.AccountExpired,
+			Otp:            user.Verified.Otp,
+			ExpiredAt:      user.Verified.ExpiredAt,
+		},
 	}
 
 	return response, nil
