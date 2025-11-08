@@ -8,7 +8,16 @@ import (
 func (b *userRepository) Update(req dto.UserMerchantUpdateRequest) (dto.UserMerchantUpdateResponse, error) {
 	// Menyiapkan struktur update untuk produk
 	updateUserMerchant := entity.AccessDoor{
-		FullName: req.FullName,
+		FullName:     req.FullName,
+		UpdatedBy:    req.UpdatedBy,
+		Email:        req.Email,
+		Whatsapp:     req.Whatsapp,
+		Password:     req.Password,
+		AccessRoleID: req.AccessRoleID,
+		Verified: entity.UserVerified{
+			Verified:      req.Verified.Verified,
+			StatusAccount: req.Verified.StatusAccount,
+		},
 	}
 
 	// Cek apakah produk ada terlebih dahulu
@@ -26,7 +35,16 @@ func (b *userRepository) Update(req dto.UserMerchantUpdateRequest) (dto.UserMerc
 
 	// Menyiapkan response setelah pembaruan berhasil
 	response := dto.UserMerchantUpdateResponse{
-		FullName: updateUserMerchant.FullName,
+		FullName:     updateUserMerchant.FullName,
+		UpdatedBy:    updateUserMerchant.UpdatedBy,
+		Email:        updateUserMerchant.Email,
+		Whatsapp:     updateUserMerchant.Whatsapp,
+		Password:     updateUserMerchant.Password,
+		AccessRoleID: updateUserMerchant.AccessRoleID,
+		Verified: dto.UserMerchantVerifiedByID{
+			Verified:      updateUserMerchant.Verified.Verified,
+			StatusAccount: updateUserMerchant.Verified.StatusAccount,
+		},
 	}
 
 	return response, nil

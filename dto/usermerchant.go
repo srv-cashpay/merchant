@@ -110,28 +110,35 @@ type UserMerchantVerifiedByID struct {
 }
 
 type UserMerchantUpdateRequest struct {
-	ID          string    `json:"id"`
-	UserID      string    `json:"user_id"`
-	MerchantID  string    `json:"merchant_id"`
-	FullName    string    `json:"full_name"`
-	Email       string    `json:"email"`
-	Description string    `json:"description"`
-	CreatedBy   string    `json:"created_by"`
-	UpdatedBy   string    `json:"updated_by"`
-	DeletedBy   string    `json:"deleted_by"`
-	CreatedAt   time.Time `json:"created_at"`
+	ID           string                   `json:"id"`
+	UserID       string                   `json:"user_id"`
+	MerchantID   string                   `json:"merchant_id"`
+	FullName     string                   `json:"full_name"`
+	Email        string                   `json:"email"`
+	Whatsapp     string                   `json:"whatsapp"`
+	Password     string                   `json:"password"`
+	AccessRoleID string                   `json:"access_role_id"`
+	RoleName     string                   `json:"role_name"`
+	Verified     UserMerchantVerifiedByID `json:"verified"`
+	CreatedBy    string                   `json:"created_by"`
+	UpdatedBy    string                   `json:"updated_by"`
+	CreatedAt    time.Time                `json:"created_at"`
 }
 
 type UserMerchantUpdateResponse struct {
-	ID          string    `json:"id"`
-	UserID      string    `json:"user_id"`
-	MerchantID  string    `json:"merchant_id"`
-	FullName    string    `json:"full_name"`
-	Description string    `json:"description"`
-	CreatedBy   string    `json:"created_by"`
-	UpdatedBy   string    `json:"updated_by"`
-	DeletedBy   string    `json:"deleted_by"`
-	CreatedAt   time.Time `json:"created_at"`
+	ID           string                   `json:"id"`
+	UserID       string                   `json:"user_id"`
+	MerchantID   string                   `json:"merchant_id"`
+	FullName     string                   `json:"full_name"`
+	Email        string                   `json:"email"`
+	Whatsapp     string                   `json:"whatsapp"`
+	Password     string                   `json:"password"`
+	AccessRoleID string                   `json:"access_role_id"`
+	RoleName     string                   `json:"role_name"`
+	Verified     UserMerchantVerifiedByID `json:"verified"`
+	CreatedBy    string                   `json:"created_by"`
+	UpdatedBy    string                   `json:"updated_by"`
+	CreatedAt    time.Time                `json:"created_at"`
 }
 
 type GetUserMerchantResponse struct {
