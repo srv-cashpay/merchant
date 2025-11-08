@@ -46,6 +46,11 @@ type DeleteRoleResponse struct {
 	DeletedBy string `json:"deleted_by"`
 }
 
+type GetRoleRequest struct {
+	UserID     string `json:"user_id"`
+	MerchantID string `json:"merchant_id"`
+}
+
 type GetRoleResponse struct {
 	Items []RoleResponse `json:"items"`
 }

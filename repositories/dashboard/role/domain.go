@@ -14,6 +14,7 @@ type DomainRepository interface {
 	Delete(req dto.DeleteRoleRequest) (dto.DeleteResponse, error)
 	BulkDelete(req dto.BulkDeleteRequest) (int, error)
 	Update(req dto.RoleUpdateRequest) (dto.RoleUpdateResponse, error)
+	RoleUser(req dto.GetRoleRequest) (dto.GetRoleResponse, error)
 }
 
 type RoleRepository struct {

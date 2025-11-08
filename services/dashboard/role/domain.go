@@ -16,6 +16,7 @@ type RoleService interface {
 	Delete(req dto.DeleteRoleRequest) (dto.DeleteRoleResponse, error)
 	BulkDelete(req dto.BulkDeleteRequest) (dto.BulkDeleteResponse, error)
 	Update(req dto.RoleUpdateRequest) (dto.RoleUpdateResponse, error)
+	RoleUser(req dto.GetRoleRequest) (dto.GetRoleResponse, error)
 }
 
 type roleService struct {

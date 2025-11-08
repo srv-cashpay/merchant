@@ -392,6 +392,7 @@ func New() *echo.Echo {
 		role.POST("/role/create", roleH.Create)
 		permission.GET("/role", permissionH.Get)
 		role.GET("/role/pagination", roleH.Pagination)
+		role.GET("/role_user", roleH.RoleUser)
 		role.PUT("/role/update/:id", roleH.Update)
 		role.DELETE("/role/:id", roleH.Delete)
 		role.DELETE("/role/bulk-delete", roleH.BulkDelete)
