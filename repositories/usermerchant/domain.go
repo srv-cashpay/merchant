@@ -9,7 +9,7 @@ import (
 type DomainRepository interface {
 	Create(req dto.UserMerchantRequest) (dto.UserMerchantResponse, error)
 	Get(req *dto.Pagination) (dto.UserMerchantPaginationResponse, int)
-	GetById(req dto.GetByIdRequest) (*dto.UserMerchantResponse, error)
+	GetById(req dto.GetByIdRequest) (*dto.UserMerchantByIdResponse, error)
 	Delete(req dto.DeleteRequest) (dto.DeleteResponse, error)
 	BulkDelete(req dto.BulkDeleteRequest) (int, error)
 	Update(req dto.UserMerchantUpdateRequest) (dto.UserMerchantUpdateResponse, error)

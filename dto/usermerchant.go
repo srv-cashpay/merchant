@@ -63,12 +63,47 @@ type UserMerchantResponse struct {
 	Merchant      GetMerchantResponse  `json:"merchant"`
 }
 
+type UserMerchantByIdResponse struct {
+	ID            string                   `json:"id"`
+	UserID        string                   `json:"user_id"`
+	MerchantID    string                   `json:"merchant_id"`
+	FullName      string                   `json:"full_name"`
+	Whatsapp      string                   `json:"whatsapp"`
+	Email         string                   `json:"email"`
+	Password      string                   `json:"password"`
+	AccessRoleID  string                   `json:"access_role_id"`
+	RoleName      string                   `json:"role_name"`
+	LoginAttempts int                      `json:"login_attempts"`
+	Suspended     bool                     `json:"suspended"`
+	LastAttempt   time.Time                `json:"last_attempt"`
+	Description   string                   `json:"description"`
+	CreatedBy     string                   `json:"created_by"`
+	UpdatedBy     string                   `json:"updated_by"`
+	DeletedBy     string                   `json:"deleted_by"`
+	CreatedAt     time.Time                `json:"created_at"`
+	UpdatedAt     time.Time                `json:"updated_at"`
+	DeletedAt     *time.Time               `json:"deleted_at,omitempty"`
+	Verified      UserMerchantVerifiedByID `json:"verified"`
+	Merchant      GetMerchantResponse      `json:"merchant"`
+}
+
 type UserMerchantVerified struct {
 	ID             string    `json:"id"`
 	UserID         string    `json:"user_id"`
 	Token          string    `json:"token"`
 	Verified       string    `json:"verified"`
 	StatusAccount  string    `json:"status_account"`
+	AccountExpired time.Time `json:"account_expired"`
+	Otp            string    `json:"otp"`
+	ExpiredAt      time.Time `json:"expired_at"`
+}
+
+type UserMerchantVerifiedByID struct {
+	ID             string    `json:"id"`
+	UserID         string    `json:"user_id"`
+	Token          string    `json:"token"`
+	Verified       bool      `json:"verified"`
+	StatusAccount  bool      `json:"status_account"`
 	AccountExpired time.Time `json:"account_expired"`
 	Otp            string    `json:"otp"`
 	ExpiredAt      time.Time `json:"expired_at"`

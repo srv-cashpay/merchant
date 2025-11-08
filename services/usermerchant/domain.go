@@ -11,7 +11,7 @@ import (
 type UserMerchantService interface {
 	Create(req dto.UserMerchantRequest) (dto.UserMerchantResponse, error)
 	Get(context echo.Context, req *dto.Pagination) dto.Response
-	GetById(req dto.GetByIdRequest) (*dto.UserMerchantResponse, error)
+	GetById(req dto.GetByIdRequest) (*dto.UserMerchantByIdResponse, error)
 	Delete(req dto.DeleteRequest) (dto.DeleteResponse, error)
 	BulkDelete(req dto.BulkDeleteRequest) (dto.BulkDeleteResponse, error)
 	Update(req dto.UserMerchantUpdateRequest) (dto.UserMerchantUpdateResponse, error)

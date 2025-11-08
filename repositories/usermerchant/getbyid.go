@@ -7,7 +7,7 @@ import (
 	util "github.com/srv-cashpay/util/s"
 )
 
-func (b *userRepository) GetById(req dto.GetByIdRequest) (*dto.UserMerchantResponse, error) {
+func (b *userRepository) GetById(req dto.GetByIdRequest) (*dto.UserMerchantByIdResponse, error) {
 	var user entity.AccessDoor
 
 	// Ambil data user + relasi Verified dan Merchant (kalau perlu)
@@ -24,22 +24,13 @@ func (b *userRepository) GetById(req dto.GetByIdRequest) (*dto.UserMerchantRespo
 	_ = b.DB.First(&role, "id = ?", user.AccessRoleID)
 
 	// ✅ Ubah boolean menjadi string
-	verifiedStatus := "not verified"
-	if user.Verified.Verified {
-		verifiedStatus = "verified"
-	}
-
-	accountStatus := "inactive"
-	if user.Verified.StatusAccount {
-		accountStatus = "active"
-	}
 
 	// ✅ Dekripsi data jika terenkripsi
 	decryptedWa, _ := util.Decrypt(user.Whatsapp)
 	decryptedEmail, _ := util.Decrypt(user.Email)
 
 	// ✅ Buat response DTO
-	response := &dto.UserMerchantResponse{
+	response := &dto.UserMerchantByIdResponse{
 		ID:            user.ID,
 		MerchantID:    user.MerchantID,
 		FullName:      user.FullName,
@@ -55,12 +46,12 @@ func (b *userRepository) GetById(req dto.GetByIdRequest) (*dto.UserMerchantRespo
 		UpdatedBy:     user.UpdatedBy,
 		DeletedBy:     user.DeletedBy,
 		CreatedAt:     user.CreatedAt,
-		Verified: dto.UserMerchantVerified{
+		Verified: dto.UserMerchantVerifiedByID{
 			ID:             user.Verified.ID,
 			UserID:         user.Verified.UserID,
 			Token:          user.Verified.Token,
-			Verified:       verifiedStatus, // ✅ ubah ke string
-			StatusAccount:  accountStatus,  // ✅ ubah ke string
+			Verified:       user.Verified.Verified,      // ✅ ubah ke string
+			StatusAccount:  user.Verified.StatusAccount, // ✅ ubah ke string
 			AccountExpired: user.Verified.AccountExpired,
 			Otp:            user.Verified.Otp,
 			ExpiredAt:      user.Verified.ExpiredAt,
