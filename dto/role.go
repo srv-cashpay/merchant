@@ -49,7 +49,7 @@ type GetRoleRequest struct {
 }
 
 type GetRoleResponse struct {
-	Role []RoleResponse `json:"items"`
+	Role []RoleResponse `json:"roles"`
 }
 
 type GetRoleByIdRequest struct {
