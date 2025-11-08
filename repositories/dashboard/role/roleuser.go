@@ -9,6 +9,7 @@ func (r *RoleRepository) RoleUser(req dto.GetRoleRequest) (dto.GetRoleResponse, 
 	var roles []entity.Role
 
 	if err := r.DB.
+		Where("role <> ?", "God Cashpay").
 		Find(&roles).Error; err != nil {
 		return dto.GetRoleResponse{}, err
 	}
@@ -16,6 +17,7 @@ func (r *RoleRepository) RoleUser(req dto.GetRoleRequest) (dto.GetRoleResponse, 
 	items := make([]dto.RoleResponse, len(roles))
 	for i, role := range roles {
 		items[i] = dto.RoleResponse{
+			ID:   role.ID,
 			Role: role.Role,
 		}
 	}

@@ -11,11 +11,8 @@ type RoleRequest struct {
 }
 
 type RoleResponse struct {
-	ID         string `json:"id"`
-	Role       string `json:"role`
-	UserID     string `json:"user_id"`
-	MerchantID string `json:"merchant_id"`
-	CreatedBy  string `json:"created_by"`
+	ID   string `json:"id"`
+	Role string `json:"role`
 }
 
 type RoleUpdateRequest struct {
