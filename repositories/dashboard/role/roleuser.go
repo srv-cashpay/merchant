@@ -9,7 +9,6 @@ func (r *RoleRepository) RoleUser(req dto.GetRoleRequest) (dto.GetRoleResponse, 
 	var roles []entity.Role
 
 	if err := r.DB.
-		Where("user_id = ? AND merchant_id = ?", req.UserID, req.MerchantID).
 		Find(&roles).Error; err != nil {
 		return dto.GetRoleResponse{}, err
 	}
