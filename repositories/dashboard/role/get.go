@@ -21,6 +21,6 @@ func (r *RoleRepository) Get(req dto.RoleUserRequest) (dto.GetRoleResponse, erro
 
 	// Bungkus izin dalam field 'items' seperti yang diharapkan
 	return dto.GetRoleResponse{
-		Items: roles,
+		Role: roles,
 	}, nil
 }

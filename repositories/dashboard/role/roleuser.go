@@ -14,13 +14,13 @@ func (r *RoleRepository) RoleUser(req dto.GetRoleRequest) (dto.GetRoleResponse, 
 		return dto.GetRoleResponse{}, err
 	}
 
-	items := make([]dto.RoleResponse, len(roles))
+	roler := make([]dto.RoleResponse, len(roles))
 	for i, role := range roles {
-		items[i] = dto.RoleResponse{
+		roler[i] = dto.RoleResponse{
 			ID:   role.ID,
 			Role: role.Role,
 		}
 	}
 
-	return dto.GetRoleResponse{Items: items}, nil
+	return dto.GetRoleResponse{Role: roler}, nil
 }
