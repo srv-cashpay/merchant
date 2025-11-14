@@ -283,27 +283,27 @@ func New() *echo.Echo {
 		export.POST("/export/excel", exportproductH.ExportExcel)
 	}
 
-	sub := e.Group("api/merchant/sub", middlewares.AuthorizeJWT(JWT))
+	sub := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
 	{
-		sub.GET("/api/transaction/:order_id/status", subscribeH.CheckTransactionStatus)
-		sub.POST("/api/midtrans/callback", subscribeH.MidtransCallback)
-		sub.POST("/api/charge-bni", subscribeH.ChargeBni)
-		sub.POST("/api/charge-permata", subscribeH.ChargePermata)
-		sub.POST("/api/charge-mandiri", subscribeH.ChargeMandiri)
-		sub.POST("/api/charge-bri", subscribeH.ChargeBri)
-		sub.POST("/api/charge-cimb", subscribeH.ChargeCimb)
+		sub.GET("/subscribe/transaction/:order_id/status", subscribeH.CheckTransactionStatus)
+		sub.POST("/subscribe/midtrans/callback", subscribeH.MidtransCallback)
+		sub.POST("/subscribe/charge-bni", subscribeH.ChargeBni)
+		sub.POST("/subscribe/charge-permata", subscribeH.ChargePermata)
+		sub.POST("/subscribe/charge-mandiri", subscribeH.ChargeMandiri)
+		sub.POST("/subscribe/charge-bri", subscribeH.ChargeBri)
+		sub.POST("/subscribe/charge-cimb", subscribeH.ChargeCimb)
 
-		sub.POST("/api/charge-qris", subscribeH.ChargeQris)
-		sub.POST("/api/charge-gopay", subscribeH.ChargeGopay)
-		sub.POST("/api/charge-shopeepay", subscribeH.ChargeShopeePay)
+		sub.POST("/subscribe/charge-qris", subscribeH.ChargeQris)
+		sub.POST("/subscribe/charge-gopay", subscribeH.ChargeGopay)
+		sub.POST("/subscribe/charge-shopeepay", subscribeH.ChargeShopeePay)
 
-		sub.POST("/api/charge-gpay", subscribeH.ChargeGpay)
-		sub.GET("/api/tokenize", subscribeH.TokenizeCardHandler)
-		sub.POST("/api/charge-card", subscribeH.CardPayment)
-		sub.POST("/api/cancel/:order_id", subscribeH.CancelPay)
+		sub.POST("/subscribe/charge-gpay", subscribeH.ChargeGpay)
+		sub.GET("/subscribe/tokenize", subscribeH.TokenizeCardHandler)
+		sub.POST("/subscribe/charge-card", subscribeH.CardPayment)
+		sub.POST("/subscribe/cancel/:order_id", subscribeH.CancelPay)
 
-		sub.POST("/api/paypal", subscribeH.PayPal)
-		sub.GET("/api/paypal/capture/:order_id", subscribeH.CapturePaypalOrder)
+		sub.POST("/subscribe/paypal", subscribeH.PayPal)
+		sub.GET("/subscribe/paypal/capture/:order_id", subscribeH.CapturePaypalOrder)
 
 	}
 	pos := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
