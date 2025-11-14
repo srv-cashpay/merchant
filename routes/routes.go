@@ -283,7 +283,7 @@ func New() *echo.Echo {
 		export.POST("/export/excel", exportproductH.ExportExcel)
 	}
 
-	sub := e.Group("sub", middlewares.AuthorizeJWT(JWT))
+	sub := e.Group("api/merchant/sub", middlewares.AuthorizeJWT(JWT))
 	{
 		sub.GET("/api/transaction/:order_id/status", subscribeH.CheckTransactionStatus)
 		sub.POST("/api/midtrans/callback", subscribeH.MidtransCallback)
