@@ -5,7 +5,7 @@ import "time"
 type RoleUserRequest struct {
 	ID           uint   `json:"id"`
 	RoleID       string `json:"role_id"`
-	PermissionID uint   `json:"permission_id"`
+	PermissionID string `json:"permission_id"`
 	UserID       string `json:"user_id"`
 	MerchantID   string `json:"merchant_id"`
 	CreatedBy    string `json:"created_by"`
