@@ -19,15 +19,14 @@ func (r *RoleUserRepository) Pagination(req *dto.Pagination) (RepositoryResult, 
 			ru.id,
 			roles.role AS role_id,
 			access_doors.full_name AS user_id,
-			permissions.label AS permission_id,   
+			permissions.label AS permission_id,
 			ru.created_at
 		`).
 		Joins("JOIN roles ON roles.id = ru.role_id").
-		Joins("JOIN permissions ON permissions.id = ru.permission_id"). // <=== JOIN BY ID
-		Joins("JOIN access_doors ON access_doors.id = ru.user_id").
+		Joins("JOIN permissions ON permissions.id = ru.permission_id").
+		Joins("JOIN access_doors ON access_doors.id::varchar = ru.user_id").
 		Limit(req.Limit).
-		Offset(offset).
-		Order(req.Sort)
+		Offset(offset)
 
 	// Search filter
 	if req.Searchs != nil {
@@ -43,17 +42,20 @@ func (r *RoleUserRepository) Pagination(req *dto.Pagination) (RepositoryResult, 
 		}
 	}
 
+	find = find.Order(req.Sort)
+
+	// Eksekusi
 	if err := find.Scan(&roleusers).Error; err != nil {
 		return RepositoryResult{Error: err}, 0
 	}
 
 	req.Rows = roleusers
 
-	// Count
+	// COUNT (harus sama dengan JOIN atas)
 	if err := r.DB.Table("role_users AS ru").
 		Joins("JOIN roles ON roles.id = ru.role_id").
 		Joins("JOIN permissions ON permissions.id = ru.permission_id").
-		Joins("JOIN access_doors ON access_doors.id = ru.user_id").
+		Joins("JOIN access_doors ON access_doors.id::varchar = ru.user_id").
 		Count(&totalRows).Error; err != nil {
 		return RepositoryResult{Error: err}, 0
 	}

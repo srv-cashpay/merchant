@@ -12,7 +12,7 @@ type RoleUserRequest struct {
 }
 
 type RoleUserResponse struct {
-	ID           uint   `json:"id"`
+	ID           string `json:"id"`
 	RoleID       string `json:"role_id"`
 	PermissionID string `json:"permission_id"`
 	UserID       string `json:"user_id"`
