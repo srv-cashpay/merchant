@@ -7,82 +7,71 @@ import (
 
 	dto "github.com/srv-cashpay/merchant/dto"
 	"github.com/srv-cashpay/merchant/entity"
-	"github.com/srv-cashpay/merchant/helpers"
 )
 
 func (r *RoleUserRepository) Pagination(req *dto.Pagination) (RepositoryResult, int) {
 	var roleusers []entity.RoleUser
-
 	var totalRows int64
-	totalPages, fromRow, toRow := 0, 0, 0
 
-	// Ubah offset agar sesuai dengan page yang dimulai dari 1
+	// Offset page
 	offset := (req.Page - 1) * req.Limit
 
-	// Ambil data sesuai limit, offset, dan urutan
-	find := r.DB.Limit(req.Limit).Offset(offset).Order(req.Sort)
+	// Query awal + JOIN ke roles
+	find := r.DB.Table("role_users AS ru").
+		Select(`
+			ru.id,
+			roles.role AS role_id,       -- role_id = NAMA ROLE
+			ru.user_id,
+			ru.permission_id,
+			ru.created_at
+		`).
+		Joins("JOIN roles ON roles.id = ru.role_id").
+		Limit(req.Limit).
+		Offset(offset).
+		Order(req.Sort)
 
-	// Generate where query untuk search
+	// Search filter
 	if req.Searchs != nil {
-		for _, value := range req.Searchs {
-			column := value.Column
-			action := value.Action
-			query := value.Query
-
-			switch action {
+		for _, s := range req.Searchs {
+			switch s.Action {
 			case "equals":
-				find = find.Where(fmt.Sprintf("%s = ?", column), query)
+				find = find.Where(fmt.Sprintf("%s = ?", s.Column), s.Query)
 			case "contains":
-				find = find.Where(fmt.Sprintf("%s LIKE ?", column), "%"+query+"%")
+				find = find.Where(fmt.Sprintf("%s LIKE ?", s.Column), "%"+s.Query+"%")
 			case "in":
-				find = find.Where(fmt.Sprintf("%s IN (?)", column), strings.Split(query, ","))
+				find = find.Where(fmt.Sprintf("%s IN (?)", s.Column), strings.Split(s.Query, ","))
 			}
 		}
 	}
 
-	find = find.Find(&roleusers)
-
-	// Periksa jika ada error saat pengambilan data
-	if errFind := find.Error; errFind != nil {
-		return RepositoryResult{Error: errFind}, totalPages
+	// Eksekusi query
+	if err := find.Scan(&roleusers).Error; err != nil {
+		return RepositoryResult{Error: err}, 0
 	}
 
 	req.Rows = roleusers
 
-	// Hitung total data
-	if errCount := r.DB.Model(&entity.Role{}).Count(&totalRows).Error; errCount != nil {
-		return RepositoryResult{Error: errCount}, totalPages
-	}
-
-	for i := range roleusers {
-		roleusers[i].RoleID = helpers.TruncateString(roleusers[i].RoleID, 47)
+	// COUNT HARUS DARI role_users, BUKAN roles
+	if err := r.DB.Table("role_users AS ru").
+		Joins("JOIN roles ON roles.id = ru.role_id").
+		Count(&totalRows).Error; err != nil {
+		return RepositoryResult{Error: err}, 0
 	}
 
 	req.TotalRows = int(totalRows)
 
-	// Hitung total halaman berdasarkan limit
-	totalPages = int(math.Ceil(float64(totalRows) / float64(req.Limit)))
+	// Total pages
+	totalPages := int(math.Ceil(float64(totalRows) / float64(req.Limit)))
 	req.TotalPages = totalPages
-	// Hitung `fromRow` dan `toRow` untuk page saat ini
+
+	// FromRow & ToRow
 	if req.Page == 1 {
-		// Untuk halaman pertama
-		fromRow = 1
-		toRow = req.Limit
+		req.FromRow = 1
+		req.ToRow = len(roleusers)
 	} else {
-		if req.Page <= totalPages {
-			fromRow = (req.Page-1)*req.Limit + 1
-			toRow = req.Page * req.Limit
-		}
+		req.FromRow = (req.Page-1)*req.Limit + 1
+		req.ToRow = req.FromRow + len(roleusers) - 1
 	}
-
-	// Pastikan `toRow` tidak melebihi `totalRows`
-	if toRow > int(totalRows) {
-		toRow = int(totalRows)
-	}
-
-	// Set hasil akhir
-	req.FromRow = fromRow
-	req.ToRow = toRow
 
 	return RepositoryResult{Result: req}, totalPages
 }
