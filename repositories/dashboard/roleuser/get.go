@@ -9,12 +9,14 @@ func (r *RoleUserRepository) Get(req dto.RoleUserRequest) (dto.GetRoleUserRespon
 
 	err := r.DB.Table("role_users AS ru").
 		Select(`
-            roles.role AS role_id,       
-            roles.role AS label,        
-            roles.merchant_id,
-            roles.user_id,
-            roles.created_at
-        `).
+			ru.id,
+			roles.role AS role_id,       
+			roles.role AS label,          
+			ru.user_id,                   
+			ru.permission_id,           
+			roles.merchant_id,
+			ru.created_at                
+		`).
 		Joins("JOIN roles ON roles.id = ru.role_id").
 		Where("ru.user_id = ?", req.UserID).
 		Scan(&roles).Error
