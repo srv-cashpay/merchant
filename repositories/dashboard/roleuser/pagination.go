@@ -19,7 +19,7 @@ func (r *RoleUserRepository) Pagination(req *dto.Pagination) (RepositoryResult, 
 			ru.id,
 			roles.role AS role_id,
 			access_doors.full_name AS user_id,
-			permissions.label AS permission_id,   -- <=== LABEL BUKAN ID
+			permissions.label AS permission_id,   
 			ru.created_at
 		`).
 		Joins("JOIN roles ON roles.id = ru.role_id").
