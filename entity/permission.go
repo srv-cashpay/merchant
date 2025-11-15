@@ -10,7 +10,7 @@ type Permission struct {
 	ID         uint           `gorm:"primaryKey;autoIncrement" json:"id"`
 	UserID     string         `gorm:"type:varchar(36);index" json:"user_id"`
 	MerchantID string         `gorm:"type:varchar(36);index" json:"merchant_id"`
-	Label      string         `gorm:"labe,omitempty" json:"label"`
+	Label      string         `gorm:"label,omitempty" json:"label"`
 	Icon       string         `gorm:"icon" json:"icon"`
 	To         string         `gorm:"to" json:"to"`
 	CreatedBy  string         `gorm:"created_by" json:"created_by"`

@@ -17,12 +17,13 @@ func (r *RoleUserRepository) Pagination(req *dto.Pagination) (RepositoryResult, 
 	find := r.DB.Table("role_users AS ru").
 		Select(`
 			ru.id,
-			roles.role AS role_id,                
-			access_doors.full_name AS user_id,   
-			ru.permission_id,
+			roles.role AS role_id,
+			access_doors.full_name AS user_id,
+			permissions.label AS permission_id,   -- <=== LABEL BUKAN ID
 			ru.created_at
 		`).
 		Joins("JOIN roles ON roles.id = ru.role_id").
+		Joins("JOIN permissions ON permissions.id = ru.permission_id"). // <=== JOIN BY ID
 		Joins("JOIN access_doors ON access_doors.id = ru.user_id").
 		Limit(req.Limit).
 		Offset(offset).
@@ -42,16 +43,16 @@ func (r *RoleUserRepository) Pagination(req *dto.Pagination) (RepositoryResult, 
 		}
 	}
 
-	// Eksekusi query
 	if err := find.Scan(&roleusers).Error; err != nil {
 		return RepositoryResult{Error: err}, 0
 	}
 
 	req.Rows = roleusers
 
-	// Count harus sama dengan JOIN di atas
+	// Count
 	if err := r.DB.Table("role_users AS ru").
 		Joins("JOIN roles ON roles.id = ru.role_id").
+		Joins("JOIN permissions ON permissions.id = ru.permission_id").
 		Joins("JOIN access_doors ON access_doors.id = ru.user_id").
 		Count(&totalRows).Error; err != nil {
 		return RepositoryResult{Error: err}, 0
@@ -61,7 +62,7 @@ func (r *RoleUserRepository) Pagination(req *dto.Pagination) (RepositoryResult, 
 	totalPages := int(math.Ceil(float64(totalRows) / float64(req.Limit)))
 	req.TotalPages = totalPages
 
-	// Hitung fromRow / toRow
+	// fromRow / toRow
 	if req.Page == 1 {
 		req.FromRow = 1
 		req.ToRow = len(roleusers)
