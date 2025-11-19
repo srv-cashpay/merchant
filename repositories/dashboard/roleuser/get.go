@@ -27,7 +27,7 @@ func (r *RoleUserRepository) Get(req dto.RoleUserRequest) (dto.GetRoleUserRespon
 		`).
 		Joins(`
 			LEFT JOIN permissions AS p 
-				ON ru.permission_id @> ('[' || p.id || ']')::jsonb
+				ON ru.permission_id::jsonb @> ('[' || p.id || ']')::jsonb
 		`).
 		Where("ru.user_id = ?", req.UserID).
 		Where("ru.merchant_id = ?", req.MerchantID).
@@ -37,7 +37,6 @@ func (r *RoleUserRepository) Get(req dto.RoleUserRequest) (dto.GetRoleUserRespon
 		return dto.GetRoleUserResponse{}, err
 	}
 
-	// Map ke DTO
 	var result []dto.RoleUserResponse
 
 	for _, row := range rows {
@@ -54,7 +53,6 @@ func (r *RoleUserRepository) Get(req dto.RoleUserRequest) (dto.GetRoleUserRespon
 		})
 	}
 
-	// Bungkus izin dalam field 'items' seperti yang diharapkan
 	return dto.GetRoleUserResponse{
 		Items: result,
 	}, nil
