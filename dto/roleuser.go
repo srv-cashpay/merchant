@@ -7,7 +7,7 @@ import (
 type RoleUserRequest struct {
 	ID           uint   `json:"id"`
 	RoleID       string `json:"role_id"`
-	PermissionID []int  `json:"permission_id"` // ← wajib array
+	PermissionID []uint `json:"permission_id"` // ← wajib array
 	UserID       string `json:"user_id"`
 	MerchantID   string `json:"merchant_id"`
 	CreatedBy    string `json:"created_by"`
@@ -16,7 +16,7 @@ type RoleUserRequest struct {
 type RoleUserResponse struct {
 	ID           uint   `json:"id"`
 	RoleID       string `json:"role_id"`
-	PermissionID []int  `json:"permission_id"`
+	PermissionID []uint `json:"permission_id"`
 	UserID       string `json:"user_id"`
 	MerchantID   string `json:"merchant_id"`
 	CreatedBy    string `json:"created_by"`

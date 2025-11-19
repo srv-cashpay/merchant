@@ -1,11 +1,20 @@
 package roleuser
 
 import (
+	"encoding/json"
+
 	dto "github.com/srv-cashpay/merchant/dto"
 )
 
 func (r *RoleUserRepository) Get(req dto.RoleUserRequest) (dto.GetRoleUserResponse, error) {
-	var result []dto.RoleUserResponse
+	var rows []struct {
+		ID           uint
+		RoleID       string
+		PermissionID []byte
+		UserID       string
+		MerchantID   string
+		CreatedBy    string
+	}
 
 	err := r.DB.Table("role_users AS ru").
 		Select(`
@@ -16,12 +25,33 @@ func (r *RoleUserRepository) Get(req dto.RoleUserRequest) (dto.GetRoleUserRespon
 			ru.merchant_id,
 			p.created_by
 		`).
-		Joins("LEFT JOIN permissions AS p ON JSON_CONTAINS(ru.permission_id, JSON_QUOTE(CAST(p.id AS CHAR)))").
-		Where("ru.user_id = ? AND ru.merchant_id = ?", req.UserID, req.MerchantID).
-		Scan(&result).Error
+		Joins(`
+			LEFT JOIN permissions AS p 
+				ON ru.permission_id @> ('[' || p.id || ']')::jsonb
+		`).
+		Where("ru.user_id = ?", req.UserID).
+		Where("ru.merchant_id = ?", req.MerchantID).
+		Scan(&rows).Error
 
 	if err != nil {
 		return dto.GetRoleUserResponse{}, err
+	}
+
+	// Map ke DTO
+	var result []dto.RoleUserResponse
+
+	for _, row := range rows {
+		var permIDs []uint
+		json.Unmarshal(row.PermissionID, &permIDs)
+
+		result = append(result, dto.RoleUserResponse{
+			ID:           row.ID,
+			RoleID:       row.RoleID,
+			PermissionID: permIDs,
+			UserID:       row.UserID,
+			MerchantID:   row.MerchantID,
+			CreatedBy:    row.CreatedBy,
+		})
 	}
 
 	// Bungkus izin dalam field 'items' seperti yang diharapkan
