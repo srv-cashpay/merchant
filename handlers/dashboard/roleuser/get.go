@@ -5,13 +5,11 @@ import (
 
 	"github.com/labstack/echo/v4"
 	dto "github.com/srv-cashpay/merchant/dto"
-	"github.com/srv-cashpay/merchant/helpers"
 	res "github.com/srv-cashpay/util/s/response"
 )
 
 func (b *domainHandler) Get(c echo.Context) error {
 	var req dto.RoleUserRequest
-	paginationDTO := helpers.GeneratePaginationRequest(c)
 
 	userid, ok := c.Get("UserId").(string)
 	if !ok {
@@ -23,10 +21,10 @@ func (b *domainHandler) Get(c echo.Context) error {
 		return res.ErrorBuilder(&res.ErrorConstant.InternalServerError, nil).Send(c)
 	}
 
-	paginationDTO.MerchantID = merchantId
-	paginationDTO.UserID = userid
+	req.MerchantID = merchantId
+	req.UserID = userid
 
-	if err := c.Bind(&paginationDTO); err != nil {
+	if err := c.Bind(&req); err != nil {
 		return c.JSON(400, "Invalid request")
 	}
 
