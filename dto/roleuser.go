@@ -55,7 +55,7 @@ type DeleteRoleUserResponse struct {
 }
 
 type GetRoleUserResponse struct {
-	Roles []RoleUserResponse `json:"items"`
+	Roles []RoleUserResponse `json:"roles"`
 }
 
 type GetRoleUserByIdRequest struct {
