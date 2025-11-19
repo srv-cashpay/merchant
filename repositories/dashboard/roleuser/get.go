@@ -59,14 +59,13 @@ func (r *RoleUserRepository) Get(req dto.RoleUserRequest) (dto.GetRoleUserRespon
 			json.Unmarshal(row.PermissionID, &permIDs)
 
 			roleMap[row.ID] = &dto.RoleUserResponse{
-				ID:           row.ID,
-				RoleID:       row.RoleID,
-				RoleName:     row.RoleName, // ← Tambahkan
-				PermissionID: permIDs,
-				UserID:       row.UserID,
-				MerchantID:   row.MerchantID,
-				CreatedBy:    row.CreatedBy,
-				Permissions:  []dto.PermissionItem{},
+				ID:          row.ID,
+				RoleID:      row.RoleID,
+				RoleName:    row.RoleName, // ← Tambahkan
+				UserID:      row.UserID,
+				MerchantID:  row.MerchantID,
+				CreatedBy:   row.CreatedBy,
+				Permissions: []dto.PermissionItem{},
 			}
 		}
 
