@@ -5,15 +5,20 @@ import (
 )
 
 func (r *RoleUserRepository) Get(req dto.RoleUserRequest) (dto.GetRoleUserResponse, error) {
-	var roles []dto.RoleUserResponse
+	var result []dto.RoleUserResponse
 
-	// Query untuk memvalidasi RoleUser dan Role
-	err := r.DB.Table("role_user_roles").
-		Select("roles.label, roles.icon, roles.to").
-		Joins("JOIN role_users ON role_user_roles.role_user_id = role_users.id").
-		Joins("JOIN roles ON role_user_roles.role_id = roles.id").
-		Where("role_users.user_id = ? AND role_users.role_id = ?", req.UserID, "8gHwINv71XDy"). // Validasi RoleID dan UserID
-		Scan(&roles).Error
+	err := r.DB.Table("role_users AS ru").
+		Select(`
+			ru.id,
+			ru.role_id,
+			ru.permission_id,
+			ru.user_id,
+			ru.merchant_id,
+			p.created_by
+		`).
+		Joins("LEFT JOIN permissions AS p ON JSON_CONTAINS(ru.permission_id, JSON_QUOTE(CAST(p.id AS CHAR)))").
+		Where("ru.user_id = ? AND ru.merchant_id = ?", req.UserID, req.MerchantID).
+		Scan(&result).Error
 
 	if err != nil {
 		return dto.GetRoleUserResponse{}, err
@@ -21,6 +26,6 @@ func (r *RoleUserRepository) Get(req dto.RoleUserRequest) (dto.GetRoleUserRespon
 
 	// Bungkus izin dalam field 'items' seperti yang diharapkan
 	return dto.GetRoleUserResponse{
-		Items: roles,
+		Items: result,
 	}, nil
 }

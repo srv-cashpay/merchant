@@ -1,20 +1,22 @@
 package dto
 
-import "time"
+import (
+	"time"
+)
 
 type RoleUserRequest struct {
 	ID           uint   `json:"id"`
 	RoleID       string `json:"role_id"`
-	PermissionID string `json:"permission_id"`
+	PermissionID []int  `json:"permission_id"` // ← wajib array
 	UserID       string `json:"user_id"`
 	MerchantID   string `json:"merchant_id"`
 	CreatedBy    string `json:"created_by"`
 }
 
 type RoleUserResponse struct {
-	ID           string `json:"id"`
+	ID           uint   `json:"id"`
 	RoleID       string `json:"role_id"`
-	PermissionID string `json:"permission_id"`
+	PermissionID []int  `json:"permission_id"`
 	UserID       string `json:"user_id"`
 	MerchantID   string `json:"merchant_id"`
 	CreatedBy    string `json:"created_by"`
