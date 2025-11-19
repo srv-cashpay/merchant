@@ -7,7 +7,6 @@ import (
 )
 
 func (r *RoleUserRepository) Get(req dto.RoleUserRequest) (dto.GetRoleUserResponse, error) {
-
 	var rows []struct {
 		ID           uint
 		RoleID       string
@@ -16,30 +15,32 @@ func (r *RoleUserRepository) Get(req dto.RoleUserRequest) (dto.GetRoleUserRespon
 		UserID       string
 		MerchantID   string
 		CreatedBy    string
-		PermID       uint
-		Label        string
-		Icon         string
-		To           string
+
+		// Permission Items
+		PermID uint
+		Label  string
+		Icon   string
+		To     string
 	}
 
 	err := r.DB.Table("role_users AS ru").
 		Select(`
-            ru.id,
-            ru.role_id,
-            r.role AS role_name,
-            ru.permission_id,
-            ru.user_id,
-            ru.merchant_id,
-            p.id,
-            p.label,
-            p.icon,
-            p.to
-        `).
+			ru.id,
+			ru.role_id,
+			r.role AS role_name,
+			ru.permission_id,
+			ru.user_id,
+			ru.merchant_id,
+			p.id AS perm_id,
+			p.label,
+			p.icon,
+			p.to
+		`).
 		Joins(`JOIN roles r ON r.id = ru.role_id`).
 		Joins(`
-            LEFT JOIN permissions AS p 
-                ON ru.permission_id::jsonb @> ('[' || p.id || ']')::jsonb
-        `).
+			LEFT JOIN permissions AS p 
+				ON ru.permission_id::jsonb @> ('[' || p.id || ']')::jsonb
+		`).
 		Where("ru.user_id = ?", req.UserID).
 		Where("ru.merchant_id = ?", req.MerchantID).
 		Scan(&rows).Error
@@ -60,7 +61,7 @@ func (r *RoleUserRepository) Get(req dto.RoleUserRequest) (dto.GetRoleUserRespon
 			roleMap[row.ID] = &dto.RoleUserResponse{
 				ID:           row.ID,
 				RoleID:       row.RoleID,
-				RoleName:     row.RoleName,
+				RoleName:     row.RoleName, // ← Tambahkan
 				PermissionID: permIDs,
 				UserID:       row.UserID,
 				MerchantID:   row.MerchantID,
