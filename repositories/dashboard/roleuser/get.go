@@ -10,10 +10,13 @@ func (r *RoleUserRepository) Get(req dto.RoleUserRequest) (dto.GetRoleUserRespon
 	var rows []struct {
 		ID           uint
 		RoleID       string
+		RoleName     string
 		PermissionID []byte
 		UserID       string
 		MerchantID   string
+		CreatedBy    string
 
+		// Permission Items
 		PermID uint
 		Label  string
 		Icon   string
@@ -24,6 +27,7 @@ func (r *RoleUserRepository) Get(req dto.RoleUserRequest) (dto.GetRoleUserRespon
 		Select(`
 			ru.id,
 			ru.role_id,
+			r.role AS role_name,
 			ru.permission_id,
 			ru.user_id,
 			ru.merchant_id,
@@ -32,6 +36,7 @@ func (r *RoleUserRepository) Get(req dto.RoleUserRequest) (dto.GetRoleUserRespon
 			p.icon,
 			p.to
 		`).
+		Joins(`JOIN roles r ON r.id = ru.role_id`).
 		Joins(`
 			LEFT JOIN permissions AS p 
 				ON ru.permission_id::jsonb @> ('[' || p.id || ']')::jsonb
@@ -44,11 +49,10 @@ func (r *RoleUserRepository) Get(req dto.RoleUserRequest) (dto.GetRoleUserRespon
 		return dto.GetRoleUserResponse{}, err
 	}
 
-	// Map ke response
 	roleMap := map[uint]*dto.RoleUserResponse{}
 
 	for _, row := range rows {
-		// jika belum ada -> buat object baru
+
 		if _, ok := roleMap[row.ID]; !ok {
 
 			var permIDs []uint
@@ -57,25 +61,28 @@ func (r *RoleUserRepository) Get(req dto.RoleUserRequest) (dto.GetRoleUserRespon
 			roleMap[row.ID] = &dto.RoleUserResponse{
 				ID:           row.ID,
 				RoleID:       row.RoleID,
+				RoleName:     row.RoleName, // ← Tambahkan
 				PermissionID: permIDs,
 				UserID:       row.UserID,
 				MerchantID:   row.MerchantID,
+				CreatedBy:    row.CreatedBy,
 				Permissions:  []dto.PermissionItem{},
 			}
 		}
 
-		// Append permission jika ada
 		if row.PermID != 0 {
-			roleMap[row.ID].Permissions = append(roleMap[row.ID].Permissions, dto.PermissionItem{
-				ID:    row.PermID,
-				Label: row.Label,
-				Icon:  row.Icon,
-				To:    row.To,
-			})
+			roleMap[row.ID].Permissions = append(
+				roleMap[row.ID].Permissions,
+				dto.PermissionItem{
+					ID:    row.PermID,
+					Label: row.Label,
+					Icon:  row.Icon,
+					To:    row.To,
+				},
+			)
 		}
 	}
 
-	// Convert map → array
 	var result []dto.RoleUserResponse
 	for _, v := range roleMap {
 		result = append(result, *v)

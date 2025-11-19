@@ -16,6 +16,7 @@ type RoleUserRequest struct {
 type RoleUserResponse struct {
 	ID           uint             `json:"id"`
 	RoleID       string           `json:"role_id"`
+	RoleName     string           `json:"role_name"`     // ← TAMBAH INI
 	PermissionID []uint           `json:"permission_id"` // ← wajib ADA
 	Permissions  []PermissionItem `json:"permissions"`   // label, icon, to
 	UserID       string           `json:"user_id"`
