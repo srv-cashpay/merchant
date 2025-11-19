@@ -13,7 +13,11 @@ func (r *RoleUserRepository) Get(req dto.RoleUserRequest) (dto.GetRoleUserRespon
 		PermissionID []byte
 		UserID       string
 		MerchantID   string
-		CreatedBy    string
+
+		PermID uint
+		Label  string
+		Icon   string
+		To     string
 	}
 
 	err := r.DB.Table("role_users AS ru").
@@ -23,7 +27,10 @@ func (r *RoleUserRepository) Get(req dto.RoleUserRequest) (dto.GetRoleUserRespon
 			ru.permission_id,
 			ru.user_id,
 			ru.merchant_id,
-			p.created_by
+			p.id AS perm_id,
+			p.label,
+			p.icon,
+			p.to
 		`).
 		Joins(`
 			LEFT JOIN permissions AS p 
@@ -37,23 +44,44 @@ func (r *RoleUserRepository) Get(req dto.RoleUserRequest) (dto.GetRoleUserRespon
 		return dto.GetRoleUserResponse{}, err
 	}
 
-	var result []dto.RoleUserResponse
+	// Map ke response
+	roleMap := map[uint]*dto.RoleUserResponse{}
 
 	for _, row := range rows {
-		var permIDs []uint
-		json.Unmarshal(row.PermissionID, &permIDs)
+		// jika belum ada -> buat object baru
+		if _, ok := roleMap[row.ID]; !ok {
 
-		result = append(result, dto.RoleUserResponse{
-			ID:           row.ID,
-			RoleID:       row.RoleID,
-			PermissionID: permIDs,
-			UserID:       row.UserID,
-			MerchantID:   row.MerchantID,
-			CreatedBy:    row.CreatedBy,
-		})
+			var permIDs []uint
+			json.Unmarshal(row.PermissionID, &permIDs)
+
+			roleMap[row.ID] = &dto.RoleUserResponse{
+				ID:           row.ID,
+				RoleID:       row.RoleID,
+				PermissionID: permIDs,
+				UserID:       row.UserID,
+				MerchantID:   row.MerchantID,
+				Permissions:  []dto.PermissionItem{},
+			}
+		}
+
+		// Append permission jika ada
+		if row.PermID != 0 {
+			roleMap[row.ID].Permissions = append(roleMap[row.ID].Permissions, dto.PermissionItem{
+				ID:    row.PermID,
+				Label: row.Label,
+				Icon:  row.Icon,
+				To:    row.To,
+			})
+		}
+	}
+
+	// Convert map → array
+	var result []dto.RoleUserResponse
+	for _, v := range roleMap {
+		result = append(result, *v)
 	}
 
 	return dto.GetRoleUserResponse{
-		Items: result,
+		Roles: result,
 	}, nil
 }

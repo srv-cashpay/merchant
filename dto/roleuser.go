@@ -14,12 +14,13 @@ type RoleUserRequest struct {
 }
 
 type RoleUserResponse struct {
-	ID           uint   `json:"id"`
-	RoleID       string `json:"role_id"`
-	PermissionID []uint `json:"permission_id"`
-	UserID       string `json:"user_id"`
-	MerchantID   string `json:"merchant_id"`
-	CreatedBy    string `json:"created_by"`
+	ID           uint             `json:"id"`
+	RoleID       string           `json:"role_id"`
+	PermissionID []uint           `json:"permission_id"` // ← wajib ADA
+	Permissions  []PermissionItem `json:"permissions"`   // label, icon, to
+	UserID       string           `json:"user_id"`
+	MerchantID   string           `json:"merchant_id"`
+	CreatedBy    string           `json:"created_by"`
 }
 
 type RoleUserUpdateRequest struct {
@@ -53,7 +54,7 @@ type DeleteRoleUserResponse struct {
 }
 
 type GetRoleUserResponse struct {
-	Items []RoleUserResponse `json:"items"`
+	Roles []RoleUserResponse `json:"items"`
 }
 
 type GetRoleUserByIdRequest struct {

@@ -51,6 +51,7 @@ type GetPermissionResponse struct {
 }
 
 type PermissionItem struct {
+	ID    uint   `json:"id"`
 	Label string `json:"label"`
 	Icon  string `json:"icon"`
 	To    string `json:"to"`
