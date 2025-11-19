@@ -524,6 +524,7 @@ func New() *echo.Echo {
 	dashboard := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
 	{
 		dashboard.GET("/dashboard/index", dashboardH.Get)
+		dashboard.GET("/dashboard/route", dashboardH.Get)
 	}
 	product := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
 	{

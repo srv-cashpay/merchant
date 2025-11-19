@@ -4,8 +4,9 @@ import "time"
 
 type RoleUser struct {
 	ID           uint      `gorm:"primaryKey;autoIncrement" json:"id"`
-	RoleID       string    `gorm:"type:varchar(36);index,omitempty" json:"role_id"`
+	MerchantID   string    `gorm:"type:varchar(36);index" json:"merchant_id"`
 	UserID       string    `gorm:"type:varchar(36);index,omitempty" json:"user_id"`
-	PermissionID string    `gorm:"permission_id;index,omitempty" json:"permission_id"`
+	RoleID       string    `gorm:"type:varchar(36);index,omitempty" json:"role_id"`
+	PermissionID []byte    `gorm:"type:json" json:"permission_id"`
 	CreatedAt    time.Time `json:"created_at"`
 }

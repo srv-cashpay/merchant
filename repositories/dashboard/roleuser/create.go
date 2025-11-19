@@ -1,28 +1,36 @@
 package roleuser
 
 import (
+	"encoding/json"
+
 	dto "github.com/srv-cashpay/merchant/dto"
 	"github.com/srv-cashpay/merchant/entity"
 )
 
 func (r *RoleUserRepository) Create(req dto.RoleUserRequest) (dto.RoleUserResponse, error) {
-	// Create the new Role entry
-	create := entity.RoleUser{
-		RoleID:       req.RoleID,
-		UserID:       req.UserID,
-		PermissionID: req.PermissionID,
+
+	// Convert array → JSON
+	jsonData, err := json.Marshal(req.PermissionID)
+	if err != nil {
+		return dto.RoleUserResponse{}, err
 	}
 
-	// Save the new Role to the database
+	create := entity.RoleUser{
+		MerchantID:   req.MerchantID,
+		RoleID:       req.RoleID,
+		UserID:       req.UserID,
+		PermissionID: jsonData, // sudah []byte
+	}
+
 	if err := r.DB.Save(&create).Error; err != nil {
 		return dto.RoleUserResponse{}, err
 	}
 
-	// Build the response for the created Role
 	response := dto.RoleUserResponse{
+		MerchantID:   req.MerchantID,
 		RoleID:       create.RoleID,
 		UserID:       req.UserID,
-		PermissionID: req.PermissionID,
+		PermissionID: req.PermissionID, // array int
 	}
 
 	return response, nil
