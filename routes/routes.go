@@ -292,20 +292,35 @@ func New() *echo.Echo {
 		sub.POST("/subscribe/charge-mandiri", subscribeH.ChargeMandiri)
 		sub.POST("/subscribe/charge-bri", subscribeH.ChargeBri)
 		sub.POST("/subscribe/charge-cimb", subscribeH.ChargeCimb)
-
 		sub.POST("/subscribe/charge-qris", subscribeH.ChargeQris)
 		sub.POST("/subscribe/charge-gopay", subscribeH.ChargeGopay)
 		sub.POST("/subscribe/charge-shopeepay", subscribeH.ChargeShopeePay)
-
 		sub.POST("/subscribe/charge-gpay", subscribeH.ChargeGpay)
 		sub.GET("/subscribe/tokenize", subscribeH.TokenizeCardHandler)
 		sub.POST("/subscribe/charge-card", subscribeH.CardPayment)
 		sub.POST("/subscribe/cancel/:order_id", subscribeH.CancelPay)
-
 		sub.POST("/subscribe/paypal", subscribeH.PayPal)
 		sub.GET("/subscribe/paypal/capture/:order_id", subscribeH.CapturePaypalOrder)
-
 	}
+
+	topup := e.Group("api/merchant")
+	{
+		topup.GET("/topup/transaction/:order_id/status", subscribeH.CheckTransactionStatus)
+		topup.POST("/topup/midtrans/callback", subscribeH.MidtransCallback)
+		topup.POST("/topup/charge-bni", subscribeH.ChargeBni)
+		topup.POST("/topup/charge-permata", subscribeH.ChargePermata)
+		topup.POST("/topup/charge-mandiri", subscribeH.ChargeMandiri)
+		topup.POST("/topup/charge-bri", subscribeH.ChargeBri)
+		topup.POST("/topup/charge-cimb", subscribeH.ChargeCimb)
+		topup.POST("/topup/charge-qris", subscribeH.ChargeQris)
+		topup.POST("/topup/charge-gopay", subscribeH.ChargeGopay)
+		topup.POST("/topup/charge-shopeepay", subscribeH.ChargeShopeePay)
+		topup.POST("/topup/charge-gpay", subscribeH.ChargeGpay)
+		topup.GET("/topup/tokenize", subscribeH.TokenizeCardHandler)
+		topup.POST("/topup/charge-card", subscribeH.CardPayment)
+		topup.POST("/topup/cancel/:order_id", subscribeH.CancelPay)
+	}
+
 	pos := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
 	{
 		pos.POST("/pos/create", posH.Create)
