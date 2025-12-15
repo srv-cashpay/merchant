@@ -51,6 +51,10 @@ import (
 	r_subscribe "github.com/srv-cashpay/merchant/repositories/subscribe"
 	s_subscribe "github.com/srv-cashpay/merchant/services/subscribe"
 
+	h_topup "github.com/srv-cashpay/merchant/handlers/topup"
+	r_topup "github.com/srv-cashpay/merchant/repositories/topup"
+	s_topup "github.com/srv-cashpay/merchant/services/topup"
+
 	h_authenticator "github.com/srv-cashpay/merchant/handlers/authenticator_request"
 	r_authenticator "github.com/srv-cashpay/merchant/repositories/authenticator_request"
 	s_authenticator "github.com/srv-cashpay/merchant/services/authenticator_request"
@@ -156,6 +160,10 @@ var (
 	subscribeR = r_subscribe.NewSubscribeRepository(DB, pp)
 	subscribeS = s_subscribe.NewSubscribeService(subscribeR, JWT)
 	subscribeH = h_subscribe.NewSubscribeHandler(subscribeS)
+
+	topupR = r_topup.NewSubscribeRepository(DB, pp)
+	topupS = s_topup.NewSubscribeService(topupR, JWT)
+	topupH = h_topup.NewSubscribeHandler(topupS)
 
 	posR = r_pos.NewPosRepository(DB)
 	posS = s_pos.NewPosService(posR, JWT)
@@ -305,20 +313,20 @@ func New() *echo.Echo {
 
 	topup := e.Group("api/merchant")
 	{
-		topup.GET("/topup/transaction/:order_id/status", subscribeH.CheckTransactionStatus)
-		topup.POST("/topup/midtrans/callback", subscribeH.MidtransCallback)
-		topup.POST("/topup/charge-bni", subscribeH.ChargeBni)
-		topup.POST("/topup/charge-permata", subscribeH.ChargePermata)
-		topup.POST("/topup/charge-mandiri", subscribeH.ChargeMandiri)
-		topup.POST("/topup/charge-bri", subscribeH.ChargeBri)
-		topup.POST("/topup/charge-cimb", subscribeH.ChargeCimb)
-		topup.POST("/topup/charge-qris", subscribeH.ChargeQris)
-		topup.POST("/topup/charge-gopay", subscribeH.ChargeGopay)
-		topup.POST("/topup/charge-shopeepay", subscribeH.ChargeShopeePay)
-		topup.POST("/topup/charge-gpay", subscribeH.ChargeGpay)
-		topup.GET("/topup/tokenize", subscribeH.TokenizeCardHandler)
-		topup.POST("/topup/charge-card", subscribeH.CardPayment)
-		topup.POST("/topup/cancel/:order_id", subscribeH.CancelPay)
+		topup.GET("/topup/transaction/:order_id/status", topupH.CheckTransactionStatus)
+		topup.POST("/topup/midtrans/callback", topupH.MidtransCallback)
+		topup.POST("/topup/charge-bni", topupH.ChargeBni)
+		topup.POST("/topup/charge-permata", topupH.ChargePermata)
+		topup.POST("/topup/charge-mandiri", topupH.ChargeMandiri)
+		topup.POST("/topup/charge-bri", topupH.ChargeBri)
+		topup.POST("/topup/charge-cimb", topupH.ChargeCimb)
+		topup.POST("/topup/charge-qris", topupH.ChargeQris)
+		topup.POST("/topup/charge-gopay", topupH.ChargeGopay)
+		topup.POST("/topup/charge-shopeepay", topupH.ChargeShopeePay)
+		topup.POST("/topup/charge-gpay", topupH.ChargeGpay)
+		topup.GET("/topup/tokenize", topupH.TokenizeCardHandler)
+		topup.POST("/topup/charge-card", topupH.CardPayment)
+		topup.POST("/topup/cancel/:order_id", topupH.CancelPay)
 	}
 
 	pos := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
