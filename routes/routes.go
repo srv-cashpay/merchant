@@ -370,7 +370,7 @@ func New() *echo.Echo {
 
 	methode := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
 	{
-		methode.PUT("/methode-pay/qris", transactionmethodeH.Create)
+		methode.POST("/methode-pay/qris", transactionmethodeH.Create)
 	}
 
 	merk := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
