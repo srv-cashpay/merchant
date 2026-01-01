@@ -14,6 +14,7 @@ func (r *paymentmethodRepository) Create(req dto.PaymentMethodRequest) (dto.Paym
 		UserID:        req.UserID,
 		MerchantID:    req.MerchantID,
 		CreatedBy:     req.CreatedBy,
+		Category:      req.Category,
 	}
 
 	if err := r.DB.Create(&create).Error; err != nil {
@@ -27,6 +28,7 @@ func (r *paymentmethodRepository) Create(req dto.PaymentMethodRequest) (dto.Paym
 		UserID:        create.UserID,
 		MerchantID:    create.MerchantID,
 		CreatedBy:     create.CreatedBy,
+		Category:      req.Category,
 	}
 
 	return response, nil

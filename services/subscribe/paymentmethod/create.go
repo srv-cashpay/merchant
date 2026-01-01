@@ -37,6 +37,7 @@ func (s *paymentmethodService) Create(req dto.PaymentMethodRequest) (dto.Payment
 		PaymentMethod: created.PaymentMethod,
 		Status:        created.Status,
 		CreatedBy:     created.CreatedBy,
+		Category:      created.Category,
 	}
 	return resp, nil
 }
