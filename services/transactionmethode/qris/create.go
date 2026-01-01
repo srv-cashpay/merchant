@@ -1,15 +1,10 @@
 package qris
 
 import (
-	"fmt"
-
 	dto "github.com/srv-cashpay/merchant/dto"
 )
 
 func (s *qrisService) Create(req dto.CoQrisRequest) (dto.CoQrisResponse, error) {
-	if req.Status != 1 && req.Status != 2 {
-		return dto.CoQrisResponse{}, fmt.Errorf("invalid status: must be 1 (active) or 2 (inactive)")
-	}
 
 	create := dto.CoQrisRequest{
 		QrisName:   req.QrisName,
@@ -26,22 +21,11 @@ func (s *qrisService) Create(req dto.CoQrisRequest) (dto.CoQrisResponse, error) 
 		return dto.CoQrisResponse{}, err
 	}
 
-	statusMap := map[int]string{
-		1: "active",
-		2: "inactive",
-	}
-
-	// Dapatkan string status berdasarkan nilai integer
-	statusString, ok := statusMap[create.Status]
-	if !ok {
-		return dto.CoQrisResponse{}, fmt.Errorf("invalid status value in database")
-	}
-
 	response := dto.CoQrisResponse{
 		QrisName:   created.QrisName,
 		Link:       created.Link,
 		FilePath:   created.FilePath,
-		Status:     statusString,
+		Status:     created.Status,
 		UserID:     created.UserID,
 		MerchantID: created.MerchantID,
 		CreatedBy:  created.CreatedBy,

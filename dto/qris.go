@@ -12,7 +12,7 @@ type CoQrisRequest struct {
 	QrisName   string `json:"qris_name"`
 	Link       string `json:"link"`
 	File       *multipart.FileHeader
-	Status     int       `json:"status"`
+	Status     string    `json:"status"`
 	CreatedBy  string    `json:"created_by"`
 	UpdatedBy  string    `json:"updated_by"`
 	DeletedBy  string    `json:"deleted_by"`

@@ -12,7 +12,7 @@ type Qris struct {
 	MerchantID string         `gorm:"type:varchar(36);index" json:"merchant_id"`
 	QrisName   string         `gorm:"type:varchar(50)" json:"qris_name"`
 	Link       string         `gorm:"type:varchar(50)" json:"link"`
-	Status     int            `gorm:"status" json:"status"`
+	Status     string         `gorm:"status" json:"status"`
 	CreatedBy  string         `gorm:"created_by" json:"created_by"`
 	UpdatedBy  string         `gorm:"update_by" json:"update_by"`
 	CreatedAt  time.Time      `json:"created_at"`
