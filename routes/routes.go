@@ -71,6 +71,10 @@ import (
 	r_paymentmethod "github.com/srv-cashpay/merchant/repositories/subscribe/paymentmethod"
 	s_paymentmethod "github.com/srv-cashpay/merchant/services/subscribe/paymentmethod"
 
+	h_transactionmethode "github.com/srv-cashpay/merchant/handlers/transactionmethode/qris"
+	r_transactionmethode "github.com/srv-cashpay/merchant/repositories/transactionmethode/qris"
+	s_transactionmethode "github.com/srv-cashpay/merchant/services/transactionmethode/qris"
+
 	h_history "github.com/srv-cashpay/merchant/handlers/subscribe/history"
 	r_history "github.com/srv-cashpay/merchant/repositories/subscribe/history"
 	s_history "github.com/srv-cashpay/merchant/services/subscribe/history"
@@ -233,6 +237,10 @@ var (
 	paymentmethodS = s_paymentmethod.NewPaymentMethodService(paymentmethodR, JWT)
 	paymentmethodH = h_paymentmethod.NewPaymentHandler(paymentmethodS)
 
+	transactionmethodeR = r_transactionmethode.NewQrisRepository(DB)
+	transactionmethodeS = s_transactionmethode.NewQrisService(transactionmethodeR, JWT)
+	transactionmethodeH = h_transactionmethode.NewQrisHandler(transactionmethodeS)
+
 	historyR = r_history.NewHistoryRepository(DB)
 	historyS = s_history.NewHistoryService(historyR, JWT)
 	historyH = h_history.NewHistoryHandler(historyS)
@@ -358,6 +366,11 @@ func New() *echo.Echo {
 		printer.GET("/printer/get", printerH.Get)
 		printer.POST("/printer/create", printerH.Create)
 		printer.DELETE("/printer/:id", printerH.Delete)
+	}
+
+	methode := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
+	{
+		methode.PUT("/methode-pay/qris", transactionmethodeH.Create)
 	}
 
 	merk := e.Group("api/merchant", middlewares.AuthorizeJWT(JWT))
